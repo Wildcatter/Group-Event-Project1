@@ -5,7 +5,7 @@
 
  		// Your token with Eventbrite for stuff: D5JWVCEPRXACNC6KHG
 
- 		// Establish query URL, metting Eventbrite API HEY YA'lLlllllllll
+ 		// Establish query URL, metting Eventbrite API HEY NO MORE STUFF
  		var queryUrl = "http://api.";
  		console.log("queryUrl: " + queryUrl);
 
