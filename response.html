@@ -35,8 +35,10 @@ var url = "https://www.eventbriteapi.com/v3/events/?token=IVKXSGGHO6MZSHMF5QZZ&q
 $.ajax({
 	url: url,
 	method: "GET",
-}).done(function(response) {
+	}).done(function(response) {
 	console.log(response);
+	console.log(response.events[0].description.text);
+	console.log(response.events[0].end.local)
 });
 
 // q = events with keyword
