@@ -28,14 +28,16 @@
   	};
   	firebase.initializeApp(config);
 	</script>
-	
+
 <script>
-// $.ajax({
-// 	url: url,
-// 	method: "GET",
-// }).done(function(response) {
-// 	console.log(response);
-// });
+var url = "https://www.eventbriteapi.com/v3/events/?token=IVKXSGGHO6MZSHMF5QZZ&q=austin";
+
+$.ajax({
+	url: url,
+	method: "GET",
+}).done(function(response) {
+	console.log(response);
+});
 
 // q = events with keyword
 // start_date.range_start
