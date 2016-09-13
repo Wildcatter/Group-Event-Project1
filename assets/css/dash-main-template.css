@@ -17,6 +17,16 @@ a.navbar-brand {
 	font-size: 20px;
 }
 
+/* Make a class available for centering text */
+.text-center {
+	text-align: center;
+}
+
+/* Give more space between bottom of panels */
+.panel {
+	margin-bottom: 30px;
+}
+
 /* Make input label thinner */
 label {
 	font-weight: 200;
@@ -109,7 +119,13 @@ h1 {
 /* Give main page heading a gray bottom border */
 h1.page-header {
 	border-bottom: .5px solid gray;
-	margin-bottom: 5px;
+	margin-bottom: 25px;
+}
+
+/* Preliminary styling for event info boxes */
+div.event-content {
+	height: 260px;
+	background-color: #B8B8B8;
 }
 
 /* Only add sidebar border on larger screens */
