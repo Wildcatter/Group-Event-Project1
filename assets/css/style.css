@@ -1,0 +1,64 @@
+/**
+ * Program: style.css
+ * Created: 09/08/2016 by Saray Reyes, Garett Francis, Matt Holland
+ * Located: fileLocation/assets/css/style.css
+ * Purpose: Provide styling instructions for group project #1 main page template - Event searcher
+ */ 
+
+/* Google fonts available on page...
+font-family: 'Raleway', sans-serif;
+font-family: 'Open Sans Condensed', sans-serif;
+font-family: 'Oxygen', sans-serif;
+font-family: 'Josefin Sans', sans-serif;
+font-family: 'Quicksand', sans-serif;
+font-family: 'Questrial', sans-serif;
+font-family: 'Didact Gothic', sans-serif;
+font-family: 'Heebo', sans-serif;
+font-family: 'Bungee Hairline', cursive;
+font-family: 'Wire One', sans-serif;
+*/
+
+/* Center-align incomplete bootstrap column blocks */
+.col-centered{
+    float: none;
+    margin: 0 auto;
+}
+
+/* Main page heading */
+.jumbotron {
+	margin-bottom: 0;
+	background: transparent;
+	color: #fff;
+}
+
+.jumbotron h1 {
+	font-weight: 100;
+}
+
+/* Main page content container */
+.main {
+	margin-top: 3%;
+}
+
+/* All form labels */
+label {
+	color: #fff;
+	font-weight: 100;
+	font-size: 2em;
+}
+
+/* Remove form input background, and make border thinner */
+input, select {
+	/*background-color: rgba(204,204,204,0.2);*/
+	border: 1px solid #fff;
+	margin-bottom: 15px;
+}
+
+/* Styling for all form elements, override bootstrap form-control class */
+.form-control {
+	height: 45px;
+	background-color: transparent;
+	color: #fff;
+	font-weight: 100;
+	font-size: 1.5em;
+}
