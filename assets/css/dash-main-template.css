@@ -3,12 +3,29 @@
  * Created: 09/08/2016 by Saray Reyes, Garett Francis, Matt Holland
  * Located: fileLocation/assets/css/style.css
  * Purpose: Provide styling instructions for group project #1 dashboard page template - Event searcher
- */ 
+ */
+
+ /* Google fonts available on page...
+ font-family: 'Yanone Kaffeesatz', sans-serif;
+ font-family: 'Raleway', sans-serif;
+ font-family: 'Josefin Sans', sans-serif;
+ font-family: 'Quicksand', sans-serif;
+ font-family: 'Josefin Slab', serif;
+ */
+
+ /*
+ Colors:
+ #31C0C5 - robin egg blue
+ #239095 - darker robin blue for hover
+ #154D4F - darkest robin blue for click border
+ #FEDC32 - daisy yellow
+ */
 
 /* Apply dark navy blue background and gray text to body */
 body {
-	background-color: #2f4050;
-	color: #9d9d9d;
+	font-family: 'Josefin Sans', sans-serif;
+	background-color: #0A0A0A;
+	color: #BFBFBF;
 }
 
 /* Main program title in top left of screen */
@@ -17,14 +34,18 @@ a.navbar-brand {
 	font-size: 20px;
 }
 
-/* Make a class available for centering text */
-.text-center {
-	text-align: center;
+/*Eventastic div*/
+.navbar-inverse .navbar-brand {
+	color: #FEDC32;
+	font-size: 32px;
+	padding-top: 20px;
+	background-color: #1F1F1F;
 }
 
-/* Give more space between bottom of panels */
-.panel {
-	margin-bottom: 30px;
+/*Nav Bar*/
+#navbar {
+	background-color: #1F1F1F;
+	border-bottom: 1px solid #BFBFBF;
 }
 
 /* Make input label thinner */
@@ -34,7 +55,7 @@ label {
 
 /* Dark gray background for sidebar */
 div.sidebar {
-	background-color: #333;
+	background-color: #1F1F1F;
 }
 
 /* Move sidebar heading down a bit, and reduce font weight */
@@ -57,7 +78,8 @@ li {
 }
 
 #dashboard-content li:hover {
-	background-color: #ccc;
+	background-color: none;
+	color: #FEDC32;
 }
 
 li h2 {
@@ -81,7 +103,6 @@ button {
 }
 
 button:hover {
-	background-color: #2c6663;
 	color: #fff;
 }
 
@@ -89,14 +110,33 @@ button:hover {
 	margin-right: 10px;
 }
 
+/*Add Favorite Buttons*/
+.btn-primary {
+	font-weight: bold;
+	background-color: #31C0C5;
+	border: none;
+}
+
 /* Override Bootstrap #333 text color on hover */
 .btn:hover {
 	color: #fff;
+	background-color: #239095;
 }
+.btn:active {
+	color: #fff;
+	background-color: #239095 !important;
+	outline: none !important;
+}
+.btn:focus {
+	color: #fff;
+	background-color: #239095 !important;
+	outline: none;
+}
+
 
 /* Make search icon light blue */
 .glyphicon-plus {
-	color: #337ab7;
+	color: #FEDC32;
 }
 
 /* Align search icon inside of input field */
@@ -111,6 +151,9 @@ span.form-control-feedback {
 	cursor: pointer;
 }
 
+.panel {
+	background-color: #ECECEC;
+}
 /* Give main page heading a lighter weight for aesthetics */
 h1 {
 	font-weight: 200;
@@ -118,19 +161,17 @@ h1 {
 
 /* Give main page heading a gray bottom border */
 h1.page-header {
-	border-bottom: .5px solid gray;
-	margin-bottom: 25px;
+	border-bottom: .5px solid #BFBFBF;
+	margin-bottom: 5px;
 }
 
-/* Preliminary styling for event info boxes */
-div.event-content {
-	height: 260px;
-	background-color: #B8B8B8;
+h3 {
+	color: #1F1F1F;
 }
 
 /* Only add sidebar border on larger screens */
 @media (min-width: 768px) {
 	.sidebar {
-		border-right: 1px solid gray;
+		border-right: 1px solid #BFBFBF;
 	}
 }
