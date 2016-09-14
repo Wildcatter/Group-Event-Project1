@@ -20,8 +20,14 @@ var eventObj = {
 	 * @return N/A
 	 */
 	ajaxCall: function(dataObj) {
-		var url = "https://www.eventbriteapi.com/v3/events/search/?token=IVKXSGGHO6MZSHMF5QZZ&location.address=austin&location.within=10mi";
-	
+		// Retrieve dataObj parameters for easy readability
+		var city = dataObj.city;
+
+		// Build query url string
+		//var url = "https://www.eventbriteapi.com/v3/events/search/?token=IVKXSGGHO6MZSHMF5QZZ&location.address=" + city + "&categories.id=" + categories + "&location.within=10mi";
+		var url = "https://www.eventbriteapi.com/v3/events/search/?token=IVKXSGGHO6MZSHMF5QZZ&location.address=" + city + "&location.within=10mi";
+		
+		// Run the AJAX call
 		$.ajax({
 			url: url,
 			method: "GET",
@@ -70,8 +76,11 @@ var eventObj = {
 
 $(document).ready(function() {
 
-	// Get the events on initial page load (50 of the first "All" events from the api)
-	eventObj.ajaxCall();
+	// Get the events on initial page load (50 of the first "All" events from the api, all categories)
+	var dataObj = {
+		city: "austin"
+	}
+	eventObj.ajaxCall(dataObj);
 
 	// If the user clicks on an event box, show modal with event info (giving greater detail of description etc)
 	// Had to start with div.main parent, then narrow down, due to DOM being updated dynamically with events after initial page load
