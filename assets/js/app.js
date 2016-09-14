@@ -27,7 +27,7 @@ $.ajax({
 	//$("#test").append(response.events[3].start.local)
 
 	response.events.forEach (function(item, index, arr) {
-		let stuff = '<div id=' + index + '>';
+		//let stuff = '<div id=' + index + '>';
 		var sliced;
 		if (item.description.text != null) {
 			sliced = item.description.text.slice(0, 100);
@@ -36,7 +36,7 @@ $.ajax({
 		}
 		
 		//$(".divs").append(stuff);	
-		$("#" + index).addClass("yo");	
+		//$("#" + index).addClass("yo");	
 		//$("#" + index).html(item.name.text);
 		$("#" + index).append(sliced);
 		let html = '<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">' +
