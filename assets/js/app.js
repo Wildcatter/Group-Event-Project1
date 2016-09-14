@@ -1,78 +1,65 @@
-/*
-----Authenticating requests
-	Once you have an OAuth token, you must include it on all requests - every request to the OAuth API must be authenticated, no anonymous access is allowed.
-	
-	You have two options to pass the token: using the authentication header (preferred) or as a query string parameter
-	
-	Authorization header:
-	Just include an Authorization header with the value Bearer MYTOKEN:
-	
-	Authorization: Bearer 5MWI565BZ5QH5UNU3XV7
-	Query string parameter¶
-	Include the token on the end of the URL as the token parameter:
-	https://www.eventbriteapi.com/v3/users/me/?token=5MWI565BZ5QH5UNU3XV7
+var config = {
+    apiKey: "AIzaSyDaPvYALiV1qQwyDxIrIfkwCUerTu_uSiA",
+    authDomain: "firstproject-b5d04.firebaseapp.com",
+    databaseURL: "https://firstproject-b5d04.firebaseio.com",
+    storageBucket: "firstproject-b5d04.appspot.com",
+ };
+  	firebase.initializeApp(config);
 
-----Parameters
-	The API accepts parameters in several ways:
+var database = firebase.database();
+const auth = firebase.auth();
 
-	As query string parameters (commonly called “GET parameters”). These are just simple string keys with urlencoded values.
-	As form-urlencoded POST body data. Keys here are usually dotted (for example event.name.html - you should include the dots as well.
-	As JSON-format POST body data. This is accepted wherever form-encoded POST data is; it’s a series of nested objects with the keys matching the dotted paths of the variable names.
-	For example, submitting this as a urlencoded POST body:
-	
-	event.name.html=Awesome%20Event&event.listed=true
-	is the same as submitting this JSON body (notice how the keys match):
-	
-	{
-	    "event": {
-	        "name": {
-	            "html": "Awesome Event"
-	        },
-	        "listed": true
-	    }
-	}
-	You cannot mix and match JSON-style inputs and GET/POST style; if you pass a JSON body (or any request body with a Content-Type header set to application/json), all GET and POST parameters will be ignored.
+$(document).ready(function() {
+var url = "https://www.eventbriteapi.com/v3/events/search/?token=IVKXSGGHO6MZSHMF5QZZ&location.address=austin&location.within=10mi";
 
-----Getting Events from Eventrbrite
-	** Note: go to the link below to see an example of event search parameters available:
-	https://www.eventbrite.com/developer/v3/endpoints/events/#ebapi-get-events-search
-
-	Notable items from documentation above:
-		-start_date.range_start
-		-start_date.range_end
-		-location.address
-		-location.within
-		-categories
-
-
-*/
-// Eventbrite token: D5JWVCEPRXACNC6KHG
-// Client Secret: WSRX6O2WIGCMZXHISX35DBDPI5X3IXJWNLDFDI7YRUUPFGQ3E3
-// Personal OAuth token: 5MWI565BZ5QH5UNU3XV7
-// Anonymout OAuth token: FE7TB42RH5HP5CBOINFE
-
-// Get values from the form inputs
-var city = $('#search-city').val();
-var category = $('#search-category').val();
-var date1 = $('#search-date1').val();
-var date2 = $('#search-date2').val();
-console.log("City: " + city + " Category: " + category + " Date 1: " + date1 + " Date 2: " + date2);
-return false;
-
-// Get the parent element which content will be prepended to
-//var parent = $("div#ajax-results");
-
-// Establish query URL, meeting Eventbrite API requirements
-var queryUrl = "https://www.eventbriteapi.com/v3/events/?token=5MWI565BZ5QH5UNU3XV7&location= " + city + "&start_date.range_start=" + date1 + "&start_date.range_end=" + date2 + ";
-console.log("queryUrl: " + queryUrl);
-
-// AJAX call to get data
 $.ajax({
-	url: queryUrl, 
-	method: "GET"
-}).done(function(returnData) {
-	console.log(returnData);
+	url: url,
+	method: "GET",
+	}).done(function(response) {
+	console.log(response);
+	console.log(response.events[1].description.text);
+	//$("#test").html(response.events[3].description.text)
+	console.log(response.events[1].end.local)
+	//$("#test").append(response.events[3].end.local)
+	console.log(response.events[1].name.text)
+	//$("#test").prepend(response.events[3].name.text)
+	console.log(response.events[1].start.local)
+	//$("#test").append(response.events[3].start.local)
 
-	// Throw stuff into main img container
-	$('div#gif-content').html(stuff);
-})
+	response.events.forEach (function(item, index, arr) {
+		let stuff = '<div id=' + index + '>';
+		var sliced;
+		if (item.description.text != null) {
+			sliced = item.description.text.slice(0, 100);
+		} else {
+			sliced = "No description";
+		}
+		
+		//$(".divs").append(stuff);	
+		$("#" + index).addClass("yo");	
+		//$("#" + index).html(item.name.text);
+		$("#" + index).append(sliced);
+		let html = '<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">' +
+                  '<div class="panel event-content text-center">' +
+                    	'<h3>' + item.name.text + '</h3>' +
+                    	'<p>' + sliced + '</p>' +
+                    	'<button type="button" class="btn btn-primary btn-lg btn-block">Add Favorite</button>' +
+                  '</div>' +
+        		  '</div>';
+        $(".main").append(html);
+	});
+});
+
+});
+// q = events with keyword
+// start_date.range_start
+// start_date.range_end
+//location.address
+// location.within
+// categories
+//response.events[i].description.text
+//response.events[i].end.local
+// "".name.text
+// "" start.local
+// "" 
+
