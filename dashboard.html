@@ -21,21 +21,25 @@
 
     <!-- Custom styles for project -->
     <link rel="stylesheet" type="text/css" href="assets/css/dash-main-template.css">
-    <style>
-    .panel {height:240px;}
-    </style>
+    
 </head>
 
 <body>
     <!-- Modal for program alerts -->
-    <div class="modal fade infoModal" tabindex="-1" role="dialog">
+    <div class="modal fade eventModal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="modal-body">
-                    <p id="modal-msg"></p>
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"> Event Information </h4>
+                </div>
+                <div class="modal-body text-center">
+                    <p id="modal-event-name"></p>
+                    <p id="modal-event-date"></p>
+                    <p id="modal-event-desc"></p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-warning" data-dismiss="modal">Okay!</button>
+                    <button type="button" class="btn btn-warning" data-dismiss="modal"> Close </button>
                 </div>
              </div>
         </div>
@@ -106,10 +110,14 @@
     <!-- Latest compiled and minified Bootstrap JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
+    <!-- Moment JS library for date formatting etc -->
+    <script src="assets/vendor/moment-js/moment.js"></script>
+
     <!-- Firebase Script Link -->
     <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
 
     <!-- Custom script for main program functionality -->
     <script src="assets/js/app.js"></script>
+
 </body>
 </html>

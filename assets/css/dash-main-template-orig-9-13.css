@@ -42,19 +42,10 @@ a.navbar-brand {
 	background-color: #1F1F1F;
 }
 
-/* Nav Bar */
+/*Nav Bar*/
 #navbar {
 	background-color: #1F1F1F;
 	border-bottom: 1px solid #BFBFBF;
-}
-
-/* Styling for event modal */
-.modal-title {
-	color: #4aaaaa;
-}
-
-#modal-event-name {
-	color: royalblue;
 }
 
 /* Make input label thinner */
@@ -100,34 +91,48 @@ input.input-generate {
 	margin-right: 5px;
 }
 
-/* Global styles for all buttons */
+/* Styling for all side buttons */
 .btn {
 	border-radius: 3px;
-	background-color: #31C0C5;
-	border: none;
+}
+
+button {
+	color: #fff;
+	background-color: #4aaaa5;
 	transition: .5s;
 }
 
-.btn:hover, .btn:active, .btn:focus {
+button:hover {
 	color: #fff;
-	background-color: #239095;
-	outline: none;
 }
 
 .clear-btn {
 	margin-right: 10px;
 }
 
-/* Styling for favorite buttons */
-.fav-button {
+/*Add Favorite Buttons*/
+.btn-primary {
 	font-weight: bold;
 	background-color: #31C0C5;
 	border: none;
-	color: #fff;
-	border-top-right-radius: 0;
-    border-top-left-radius: 0;
-    transition: .5s;
 }
+
+/* Override Bootstrap #333 text color on hover */
+.btn:hover {
+	color: #fff;
+	background-color: #239095;
+}
+.btn:active {
+	color: #fff;
+	background-color: #239095 !important;
+	outline: none !important;
+}
+.btn:focus {
+	color: #fff;
+	background-color: #239095 !important;
+	outline: none;
+}
+
 
 /* Make search icon light blue */
 .glyphicon-plus {
@@ -146,21 +151,9 @@ span.form-control-feedback {
 	cursor: pointer;
 }
 
-/* Parent container for each individual event box */
-.event-box {
-	margin-bottom: 30px;
-	cursor: pointer;
-}
-
-/* Override Bootstrap panel styling. Make sure there is no margin on bottom so that fav button looks seamless as part of container */
 .panel {
 	background-color: #ECECEC;
-	height: 190px;
-	margin-bottom: 0;
-	border-bottom-left-radius: 0;
-	border-bottom-right-radius: 0;
 }
-
 /* Give main page heading a lighter weight for aesthetics */
 h1 {
 	font-weight: 200;
