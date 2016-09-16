@@ -11,7 +11,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="../../favicon.ico">
-    <title> Event Searcher </title>
+    <title> Eventi </title>
 
     <!-- Latest Bootstrap compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -21,7 +21,8 @@
 
     <!-- Custom styles for project -->
     <link rel="stylesheet" type="text/css" href="assets/css/dash-main-template.css">
-    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans:100|Josefin+Slab:100|Quicksand:300|Raleway:100|Yanone+Kaffeesatz:200" rel="stylesheet"></head>
 </head>
 
 <body>
@@ -30,8 +31,8 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title"> Event Information </h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></button>
+                    <h3 class="modal-title"> Event Information </h3>
                 </div>
                 <div class="modal-body text-center">
                     <p id="modal-event-name"></p>
@@ -55,7 +56,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#"> Event Searcher </a>
+                <a class="navbar-brand" href="#">Eventi</a>
             </div>
             <!-- Main program nav display -->
             <div id="navbar" class="navbar-collapse collapse">
@@ -76,30 +77,38 @@
             <!-- Main sidebar content, for housing topic buttons -->
             <div class="col-sm-3 col-md-2 sidebar text-center">
                 <ul class="nav nav-sidebar">
-                    <li><a href="#" class="sidebar-heading"> Event Dashboard </a></li>
+                    <li><a href="#" class="sidebar-heading"></a></li>
                     <!-- div container for main dashboard functionality -->
                     <div id="dashboard-content">
-                    	<li>
-                    		<h2> Good Stuff </h2>
-                    	</li>
-
-                    	<li>
-                    		<h2> More Stuff </h2>
-                    	</li>
-
-                        <li>
-                            <h2> More Stuff </h2>
-                        </li>
-
-                        <li>
-                            <h2> More Stuff </h2>
-                        </li>
+                      <li>
+                        <button type="button" class="click-option" data-id="" data-categories="all events">all events</button>
+                      </li>
+                      <li>
+                        <button type="button" class="click-option" data-id="105" data-categories="Arts">arts</button>
+                      </li>
+                      <li>
+                        <button type="button" class="click-option" data-id="103" data-categories="music">music</button>
+                      </li>
+                      <li>
+                        <button type="button" class="click-option" data-id="108" data-categories="Sports & Fitness">athletics</button>
+                      </li>
+                      <li>
+                        <button type="button" class="click-option" data-id="110" data-categories="Food & Drink">food & drink</button>
+                      </li>
+                      <li>
+                        <button type="button" class="click-option" data-id="104" data-categories="Film & Media">film & media</button>
+                      </li>
+                      <li>
+                        <button type="button" class="click-option" data-id="102" data-categories="Science & Tech">science & tech</button>
+                      </li>
                     </div>
                 </ul>
             </div>
             <!-- Main app content container -->
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-                <h1 class="page-header"> Events are so awesome... <span class="header-span"></span></h1>
+                <h1 class="page-header">Choose from events in your area and add to your favorites!<span class="header-span"></span></h1>
+                <!-- Holds the event boxes -->
+                <div class="event-boxes"></div>
             </div> <!-- /.main -->
         </div> <!-- /.row -->
     </div> <!-- /.container-fluid -->
