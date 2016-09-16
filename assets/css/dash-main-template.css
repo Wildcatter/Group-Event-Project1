@@ -20,6 +20,7 @@
  #154D4F - darkest robin blue for click border
  #FEDC32 - daisy yellow
  #BFBFBF - light gray used on fonts and borders
+ #717171 - dark gray modal header
  */
 
  /* Apply dark navy blue background and gray text to body */
@@ -51,11 +52,20 @@
 
  /* Styling for event modal */
  .modal-title {
- 	color: #4aaaaa;
+ 	color: #FEDC32;
  }
 
  #modal-event-name {
  	color: royalblue;
+ }
+
+ .modal-header {
+  background-color: #717171;
+  border-radius: 4px;
+ }
+
+ .modal-header span {
+  color: #FEDC32;
  }
 
  /* Make input label thinner */
@@ -175,6 +185,7 @@
 
  h3 {
  	color: #1F1F1F;
+  font-weight: bold;
  }
 
  /* Only add sidebar border on larger screens */
@@ -190,10 +201,14 @@
 	background:none;
 	border:none;
 	outline: none;
-	font-size: 32px;
+	font-size: 24px;
 	color: #BFBFBF;
 }
 /*Hover color for the events on the dashboard*/
 .click-option:hover {
 	color: #FEDC32;
+}
+
+p {
+  color: black;
 }

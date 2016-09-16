@@ -23,7 +23,10 @@ var eventObj = {
 	 * @return N/A
 	 */
 	ajaxCall: function(dataObj) {
-		var url = "https://www.eventbriteapi.com/v3/events/search/?token=IVKXSGGHO6MZSHMF5QZZ&location.address=austin&location.within=10mi";
+
+        var city = dataObj.city;
+        var categoryId = dataObj.categoryId;
+		var url = "https://www.eventbriteapi.com/v3/events/search/?token=IVKXSGGHO6MZSHMF5QZZ&location.address=" + city + "&categories=" + categoryId + "&location.within=10mi";
 
 		$.ajax({
 			url: url,
@@ -31,6 +34,9 @@ var eventObj = {
 		}).done(function(response) {
 
 			console.log("Response: " + response.events[1]);
+
+            // clear the main content container
+            $(".event-boxes").empty();
 
 			// Loop through each event item
 			response.events.forEach(function(item, index, arr) {
@@ -62,10 +68,10 @@ var eventObj = {
 		                    		'<p class="event-desc" data-desc="' + longDesc + '">' + shortDesc + '</p>' +
 		                  		'</div>' +
 		                  		'<button type="button" class="btn btn-lg btn-block fav-button">Add Favorite</button>' +
-		        		  '</div>';
+		        		    '</div>';
 
 		        // Append new event block to div.main
-		        $(".main").append(html);
+		        $(".event-boxes").append(html);
 			});
 		});
 	}
@@ -74,11 +80,15 @@ var eventObj = {
 $(document).ready(function() {
 
 	// Get the events on initial page load (50 of the first "All" events from the api)
-	eventObj.ajaxCall();
+    var dataObj = {
+        city: "Austin",
+        categoryId: 103
+    }
+	eventObj.ajaxCall(dataObj);
 
 	// If the user clicks on an event box, show modal with event info (giving greater detail of description etc)
 	// Had to start with div.main parent, then narrow down, due to DOM being updated dynamically with events after initial page load
-	$('.main').on('click', 'div.event-content', function() {
+	$('.event-boxes').on('click', 'div.event-content', function() {
 		console.log("this: " + this);
 
 		// Get the parent element for reference
@@ -104,23 +114,20 @@ $(document).ready(function() {
 		$('.eventModal').modal("show");
 	});
 
-	// clickable event categories to narrow user search (Sarah 09/14)
-	// on click function to display only the events within that specific category
+	// Clickable event categories to narrow user search (Sarah 09/14)
+	// On click function to display only the events within that specific category
 	$('.click-option').on('click', function(){
-		// assign the data from the button to eventInfo
-		var eventInfo = $(this).data();
-		// testing that we're getting the id back when clicking
-		console.log(eventInfo.id);
-		// url string concatinated with the category id
-		var queryURL = "https://www.eventbriteapi.com/v3/events/search/?categories=" + eventInfo.id + "&token=IVKXSGGHO6MZSHMF5QZZ";
-		// ajax call which will work for each individual catgetory id
-		$.ajax({url: queryURL, method: 'GET'}).done(function(response) {
-			var results = response.data;
-			console.log(response);
-			// grab the values that you want to display from the object
-			console.log(response.events[0].description);
-			// populate the chosen values in the div
-		});
+
+		// Assign the data from the button to eventInfo
+		var catId = $(this).data("id");
+		// Testing that we're getting the id back when clicking
+		console.log(catId);
+        // Run Ajax function after user clicks category
+        var dataObj = {
+            city: "Austin",
+            categoryId: catId
+        }
+        eventObj.ajaxCall(dataObj);
 	});
 
 });
