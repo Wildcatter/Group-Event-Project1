@@ -11,7 +11,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="../../favicon.ico">
-    <title> Eventi </title>
+    <title> eventi </title>
 
     <!-- Latest Bootstrap compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -21,18 +21,20 @@
 
     <!-- Custom styles for project -->
     <link rel="stylesheet" type="text/css" href="assets/css/dash-main-template.css">
+
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Josefin+Sans:100|Josefin+Slab:100|Quicksand:300|Raleway:100|Yanone+Kaffeesatz:200" rel="stylesheet"></head>
 </head>
 
 <body>
+
     <!-- Modal for program alerts -->
     <div class="modal fade eventModal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></button>
-                    <h3 class="modal-title"> Event Information </h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+                    <h3 class="modal-title"> event information </h3>
                 </div>
                 <div class="modal-body text-center">
                     <p id="modal-event-name"></p>
@@ -56,15 +58,15 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">Eventi</a>
+                <a class="navbar-brand" href="#">eventi</a>
             </div>
             <!-- Main program nav display -->
             <div id="navbar" class="navbar-collapse collapse">
                 <div class="navbar-form navbar-right">
-                    <button class="btn btn-primary clear-btn"> Find Events </button>
-                    <label> Sign Up </label>
+                    <button class="btn"> find events </button>
+                    <label> sign up </label>
                     <!-- Input field for new topic button generation -->
-                    <input type="text" class="form-control input-generate player-join-input" placeholder="Enter your email...">
+                    <input type="text" class="form-control input-generate player-join-input" placeholder="enter your email...">
                     <!-- Search icon, registers click for new topic button generation, or via onkeyup Enter kay -->
                     <span class="glyphicon glyphicon-plus form-control-feedback plus-icon" aria-hidden="true"></span>
                 </div>
@@ -80,6 +82,7 @@
                     <li><a href="#" class="sidebar-heading"></a></li>
                     <!-- div container for main dashboard functionality -->
                     <div id="dashboard-content">
+
                       <li>
                         <button type="button" class="click-option" data-id="" data-categories="all events">all events</button>
                       </li>
@@ -106,7 +109,14 @@
             </div>
             <!-- Main app content container -->
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-                <h1 class="page-header">Choose from events in your area and add to your favorites!<span class="header-span"></span></h1>
+
+              <!-- Slide Reveal side Bar -->
+              <div class="slide-reveal">
+                <div id='slider'><h1>my favorites</h1></div>
+                <button class="btn" id='trigger'>my favorites</button>
+              </div>
+
+                <h1 class="page-header"><span class="header-span"></span></h1>
                 <!-- Holds the event boxes -->
                 <div class="event-boxes"></div>
             </div> <!-- /.main -->
@@ -127,6 +137,10 @@
 
     <!-- Custom script for main program functionality -->
     <script src="assets/js/app.js"></script>
+
+    <!-- Slide Reveal side Bar -->
+    <script src="http://code.jquery.com/jquery-[latest].min.js"></script>
+    <script src="assets/vendor/jquery-slidereveal/jquery.slidereveal.min.js"></script>
 
 </body>
 </html>

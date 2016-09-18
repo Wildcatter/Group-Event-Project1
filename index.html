@@ -28,7 +28,7 @@
 		<link rel="stylesheet" href="assets/vendor/jquery-ui/jquery-ui.theme.css">
 
 		<!-- Google fonts -->
-		<link href="https://fonts.googleapis.com/css?family=Bungee+Hairline|Didact+Gothic|Heebo|Josefin+Sans|Open+Sans+Condensed:300|Oxygen|Questrial|Quicksand|Raleway|Wire+One" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Josefin+Sans:100|Josefin+Slab:100|Quicksand:300|Raleway:100|Yanone+Kaffeesatz:200" rel="stylesheet"></head>
 	</head>
 
 	<body>
@@ -46,10 +46,13 @@
 		  	</div><!-- /.modal-dialog -->
 		</div><!-- #main-modal -->
 
+		<!-- Login link -->
+		<h2 class="login-link"> login </h2>
+
 		<!-- Big Page Heading -->
 		<div class="jumbotron">
   			<div class="container">
-    			<h1 class="text-center"> Eventinator </h1>
+    			<h1 class="text-center"> eventi </h1>
   			</div>
 		</div>
 
@@ -59,29 +62,34 @@
 					<div class="form-group">
 						<!-- Wrap inside of col's to match padding & margin of side-by-side date fields -->
 						<div class="col-sm-12 col-md-12 col-lg-12">
-							<label> City </label>
+							<label> city </label>
 							<input type="text" class="form-control" id="search-city">
 
-							<label> Category </label>
+							<label> category </label>
+							<!-- Note: value == api id requirement for that category -->
 							<select type="text" class="form-control" id="search-category">
-								<option value="">Select...</option>
-								<option value="concerts">Concerts</option>
-								<option value="arts">Art</option>
-								<option value="plays">Plays</option>
-								<option value="sports">Sports</option>
-								<option value="festivals">Festivals</option>
-								<option value="conventions">Conventions</option>
+								<option value="">all events</option>
+								<option value="105">arts</option>
+								<option value="103">music</option>
+								<option value="108">athletics</option>
+								<option value="110">food & drink</option>
+								<option value="104">film & media</option>
+								<option value="102">science & technology</option>
 							</select>
 						</div>
 						<!-- Note: date fields are side-by-side -->
 						<div class="col-sm-12 col-md-6 col-lg-6">
-							<label> Start Date </label>
+							<label> start date </label>
 							<input type="text" class="form-control" id="search-date1">
 						</div>
 
 						<div class="col-sm-12 col-md-6 col-lg-6">
-							<label> End Date </label>
+							<label> end date </label>
 							<input type="text" class="form-control" id="search-date2">
+						</div>
+
+						<div class="col-sm-12 col-md-12 col-lg-12">
+							<p class="text-center search-submit" id="search-submit"> eventinate </p>
 						</div>
 					</div>
 				</div> <!-- .main -->
@@ -93,6 +101,9 @@
 
    		<!-- Backstretch js plugin, for page background -->
    		<script src="assets/js/backstretch_plugin.min.js"></script>
+
+   		<!-- Firebase database link -->
+   		<script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
 
    		<!-- jQuery UI script for datepicker etc. , locally hosted -->
    		<script src="assets/vendor/jquery-ui/jquery-ui.min.js"></script>
