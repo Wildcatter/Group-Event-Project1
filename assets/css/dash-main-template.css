@@ -21,6 +21,7 @@
  #FEDC32 - daisy yellow
  #BFBFBF - light gray used on fonts and borders
  #717171 - dark gray modal header
+ #EFEFEF - slider background color
  */
 
  /* Apply dark navy blue background and gray text to body */
@@ -28,6 +29,12 @@
  	font-family: 'Josefin Sans', sans-serif;
  	background-color: #0A0A0A;
  	color: #BFBFBF;
+ }
+
+ /*Make all paragraph text black and bold*/
+ p {
+   color: black;
+   font-weight: bold;
  }
 
  /* Main program title in top left of screen */
@@ -48,6 +55,7 @@
  #navbar {
  	background-color: #1F1F1F;
  	border-bottom: 1px solid #BFBFBF;
+  width: 100%;
  }
 
  /* Styling for event modal */
@@ -56,7 +64,9 @@
  }
 
  #modal-event-name {
- 	color: royalblue;
+ 	color:  #31C0C5;
+  font-size: 18px;
+  font-weight: bold;
  }
 
  .modal-header {
@@ -106,6 +116,21 @@
  	font-weight: 200;
  }
 
+ /*Remove box and outline from the sidebar buttons*/
+ .click-option {
+ 	background: none;
+ 	border: none;
+ 	outline: none;
+ 	font-size: 24px;
+ 	color: #BFBFBF;
+  transition: .5s;
+ }
+
+ /*Hover color for the sidebar buttons*/
+ .click-option:hover {
+ 	color: #FEDC32;
+ }
+
  /* Move input field left to make room away from edge of screen */
  input.input-generate {
  	margin-right: 5px;
@@ -113,13 +138,15 @@
 
  /* Global styles for all buttons */
  .btn {
+  font-size: 16px;
  	border-radius: 3px;
  	background-color: #31C0C5;
  	border: none;
  	transition: .5s;
+  color: #fff;
  }
 
- .btn:hover, .btn:active, .btn:focus {
+ .btn:hover, .btn:active, .btn:focus, .btn:active:focus {
  	color: #fff;
  	background-color: #239095;
  	outline: none;
@@ -132,12 +159,13 @@
  /* Styling for favorite buttons */
  .fav-button {
  	font-weight: bold;
+  font-size: 20px;
  	background-color: #31C0C5;
  	border: none;
  	color: #fff;
  	border-top-right-radius: 0;
-     border-top-left-radius: 0;
-     transition: .5s;
+  border-top-left-radius: 0;
+  transition: .5s;
  }
 
  /* Make search icon light blue */
@@ -166,7 +194,7 @@
  /* Override Bootstrap panel styling. Make sure there is no margin on bottom so that fav button looks seamless as part of container */
  .panel {
  	background-color: #ECECEC;
- 	height: 190px;
+ 	height: 215px;
  	margin-bottom: 0;
  	border-bottom-left-radius: 0;
  	border-bottom-right-radius: 0;
@@ -188,27 +216,29 @@
   font-weight: bold;
  }
 
+/*Give the main page header some bottom margin*/
+ .main .page-header {
+  margin-bottom: 30px;
+}
+
+ /*Slide Reveal bar*/
+ .slide-reveal {
+  color: #31C0C5;
+  box-sizing: 100px;
+ }
+
+ #slider {
+   background-color: #EFEFEF;
+   text-align: center;
+ }
+ /*Slider button*/
+ .trigger {
+  outline: none;
+ }
+
  /* Only add sidebar border on larger screens */
  @media (min-width: 768px) {
  	.sidebar {
  		border-right: 1px solid #BFBFBF;
  	}
  }
-
-/*NEW STYLE 09/14 - SARAH*/
-/*Get rid of button box and outline on the events, so just the word is clickable*/
-.click-option {
-	background:none;
-	border:none;
-	outline: none;
-	font-size: 24px;
-	color: #BFBFBF;
-}
-/*Hover color for the events on the dashboard*/
-.click-option:hover {
-	color: #FEDC32;
-}
-
-p {
-  color: black;
-}

@@ -67,7 +67,7 @@ var eventObj = {
 		                    		'<p class="event-date" data-date="' + date + '">' + date + '</p>' +
 		                    		'<p class="event-desc" data-desc="' + longDesc + '">' + shortDesc + '</p>' +
 		                  		'</div>' +
-		                  		'<button type="button" class="btn btn-lg btn-block fav-button">Add Favorite</button>' +
+		                  		'<button type="button" class="btn btn-lg btn-block fav-button">add favorite</button>' +
 		        		    '</div>';
 
 		        // Append new event block to div.main
@@ -78,6 +78,14 @@ var eventObj = {
 }
 
 $(document).ready(function() {
+
+    // Slide Reveal function
+    $("#slider").slideReveal({
+        trigger: $("#trigger"),
+        push: false,
+        overlay: true,
+        position: "right"
+    });
 
 	// Get the events on initial page load (50 of the first "All" events from the api)
     var dataObj = {
