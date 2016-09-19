@@ -84,7 +84,9 @@ $(document).ready(function() {
         trigger: $("#trigger"),
         push: false,
         overlay: true,
-        position: "right"
+        position: "right",
+        speed: 600,
+        overlaySpeed: 1000
     });
 
 	// Get the events on initial page load (50 of the first "All" events from the api)

@@ -222,18 +222,31 @@
 }
 
  /*Slide Reveal bar*/
- .slide-reveal {
-  color: #31C0C5;
-  box-sizing: 100px;
+ .slide-reveal{
+  /*transition: 1s;*/
  }
 
  #slider {
-   background-color: #EFEFEF;
-   text-align: center;
+  color: #31C0C5;
+  background-color: #EFEFEF;
+  text-align: center;
+  font-weight: bold;
  }
+
  /*Slider button*/
- .trigger {
+ #trigger {
   outline: none;
+  margin-left: auto;
+  background-color: #FEDC32;
+  font-weight: bold;
+  font-size: 20px;
+  width: 90;
+  margin-top: -10px;
+  margin-bottom: 30px;
+ }
+
+ #trigger:hover {
+  background: #CAAB0A;
  }
 
  /* Only add sidebar border on larger screens */
