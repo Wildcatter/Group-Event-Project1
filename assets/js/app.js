@@ -201,14 +201,19 @@ var eventObj = {
         console.log("city: " + city + " categoryId: " + categoryId + " categoryName: " + categoryName + " date1: " + firstDate + " date2: " + lastDate);
   		
   		// Prevent form submit if all inputs are empty
-        if(city == "" && categoryId == "" && startDate == "" && endDate == "") {
-            alert("You didn't enter any search criteria!");
+        if(city == "" && categoryId == "" && firstDate == "" && lastDate == "") {
+        	// Close the search modal, and then show the alert modal
+        	$('.searchModal').modal("hide");
+            contentObj.showAlertModal("You didn't enter any search criteria!");
             return false;
         }
   
         // Prevent form submit if there was no city entered.  This is the minimum search requirement
         if(city == "") {
-            alert("You must at least enter a city for your search!");
+        	// Close the search modal, and then show the alert modal
+        	$('.searchModal').modal("hide");
+            contentObj.showAlertModal("You must at least enter a city for your search!");
+            return false;
         }
 
   		// Set city location to session var. Note: this is also set in other places. You want to overrite it every time a new search occurs
@@ -357,7 +362,7 @@ $(document).ready(function() {
 		var dateObj   = eventObj.formatQueryDates(firstDate, lastDate);		
 		
         // Run Ajax function
-         var dataObj = {
+        var dataObj = {
             city: 			city,
             categoryId: 	categoryId,
             categoryName: 	categoryName,
@@ -377,6 +382,11 @@ $(document).ready(function() {
     $('#modal-search-submit').on('click', function() {
         // Get form input data and process so it is ready to send to the api ajax call
         var dataObj = eventObj.getSearchInputData();
+
+        // Check for false return from getSearchInputData(), to prevent spinner from executing
+        if(!dataObj) {
+          return false;
+        }
 
         // Execute the ajax call, and save response to localStorage
         eventObj.executeQueryUrl(dataObj);
@@ -408,21 +418,33 @@ $(document).ready(function() {
 		localStorage.setItem("city-location", city);
 		console.log("localStorage city: " + city);
 
+		// Set categoryId == "", as default load for change location action == all categories
+		var categoryId = "";
+
+		// Set categoryName == "all events" for change location main heading feedback
+		var categoryName = "all events";
+
 		// Show fadeIn/fadeOut feedback to user for successful location set
 		$('p.location-input-feedback').text(city + " location Set Successfully!").fadeIn(1000).fadeOut(2000);
 
 		// Empty out the text that user just submitted
 		$('.location-input').val("");
 
+		// Set and format default date range for query search and search feedback heading string. Function will return object with date properties
+		// Note: might want to revisit the possibility of setting date range to == localStorage dates, instead of default, in some cases
+		var firstDate = null;
+		var lastDate  = null;
+		var dateObj   = eventObj.formatQueryDates(firstDate, lastDate);	
+
 		// Generate new result set, setting event categoryId to null & categoryName to "all events" to retrieve 'all events', and new city location as the location
 		var dataObj = {
 			city: city,
-            categoryId: null,
-            categoryName: "all events",
-            startDate: startDate,
-            queryStartDate: queryStartDate,
-            endDate: endDate,
-            queryEndDate: queryEndDate
+            categoryId: 	categoryId,
+            categoryName: 	categoryName,
+            startDate: 		dateObj.startDate,
+            queryStartDate: dateObj.queryStartDate,
+            endDate: 		dateObj.endDate,
+            queryEndDate: 	dateObj.queryEndDate
 		}
 		// Execute the query
 		eventObj.executeQueryUrl(dataObj);

@@ -149,8 +149,8 @@ var eventObj = {
         var lastDate     = $('#search-date-end').val().trim();
         console.log("city: " + city + " categoryId: " + categoryId + " categoryName: " + categoryName + " date1: " + firstDate + " date2: " + lastDate);
       
-      // Prevent form submit if all inputs are empty
-        if(city == "" && categoryId == "" && startDate == "" && endDate == "") {
+        // Prevent form submit if all inputs are empty
+        if(city == "" && categoryId == "" && firstDate == "" && lastDate == "") {
             contentObj.showAlertModal("You didn't enter any search criteria!");
             return false;
         }
@@ -158,13 +158,14 @@ var eventObj = {
         // Prevent form submit if there was no city entered.  This is the minimum search requirement
         if(city == "") {
             contentObj.showAlertModal("You must at least enter a city for your search!");
+            return false;
         }
 
-      // Set city location to session var. Note: this is also set in other places. You want to overrite it every time a new search occurs
-      localStorage.setItem("city-location", city);
-
-      // All inputs are good to go; now format dates for query string and search feedback msg string
-      var dateObj = eventObj.formatQueryDates(firstDate, lastDate);     
+        // Set city location to session var. Note: this is also set in other places. You want to overrite it every time a new search occurs
+        localStorage.setItem("city-location", city);
+  
+        // All inputs are good to go; now format dates for query string and search feedback msg string
+        var dateObj = eventObj.formatQueryDates(firstDate, lastDate);     
         
         // Send search inputs to ajaxCall. Note: ajaxCall will set response data as localStorage item for dashboard.html content generation
         var dataObj = {
@@ -375,6 +376,11 @@ $(document).ready(function() {
     $('#search-submit').on('click', function() {
         // Get form input data and process so it is ready to send to the api ajax call
         var dataObj = eventObj.getSearchInputData();
+
+        // Check for false return from getSearchInputData(), to prevent spinner from executing
+        if(!dataObj) {
+          return false;
+        }
 
         // Set the search feedback message, and save to localStorage. Do so before page redirect, so that message is saved
         eventObj.getFeedbackMsg(dataObj);
