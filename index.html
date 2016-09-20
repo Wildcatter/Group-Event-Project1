@@ -3,10 +3,7 @@
  - Created: 09/08/2016 by Sarah Reyes, Garett Francis, Matt Holland
  - Located: fileLocation/index.html
  - Purpose: Provide main page display template structure for group project #1 - Event searcher
- - YAEEEEEAHAHHAHAHAHAHAHA
 -->
-
-<!-- TEST -->
 
 <!DOCTYPE html>
 <html>
@@ -19,8 +16,9 @@
 		<!-- Latest Bootstrap compiled and minified CSS -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
-		<!-- Customized stylesheet -->
+		<!-- Custom styles for project -->
 		<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+		<link rel="stylesheet" type="text/css" href="assets/css/spinner.css">
 
 		<!-- jQuery UI styling, locally hosted -->
 		<link rel="stylesheet" href="assets/vendor/jquery-ui/jquery-ui.min.css">
@@ -32,27 +30,34 @@
 	</head>
 
 	<body>
-		<!-- Main modal for app alerts etc -->
-		<div class="modal fade" id="main-modal" tabindex="-1" role="dialog">
-		  	<div class="modal-dialog" role="document">
-		    	<div class="modal-content">
-		      		<div class="modal-header">
-		        		<h4 class="modal-title text-center">Random Modal</h4>
-		      		</div>
-		      		<div class="modal-body">
-		        		<p class="text-center">Stuff</p>
-		      		</div>
-		    	</div><!-- /.modal-content -->
-		  	</div><!-- /.modal-dialog -->
-		</div><!-- #main-modal -->
+		<!-- Spinner container -->
+    	<div class="spinner-div"></div>
+
+    	<!-- Modal for program alerts -->
+    	 <div class="modal fade alertModal" tabindex="-1" role="dialog">
+    	    <div class="modal-dialog" role="document">
+    	        <div class="modal-content">
+    	            <div class="modal-header">
+    	                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+    	                <h3 class="modal-title"> eventi </h3>
+    	            </div>
+    	            <div class="modal-body text-center">
+    	                <p id="modal-alert-msg"></p>
+    	            </div>
+    	            <div class="modal-footer">
+    	                <button type="button" class="btn btn-warning" data-dismiss="modal"> Close </button>
+    	            </div>
+    	         </div>
+    	    </div>
+    	</div><!-- /.alertModal -->
 
 		<!-- Login link -->
-		<h2 class="login-link"> Login </h2> 
+		<h2 class="login-link"> login </h2>
 
 		<!-- Big Page Heading -->
 		<div class="jumbotron">
   			<div class="container">
-    			<h1 class="text-center"> Eventi </h1>
+    			<h1 class="text-center"> eventi </h1>
   			</div>
 		</div>
 
@@ -62,34 +67,34 @@
 					<div class="form-group">
 						<!-- Wrap inside of col's to match padding & margin of side-by-side date fields -->
 						<div class="col-sm-12 col-md-12 col-lg-12">
-							<label> City </label>
+							<label> city </label>
 							<input type="text" class="form-control" id="search-city">
 
-							<label> Category </label>
+							<label> category </label>
 							<!-- Note: value == api id requirement for that category -->
 							<select type="text" class="form-control" id="search-category">
-								<option value="">All Events</option>
-								<option value="105">Arts</option>
-								<option value="103">Music</option>
-								<option value="108">Athletics</option>
-								<option value="110">Food & Drink</option>
-								<option value="104">Film & Media</option>
-								<option value="102">Science & Technology</option>
+								<option value="">all events</option>
+								<option value="105" data-category="arts">arts</option>
+								<option value="103" data-category="music">music</option>
+								<option value="108" data-category="athletics">athletics</option>
+								<option value="110" data-category="food & drink">food & drink</option>
+								<option value="104" data-category="film & media">film & media</option>
+								<option value="102" data-category="science & technology">science & technology</option>
 							</select>
 						</div>
 						<!-- Note: date fields are side-by-side -->
 						<div class="col-sm-12 col-md-6 col-lg-6">
-							<label> Start Date </label>
-							<input type="text" class="form-control" id="search-date1">
+							<label> start date </label>
+							<input type="text" class="form-control" id="search-date-start">
 						</div>
 
 						<div class="col-sm-12 col-md-6 col-lg-6">
-							<label> End Date </label>
-							<input type="text" class="form-control" id="search-date2">
+							<label> end date </label>
+							<input type="text" class="form-control" id="search-date-end">
 						</div>
 
 						<div class="col-sm-12 col-md-12 col-lg-12">
-							<p class="text-center search-submit" id="search-submit"> Eventinate! </p>
+							<p class="text-center search-submit" id="search-submit"> eventinate </p>
 						</div>
 					</div>
 				</div> <!-- .main -->
@@ -110,6 +115,9 @@
 
 		<!-- Latest compiled and minified JavaScript -->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+		<!-- Moment JS library for date formatting etc -->
+    	<script src="assets/vendor/moment-js/moment.js"></script>
 
 		<!-- Custom js application code -->
 		<script src="assets/js/index-page.js"></script>

@@ -37,6 +37,7 @@ ref.on('child_added', function(snapshot) {
   snapshot.val().email + " User favCategories: " + snapshot.val().favCategories;
   $('.drunk-ass-div').append(content);
 });
+
 </pre>
 		<div class="drunk-ass-div"></div>
 		<br>
@@ -48,28 +49,28 @@ ref.limitToFirst(2).on('child_added', function(snapshot) {
   snapshot.val().email + " User favCategories: " + snapshot.val().favCategories;
   $('.first-user').append(content);
 });
+
 </pre>
 		<div class="first-user"></div>
 		<br>
 
-		<h2> Print out all favCategories "music" events, under each user's name: </h2>
+		<h2> Print out all personal favorite titles for userId 757827487: </h2>
+
 <pre>
-usersRef.on('child_added', function(snapshot) {
-  var musicEvent = snapshot.val().favCategories.music;
-  musicEvent.forEach(function(item, index, arr) {
-    $('.music').append("<p> Event # " + index + ": " + item.desc + "</p>");
+usersRef.child('757827487').child("favCategories").on('child_added', function(snapshot) { 
+  var content = "<p>";
+  var faveCat = snapshot.key + ":<br>";
+  var event = "";
+  snapshot.val().forEach(function(item, index, arr) {
+    event += "<span> Description: " + item.desc + "</span>";
   });
+  content += faveCat + event + "</p>";
+  $('.faves').append(content);
 });
 </pre>
-		<div class="music"></div>
-		<br>
 
-		<h2> Print out all personal favorite titles for userId 888828838: </h2>
 		<div class="faves"></div>
-
-<pre>
-
-<pre>
+		<br>
 
 		<!-- jQuery library (necessary for Bootstrap & other JavaScript plugins) -->
    		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
