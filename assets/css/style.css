@@ -38,11 +38,8 @@ body {
 .login-link {
     color: #fff;
     margin-left: 30px;
-<<<<<<< HEAD
-=======
-		font-size: 32px;
-		font-weight: 600;
->>>>>>> master
+	font-size: 32px;
+	font-weight: 600;
 }
 
 /* Main page heading */
@@ -65,12 +62,6 @@ body {
 
 /* All form labels */
 label {
-<<<<<<< HEAD
-	color: #fff;
-	font-weight: 500;
-	font-size: 2em;
-  text-shadow: 2px 1px 2px black;
-=======
   color: #fff;
   font-weight: 800;
   font-size: 32px;
@@ -81,7 +72,6 @@ label {
 	background: rgba(0,0,0,.3);
 	height: 420px;
 	border-radius: 10px;
->>>>>>> master
 }
 
 /* Remove form input background, and make border thinner */
@@ -126,8 +116,4 @@ input, select {
  	color: #fff;
  	background-color: #31C0C5;
  	outline: none;
-<<<<<<< HEAD
  }
-=======
- }
->>>>>>> master

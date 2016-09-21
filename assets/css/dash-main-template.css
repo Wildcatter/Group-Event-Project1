@@ -31,32 +31,6 @@ body {
 	color: #BFBFBF;
 }
 
-<<<<<<< HEAD
-/*Make all paragraph text black and bold*/
-p {
-  color: black;
-  font-weight: bold;
-}
-=======
- /*
- Colors:
- #31C0C5 - robin egg blue
- #239095 - darker robin blue for hover
- #154D4F - darkest robin blue for click border
- #FEDC32 - daisy yellow
- #BFBFBF - light gray used on fonts and borders
- #717171 - dark gray modal header
- #EFEFEF - slider background color
- */
->>>>>>> master
-
-/* Main program title in top left of screen */
-a.navbar-brand {
-	font-weight: 200;
-	font-size: 20px;
-}
-
-<<<<<<< HEAD
 /*Eventastic div*/
 .navbar-inverse .navbar-brand {
 	color: #FEDC32;
@@ -64,69 +38,52 @@ a.navbar-brand {
 	padding-top: 20px;
 	background-color: #1F1F1F;
 }
-=======
- /*Make all paragraph text black and bold*/
- p {
-   color: black;
-   font-weight: bold;
- }
 
- /* Main program title in top left of screen */
- a.navbar-brand {
- 	font-weight: 200;
- 	font-size: 20px;
- }
->>>>>>> master
+/*Make all paragraph text black and bold*/
+p {
+  color: black;
+  font-weight: bold;
+}
+
+/* Main program title in top left of screen */
+a.navbar-brand {
+	font-weight: 200;
+	font-size: 20px;
+}
 
 /* Nav Bar */
 #navbar {
 	background-color: #1F1F1F;
 	border-bottom: 1px solid #BFBFBF;
- width: 100%;
+ 	width: 100%;
 }
 
-<<<<<<< HEAD
- /* Make input label thinner */
+/* Make input label thinner */
 label {
 	font-weight: 200;
 }
-=======
- /* Nav Bar */
- #navbar {
- 	background-color: #1F1F1F;
- 	border-bottom: 1px solid #BFBFBF;
-  width: 100%;
- }
->>>>>>> master
 
 /* Styling for event modal */
 .modal-title {
 	color: #FEDC32;
 }
 
-<<<<<<< HEAD
 #modal-event-name {
- color:  #31C0C5;
- font-size: 18px;
- font-weight: bold;
-}
-=======
- #modal-event-name {
  	color:  #31C0C5;
-  font-size: 18px;
-  font-weight: bold;
- }
->>>>>>> master
+ 	font-size: 18px;
+ 	font-weight: bold;
+}
 
 .modal-header {
- background-color: #717171;
- border-radius: 4px;
+ 	background-color: #717171;
+ 	border-radius: 4px;
 }
 
 .modal-header span {
- color: #FEDC32;
+ 	color: #FEDC32;
 }
 
+/* Styling for alert modal */
 #modal-alert-msg {
 	font-size: 25px;
 }
@@ -136,6 +93,7 @@ label {
 	font-weight: bold;
 }
 
+/* Styling for search modal */
 .searchModal input, .searchModal select {
 	margin-bottom: 14px;
 }
@@ -164,7 +122,6 @@ li {
 	transition: .5s;
 }
 
-<<<<<<< HEAD
 #dashboard-content li:hover {
 	background-color: none;
 	color: #FEDC32;
@@ -181,78 +138,39 @@ li h2 {
 	outline: none;
 	font-size: 24px;
 	color: #BFBFBF;
- transition: .5s;
-}
-=======
- /*Remove box and outline from the sidebar buttons*/
- .click-option {
- 	background: none;
- 	border: none;
- 	outline: none;
- 	font-size: 24px;
- 	color: #BFBFBF;
-  transition: .5s;
- }
-
- /*Hover color for the sidebar buttons*/
- .click-option:hover {
- 	color: #FEDC32;
- }
-
- /* Move input field left to make room away from edge of screen */
- input.input-generate {
- 	margin-right: 5px;
- }
-
- /* Global styles for all buttons */
- .btn {
-  font-size: 16px;
- 	border-radius: 3px;
- 	background-color: #31C0C5;
- 	border: none;
  	transition: .5s;
-  color: #fff;
- }
-
- .btn:hover, .btn:active, .btn:focus, .btn:active:focus {
- 	color: #fff;
- 	background-color: #239095;
- 	outline: none;
- }
->>>>>>> master
+}
 
 /*Hover color for the sidebar buttons*/
 .click-option:hover {
 	color: #FEDC32;
 }
 
-<<<<<<< HEAD
 /* Move input field left to make room away from edge of screen */
 input.input-generate {
 	margin-right: 5px;
 }
-=======
- /* Styling for favorite buttons */
- .fav-button {
- 	font-weight: bold;
-  font-size: 20px;
- 	background-color: #31C0C5;
- 	border: none;
- 	color: #fff;
- 	border-top-right-radius: 0;
-  border-top-left-radius: 0;
-  transition: .5s;
- }
->>>>>>> master
+
+/* Styling for favorite buttons */
+.fav-button {
+	font-weight: bold;
+ 	font-size: 20px;
+	background-color: #31C0C5;
+	border: none;
+	color: #fff;
+	border-top-right-radius: 0;
+ 	border-top-left-radius: 0;
+ 	transition: .5s;
+}
 
 /* Global styles for all buttons */
 .btn {
- font-size: 16px;
+ 	font-size: 16px;
 	border-radius: 3px;
 	background-color: #31C0C5;
 	border: none;
 	transition: .5s;
- color: #fff;
+ 	color: #fff;
 }
 
 .btn:hover, .btn:active, .btn:focus, .btn:active:focus {
@@ -265,33 +183,19 @@ input.input-generate {
 	margin-right: 10px;
 }
 
-/* Styling for favorite buttons */
-.fav-button {
-	font-weight: bold;
- font-size: 20px;
-	background-color: #31C0C5;
-	border: none;
-	color: #fff;
-	border-top-right-radius: 0;
- border-top-left-radius: 0;
- transition: .5s;
-}
-
-<<<<<<< HEAD
 /* Make search icon light blue */
 .glyphicon-plus {
 	color: #FEDC32;
 }
-=======
- /* Override Bootstrap panel styling. Make sure there is no margin on bottom so that fav button looks seamless as part of container */
- .panel {
- 	background-color: #ECECEC;
- 	height: 215px;
- 	margin-bottom: 0;
- 	border-bottom-left-radius: 0;
- 	border-bottom-right-radius: 0;
- }
->>>>>>> master
+
+/* Override Bootstrap panel styling. Make sure there is no margin on bottom so that fav button looks seamless as part of container */
+.panel {
+	background-color: #ECECEC;
+	height: 215px;
+	margin-bottom: 0;
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+}
 
 /* Align search icon inside of input field */
 span.plus-icon {
@@ -309,16 +213,6 @@ span.form-control-feedback {
 .event-box {
 	margin-bottom: 30px;
 	cursor: pointer;
-}
-
-<<<<<<< HEAD
-/* Override Bootstrap panel styling. Make sure there is no margin on bottom so that fav button looks seamless as part of container */
-.panel {
-	background-color: #ECECEC;
-	height: 215px;
-	margin-bottom: 0;
-	border-bottom-left-radius: 0;
-	border-bottom-right-radius: 0;
 }
 
 /* Give main page heading (currently h1) a lighter weight for aesthetics */
@@ -388,6 +282,7 @@ h3 {
  	background-color: #FEDC32;
  	font-weight: bold;
  	font-size: 20px;
+ 	color: #717171;
  	width: 90;
  	margin-top: -10px;
  	margin-bottom: 30px;
@@ -395,6 +290,89 @@ h3 {
 
 #trigger:hover {
  	background: #CAAB0A;
+ 	color: white;
+}
+
+/*Card slider for my favorites options*/
+.card {
+ 	margin-top: 10px;
+ 	position: relative;
+ 	-webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+ 	-moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+ 	box-shadow: 4 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+ 	border-radius: 10px;
+}
+
+.card .card-content {
+ 	padding: 10px;
+}
+
+.card .card-content .card-title, .card-reveal .card-title {
+ 	font-size: 24px;
+ 	font-weight: 200;
+}
+
+.card .card-action {
+ 	padding: 20px;
+ 	border-top: 1px solid rgba(160, 160, 160, 0.2);
+}
+
+.card .card-action a {
+ 	font-size: 15px;
+ 	color: #ffab40;
+ 	text-transform: uppercase;
+ 	margin-right: 20px;
+ 	-webkit-transition: color 0.3s ease;
+ 	-moz-transition: color 0.3s ease;
+ 	-o-transition: color 0.3s ease;
+ 	-ms-transition: color 0.3s ease;
+ 	transition: color 0.3s ease;
+}
+
+.card .card-action a:hover {
+ 	color: #ffd8a6;
+ 	text-decoration: none;
+}
+
+.card .card-reveal {
+ 	padding: 20px;
+ 	position: absolute;
+ 	background-color: #FFF;
+ 	width: 100%;
+ 	overflow-y: auto;
+ 	left:0;
+ 	bottom:0;
+ 	height: 100%;
+ 	z-index: 1;
+ 	display: none;
+ 	border-radius: 3px;
+ 	min-height: 1px;
+ 	padding-right: 15px;
+ 	padding-left: 15px;
+}
+
+.card .card-reveal p {
+ 	color: rgba(0, 0, 0, 0.71);
+ 	margin: 20px ;
+}
+
+.btn-custom {
+ 	background-color: transparent;
+ 	font-size: 18px;
+}
+
+/*Card slider favorites close button*/
+.close {
+  color: #31C0C5;
+  opacity: 1;
+  text-shadow: none;
+  font-size: 40px;
+  line-height: 0;
+  transition: .5s;
+}
+
+.close:hover, .close:active, .close:focus, .close:visited {
+ 	outline: none;
 }
 
 /* Media queries for small screens */
@@ -421,136 +399,17 @@ h3 {
  	h1 {
  		font-size: 30px;
  	}
- }
+}
 
- /* Medai queries for everything except medium screens */
- @media (min-width: 992px) {
- 	/* Move the spinner over half of the side content width from the middle of the page: (50 + 16.66666/2)%, to center it. Reduce a bit for padding */
- 	div.spinner {
- 		margin-left: 57.6%;
- 	}
- }
-=======
- /*Give the main page header some bottom margin*/
- .main .page-header {
-   margin-bottom: 30px;
- }
+/* Medai queries for everything except medium screens */
+@media (min-width: 992px) {
+	/* Only add sidebar border on larger screens */
+	.sidebar {
+		border-right: 1px solid #BFBFBF;
+	}
 
- /*Slide Reveal bar*/
- .slide-reveal{
- }
-
- #slider {
-  color: #31C0C5;
-  background-color: #EFEFEF;
-  text-align: center;
-  font-weight: bold;
- }
-
- /*Slider button*/
- #trigger {
-  outline: none;
-  margin-left: auto;
-  background-color: #FEDC32;
-  font-weight: bold;
-  font-size: 20px;
-  color: #717171;
-  width: 90;
-  margin-top: -10px;
-  margin-bottom: 30px;
- }
-
- #trigger:hover {
-  background: #CAAB0A;
-  color: white;
- }
-
- /* Only add sidebar border on larger screens */
- @media (min-width: 768px) {
- 	.sidebar {
- 		border-right: 1px solid #BFBFBF;
- 	}
- }
-
- /*Card slider for my favorites options*/
- .card {
-  margin-top: 10px;
-  position: relative;
-  -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
-  -moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
-  box-shadow: 4 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
-  border-radius: 10px;
- }
-
- .card .card-content {
-  padding: 10px;
- }
-
- .card .card-content .card-title, .card-reveal .card-title {
-  font-size: 24px;
-  font-weight: 200;
- }
-
- .card .card-action {
-  padding: 20px;
-  border-top: 1px solid rgba(160, 160, 160, 0.2);
- }
-
- .card .card-action a {
-  font-size: 15px;
-  color: #ffab40;
-  text-transform:uppercase;
-  margin-right: 20px;
-  -webkit-transition: color 0.3s ease;
-  -moz-transition: color 0.3s ease;
-  -o-transition: color 0.3s ease;
-  -ms-transition: color 0.3s ease;
-  transition: color 0.3s ease;
- }
-
- .card .card-action a:hover {
-  color:#ffd8a6;
-  text-decoration:none;
- }
-
- .card .card-reveal {
-  padding: 20px;
-  position: absolute;
-  background-color: #FFF;
-  width: 100%;
-  overflow-y: auto;
-  left:0;
-  bottom:0;
-  height: 100%;
-  z-index: 1;
-  display: none;
-  border-radius: 3px;
-  min-height: 1px;
-  padding-right: 15px;
-  padding-left: 15px;
- }
-
- .card .card-reveal p {
-  color: rgba(0, 0, 0, 0.71);
-  margin:20px ;
- }
-
- .btn-custom {
-  background-color: transparent;
-  font-size:18px;
- }
-
- /*Card slider favorites close button*/
- .close {
-   color: #31C0C5;
-   opacity: 1;
-   text-shadow: none;
-   font-size: 40px;
-   line-height: 0;
-   transition: .5s;
- }
-
- .close:hover, .close:active, .close:focus, .close:visited {
-  outline: none;
- }
->>>>>>> master
+	/* Move the spinner over half of the side content width from the middle of the page: (50 + 16.66666/2)%, to center it. Reduce a bit for padding */
+	div.spinner {
+		margin-left: 57.6%;
+	}
+}
