@@ -462,14 +462,7 @@ $(document).ready(function() {
 	});
 
 });
-// q = events with keyword
-// start_date.range_start
-// start_date.range_end
-//location.address
-// location.within
-// categories
-//response.events[i].description.text
-//response.events[i].end.local
-// "".name.text
-// "" start.local
-// ""
+
+array.forEach(function(item, index, arr) {
+
+});
