@@ -4,9 +4,6 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-	<style>
-		
-	</style>.
 </head>
 <body>
 	<div class="container-fluid main">
@@ -22,17 +19,31 @@
 		  <div class="checkbox">
 		    <label><input type="checkbox"> Remember me</label>
 		  </div>
-		  <button type="submit" class="btn btn-default" id="login">Log in</button>
 		  <button type="submit" class="btn btn-default" id="join">Join</button>
+		  <button type="submit" class="btn btn-default" id="login">EmailLogin</button>
+		  <button type="submit" class="btn btn-default" id="fbook">FbookLogin</button>
+		  <button type="submit" class="btn btn-default" id="googs">Googs</button>  
 		  <button type="submit" class="btn btn-default" id="logout">Log out</button>
+		  <fb:login-button data-auto-logout-link="true" id="fbook" scope="public_profile,email" size="large"></fb:login-button>
+		 </div>
+		 <div class="row-fluid fbook">
 		 </div>
 	</div>
 
 	<script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-	<script src="https://www.gstatic.com/firebasejs/3.3.2/firebase.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/3.3.0/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/3.3.0/firebase-auth.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/3.3.0/firebase-database.js"></script>
+	<!-- <script src="//connect.facebook.net/en_US/sdk.js"></script> -->
 
-	<script>
+<script>
+
+
+	// facebook app id = 664826037014450
+	// facebook secret id = 088a4c5619143159da7c61cf8f1c5559
+
+
   // Initialize Firebase
   	var config = {
     apiKey: "AIzaSyDaPvYALiV1qQwyDxIrIfkwCUerTu_uSiA",
@@ -41,20 +52,71 @@
     storageBucket: "firstproject-b5d04.appspot.com",
   	};
   	firebase.initializeApp(config);
-	</script>
 
+  // window.fbAsyncInit = function() {
+  //   FB.init({
+  //     appId      : 664826037014450,
+  //     xfbml      : true,
+  //     version    : 'v2.7'
+  //   });
+  // };
 
-<script>
+// FB.Event.subscribe('auth.authResponseChange', checkLoginState);
+
 var database = firebase.database();
 const auth = firebase.auth();
+var provider = new firebase.auth.FacebookAuthProvider();
+var googprovider = new firebase.auth.GoogleAuthProvider();
+var uidUser;
+var currentUserRef;
+var user;
+var userImg;
+var userName;
+var userEmail;
 
-$(document).on("click", "#join", function() {
-	const email = $("#email").val();
-	const password = $("#pwd").val();
-	const promise = auth.createUserWithEmailAndPassword(email,password);
-	promise.then(user => console.log(user));
-//	promise.catch(e=> console.log(e.message));
+
+
+firebase.auth().getRedirectResult().then(function(result) {
+  if (result.credential) {
+    // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+    var token = result.credential.accessToken;
+    console.log(token);
+    console.log(result)
+    // ...
+  }
+  // The signed-in user info.
+  user = result.user;
+
+  console.log(user.displayName);
+  userName = user.displayName;
+
+  console.log(user.email);
+  userEmail = user.email;
+
+  console.log(user.photoURL);
+  userImg = user.photoURL;
+
+  $(".fbook").html(user.displayName);
+
+  $(".fbook").append(user.email);
+
+  $(".fbook").append('<img src =' + user.photoURL + '>')
+
+}).catch(function(error) {
+  // Handle Errors here.
+  var errorCode = error.code;
+  var errorMessage = error.message;
+  // The email of the user's account used.
+  var email = error.email;
+  // The firebase.auth.AuthCredential type that was used.
+  var credential = error.credential;
+  // ...
 });
+
+$(document).on("click", "#fbook", function() {
+	firebase.auth().signInWithRedirect(provider);
+});
+
 
 $(document).on("click", "#login", function() {
 	const email = $("#email").val();
@@ -63,9 +125,34 @@ $(document).on("click", "#login", function() {
 	//promise.catch(e=> console.log(e.message));
 });
 
+$(document).on("click", "#join", function() {
+	const email = $("#email").val();
+	const password = $("#pwd").val();
+	const promise = auth.createUserWithEmailAndPassword(email,password);
+	promise.then(user => console.log(user));
+	promise.catch(e=> console.log(e.message));
+});
+
+$(document).on("click", "#googs", function() {
+	firebase.auth().signInWithRedirect(googprovider);
+});
+
 firebase.auth().onAuthStateChanged(firebaseUser => {
 	if(firebaseUser) {
+		alert("THANKS FOR LOGGING IN. LOSER")
 		console.log(firebaseUser);
+		uidUser = firebase.auth().currentUser.uid;
+		(console.log(uidUser));
+		currentUserRef = database.ref('Users/'+uidUser);
+		currentUserRef.update({
+			name: userName,
+			email: userEmail,
+			photo: userImg,
+		});
+		console.log(currentUserRef);
+		setTimeout(function () {
+			window.location = "https://pacific-reef-34702.herokuapp.com/dashboard.html";
+		}, 1000);
 	} else {
 		console.log("not logged in");
 	}
@@ -74,6 +161,8 @@ firebase.auth().onAuthStateChanged(firebaseUser => {
 $(document).on("click", "#logout", function(){
 	firebase.auth().signOut();
 });
+
+
 
 
 </script>
