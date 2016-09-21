@@ -10,7 +10,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="../../favicon.ico">
+    <!-- <link rel="icon" href="../../favicon.ico"> -->
     <title> eventi </title>
 
     <!-- Latest Bootstrap compiled and minified CSS -->
@@ -160,7 +160,6 @@
                     <li><a href="#" class="sidebar-heading"></a></li>
                     <!-- div container for main dashboard functionality -->
                     <div id="dashboard-content">
-
                         <!-- Slide Reveal side Bar Button -->
                         <button class="btn" id='trigger'>my favorites</button>
     
@@ -200,6 +199,7 @@
                     </div>
                 </ul>
             </div>
+
             <!-- Main app content container -->
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
                 <!-- Slide Reveal side Bar -->
@@ -214,7 +214,7 @@
                     </div>
                 </div>
                 <!-- Holds the event boxes -->
-                <div class="event-boxes"></div>
+                <div class="event-boxes card"></div>
             </div> <!-- /.main -->
         </div> <!-- /.row -->
     </div> <!-- /.container-fluid -->
@@ -233,6 +233,9 @@
 
     <!-- Firebase Script Link -->
     <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
+
+    <!-- Slide Reveal side Bar -->
+    <script src="assets/vendor/jquery-slidereveal/jquery.slidereveal.min.js"></script>
 
     <!-- Custom script for main program functionality -->
     <script src="assets/js/app.js"></script>
