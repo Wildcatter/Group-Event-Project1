@@ -38,6 +38,8 @@ body {
 .login-link {
     color: #fff;
     margin-left: 30px;
+		font-size: 32px;
+		font-weight: 600;
 }
 
 /* Main page heading */
@@ -49,7 +51,8 @@ body {
 }
 
 .jumbotron h1 {
-	font-weight: 100;
+	font-weight: 500;
+	font-size: 100px;
 }
 
 /* Main page content container */
@@ -59,10 +62,16 @@ body {
 
 /* All form labels */
 label {
-	color: #fff;
-	font-weight: 500;
-	font-size: 2em;
-  text-shadow: 2px 1px 2px black;
+  color: #fff;
+  font-weight: 800;
+  font-size: 32px;
+  letter-spacing: 1px;
+}
+
+.form-group {
+	background: rgba(0,0,0,.3);
+	height: 420px;
+	border-radius: 10px;
 }
 
 /* Remove form input background, and make border thinner */

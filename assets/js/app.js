@@ -11,9 +11,6 @@ firebase.initializeApp(config);
 var database = firebase.database();
 const auth = firebase.auth();
 
-// testing Sarah's object for each category id
-var testSarahsObject = {};
-
 // Object for storing event properties and methods specific to any event actions
 var eventObj = {
 
@@ -60,15 +57,32 @@ var eventObj = {
 					longDesc = shortDesc = "No description available.";
 				}
 
-				// Build string of html content, filling in variable content with response items. fullDesc will be used for modal dropdown of full description
+				// // Build string of html content, filling in variable content with response items. fullDesc will be used for modal dropdown of full description
 				let html = '<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 event-box">' +
-		                  		'<div class="panel event-content text-center" id="event' + index + '">' +
+		                  		'<div class="panel event-content text-center card-image" id="event' + index + '">' +
 		                    		'<h3 class="event-name" data-name="' + name + '">' + name + '</h3>' +
 		                    		'<p class="event-date" data-date="' + date + '">' + date + '</p>' +
 		                    		'<p class="event-desc" data-desc="' + longDesc + '">' + shortDesc + '</p>' +
 		                  		'</div>' +
-		                  		'<button type="button" class="btn btn-lg btn-block fav-button">add favorite</button>' +
+		                  		'<button type="button" class="btn btn-lg btn-block fav-button show">add favorite</button>' +
+                                '<div class="card-reveal">' +
+                                    '<span class="card-title">Card Title</span><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>' +
+                                    '<p>Here is some more information about this product that is only revealed once clicked on.</p>' +
+                                '</div>' +
 		        		    '</div>';
+
+                // let html = '<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 event-box">' +
+                //           		'<div class="panel event-content text-center card-image" id="event' + index + '">' +
+                //             		'<h3 class="event-name" data-name="' + name + '">' + name + '</h3>' +
+                //             		'<p class="event-date" data-date="' + date + '">' + date + '</p>' +
+                //             		'<p class="event-desc" data-desc="' + longDesc + '">' + shortDesc + '</p>' +
+                //                     '<div class="card-reveal">' +
+                //                         '<span class="card-title">Card Title</span><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>' +
+                //                         '<p>Here is some more information about this product that is only revealed once clicked on.</p>' +
+                //                     '</div>' +
+                //           		'</div>' +
+                //           		'<button type="button" class="btn btn-lg btn-block fav-button show">add favorite</button>' +
+                // 		    '</div>';
 
 		        // Append new event block to div.main
 		        $(".event-boxes").append(html);
@@ -85,9 +99,31 @@ $(document).ready(function() {
         push: false,
         overlay: true,
         position: "right",
-        speed: 600,
-        overlaySpeed: 1000
+        speed: 600
     });
+
+    // Card slider for my favorites options
+    var slider;
+
+    $('.event-boxes').on('click','.show', function(){
+        console.log(this);
+        console.log("I clicked");
+        var slider = $(this);
+        slider.siblings('.card-reveal').slideToggle('slow');
+    });
+    $('.event-boxes').on('click','.close', function(){
+        $(this).parent().slideToggle('slow');
+    });
+
+    // $('.event-boxes').on('click','.show', function(){
+    //     console.log(this);
+    //     console.log("I clicked");
+    //     var slider = $(this).closest('.card-reveal');
+    //     slider.slideToggle('slow');
+    // });
+    // $('.event-boxes').on('click','.close', function(){
+    //     $(this).parent().slideToggle('slow');
+    // });
 
 	// Get the events on initial page load (50 of the first "All" events from the api)
     var dataObj = {
@@ -139,7 +175,6 @@ $(document).ready(function() {
         }
         eventObj.ajaxCall(dataObj);
 	});
-
 });
 // q = events with keyword
 // start_date.range_start
