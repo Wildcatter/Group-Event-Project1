@@ -15,6 +15,9 @@ var db = firebase.database();
 // For testing purposes, for testing of modal that pops up if user tries to 'Add Favorite', but they are not logged in
 var userLoggedIn = false;
 
+// Establish global for database user reference
+var usersRef = db.ref("users");
+
 // For testing purposes, to obtain user informtion as if user were logged in
 var userId = "757827487";
 
@@ -149,6 +152,8 @@ var eventObj = {
 	 * @return N/A
 	 */
 	generateSearchContent: function(response) {
+        console.log("event 1: " , response.events[1]);
+        console.log("response: " , response);
 		// Loop through each event item from the event search response object
 		response.events.forEach(function(item, index, arr) {
 
@@ -158,10 +163,24 @@ var eventObj = {
 			// Set easy access to date. Format it using moment.js plugin
 			var date = moment(item.start.local).format('MMMM Do YYYY');
 
+            // Set easy access to event time.  Format it using moment.js plugin
+            var startTime = moment(item.start.local).format('LT');
+            var endTime   = moment(item.end.local).format('LT');
+            var time      = startTime + " - " + endTime;
+
 			// Set easy access to event description
 			var desc = item.description.text;
 			var shorDesc = "";
 			var fullDesc = "";
+
+            // Set easy access to event cost. Couldn't get anything to work
+            //var cost = "";
+
+            // Set easy access to event category name. Couln't get anything to work
+            //var category = "";
+
+            // Set easy acces to event address.  Couldn't get anything to work
+            // var address = "";
 
 			// If there is no item description, set default message. Save long description for modal dropdown
 			if (item.description.text != null) {
@@ -173,17 +192,21 @@ var eventObj = {
 
 			// Build string of html content, filling in variable content with response items. fullDesc will be used for modal dropdown of full description
 			let html = '<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 event-box">' +
-                      '<div class="panel event-content text-center card-image" id="event' + index + '">' +
-                          '<h3 class="event-name" data-name="' + name + '">' + name + '</h3>' +
-                          '<p class="event-date" data-date="' + date + '">' + date + '</p>' +
-                          '<p class="event-desc" data-desc="' + longDesc + '">' + shortDesc + '</p>' +
-                      '</div>' +
-                      '<button type="button" class="btn btn-lg btn-block fav-button show">add favorite</button>' +
-                      '<div class="card-reveal">' +
-                           '<span class="card-title">Card Title</span><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>' +
-                           '<p>Here is some more information about this product that is only revealed once clicked on.</p>' +
-                      '</div>' +
-                  '</div>';
+                            '<div class="panel event-content text-center card-image" id="event' + index + '">' +
+                                '<h3 class="event-name" data-name="' + name + '">' + name + '</h3>' +
+                                '<p class="event-date" data-date="' + date + '">' + date + '</p>' +
+                                '<p class="event-time" data-time="' + time + '">' + time + '</p>' +
+                                '<p class="event-desc" data-desc="' + longDesc + '">' + shortDesc + '</p>' +
+                                //'<p class="event-cost" data-cost="' + cost + '">' + cost + '</p>' +
+                                //'<p class="event-cost" data-category="' + category + '">' + category + '</p>' +
+                                //'<p class="event-cost" data-address="' + address + '">' + address + '</p>' +
+                            '</div>' +
+                            '<button type="button" class="btn btn-lg btn-block fav-button show">add favorite</button>' +
+                            '<div class="card-reveal">' +
+                                '<span class="card-title">Card Title</span><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>' +
+                                '<p>Here is some more information about this product that is only revealed once clicked on.</p>' +
+                            '</div>' +
+                        '</div>';
 
 		     // Append new event block to div.main
 		     $(".event-boxes").append(html);
@@ -266,6 +289,25 @@ var eventObj = {
 
         // Update main heading with search feedback
   		$('.header-span').text(msg);
+    },
+
+    /**
+     * Get logged-in user's favorites information, for use in side favorites slider, and event card slider <select> options, and event cards
+     * Note: usersRef and userId are global vars established at top of program. userId gets set when user logs in
+     * User will not be able to access this function if he/she is not logged in already, so no need to check for login at this point
+     *
+     */
+    getUserFavorites: function() {
+        usersRef.child(userId).child("favCategories").on('child_added', function(snapshot) { 
+            var content = "<p>";
+            var faveCat = snapshot.key + ":<br>";
+            var event = "";
+            snapshot.val().forEach(function(item, index, arr) {
+                event += "<span> Description: " + item.desc + "</span><br>";
+            });
+        content += faveCat + event + "</p>";
+        console.log(content);
+        }); 
     }
 
 } // eventObj
@@ -347,6 +389,10 @@ $(document).ready(function() {
 		// Get event date
 		data = $(parentId + ' p.event-date').data("date");
 		$('#modal-event-date').text(data);
+
+        // Get event time
+        data = $(parentId + ' p.event-time').data("time");
+        $('#modal-event-time').text(data);
 
 		// Get event description
 		data = $(parentId + ' p.event-desc').data("desc");
