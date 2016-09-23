@@ -293,6 +293,21 @@ h3 {
  	color: white;
 }
 
+/* Remove the slider fav list bullets, make text larger, and increase spacing between links */
+ul.slider-favs {
+	list-style: none;
+	padding: 0;
+}
+
+ul.slider-favs li {
+	cursor: pointer;
+}
+
+.slider-favs li {
+	font-size: 25px;
+	margin: 20px 0;
+}
+
 /*Card slider for my favorites options*/
 .card {
  	margin-top: 10px;

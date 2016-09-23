@@ -27,9 +27,16 @@ var eventObj = {
 	// Set delay interval for ajaxCall(), so the spinner is visible for a minimum period of time (otherwise will go away too fast)
 	timeDelay: 530,
 
+    // Set delay interval for generateFavContent() to longer period thatn timeDelay, as it will be too short because there is no ajax call taking up time
+    timeDelayFavContent: 930,
+
 	// Set query url as global so that ajaxCall() method may access it without receiving url as parameter 
 	// (setTimeout does not allow for passing parameters to fn's)
 	queryUrl: "",
+
+    // Set favArray as global so that generateFavContent() may be called inside of setTimeout function
+    // (setTimeout does not allow for passing parameters to fn's)
+    favArray: [],
 
 	/**
 	 * Build the query url string, and execute ajaxCall(), based on dataObj params. 
@@ -191,7 +198,7 @@ var eventObj = {
 			}
 
 			// Build string of html content, filling in variable content with response items. fullDesc will be used for modal dropdown of full description
-			let html = '<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 event-box">' +
+			var html = '<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 event-box">' +
                             '<div class="panel event-content text-center card-image" id="event' + index + '">' +
                                 '<h3 class="event-name" data-name="' + name + '">' + name + '</h3>' +
                                 '<p class="event-date" data-date="' + date + '">' + date + '</p>' +
@@ -212,6 +219,72 @@ var eventObj = {
 		     $(".event-boxes").append(html);
 		});
 	}, // generateSearchContent()
+
+    /** 
+     * After user clicks their favorite from the side favorites slider, db call generates array of event favorites.  Loop through those and generate content with this function
+     * May need to integrate this back into the main generateSearchContent() function, but not sure.  Just strong-arm it for now...
+     * the favArray variable is global, as setTimeout doesn't like to have functions inside that are passed params.....
+     * @param N/A
+     * @return N/A
+     */
+    generateFavContent: function() {
+        // Loop through each event object inside of the events array, creating event cards to put into .event-boxes div container
+        eventObj.favArray.forEach(function(item, index, arr) {
+
+            // Set easy access to name
+            var name = item.name;
+
+            // Set easy access to date. Format it using moment.js plugin
+            var date = item.date;
+
+            // Set easy access to event time.  Format it using moment.js plugin
+            var time = item.time;
+
+            // Set easy access to event description. Note:  in other code, this is var desc.  When I tried to do that, it grabbed the last previous desc from the last generated event content box.  Weird.  Some global thing
+            //console.log("item desc: " + item.desc);
+            var desc = item.desc;
+            console.log("desc: " + desc);
+            var shortDescription = desc.slice(0, 100) + "...";
+            var longDescription = desc;
+
+            // Set easy access to event cost. Couldn't get anything to work
+            //var cost = "";
+
+            // Set easy access to event category name. Couln't get anything to work
+            //var category = "";
+
+            // Set easy acces to event address.  Couldn't get anything to work
+            // var address = "";
+
+            // Note: below is duplicated code.  You need to make this a function in itself to conform to DRY principle
+            // Build string of html content, filling in variable content with response items. fullDesc will be used for modal dropdown of full description
+            var html = '<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 event-box">' +
+                            '<div class="panel event-content text-center card-image" id="event' + index + '">' +
+                                '<h3 class="event-name" data-name="' + name + '">' + name + '</h3>' +
+                                '<p class="event-date" data-date="' + date + '">' + date + '</p>' +
+                                '<p class="event-time" data-time="' + time + '">' + time + '</p>' +
+                                '<p class="event-desc" data-desc="' + longDescription + '">' + shortDescription + '</p>' +
+                                //'<p class="event-cost" data-cost="' + cost + '">' + cost + '</p>' +
+                                //'<p class="event-cost" data-category="' + category + '">' + category + '</p>' +
+                                //'<p class="event-cost" data-address="' + address + '">' + address + '</p>' +
+                            '</div>' +
+                            '<button type="button" class="btn btn-lg btn-block fav-button show">add favorite</button>' +
+                            '<div class="card-reveal">' +
+                                '<span class="card-title">Card Title</span><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>' +
+                                '<p>Here is some more information about this product that is only revealed once clicked on.</p>' +
+                            '</div>' +
+                        '</div>';
+
+            // Append new event block to div.main
+            $(".event-boxes").append(html);
+        });
+
+        // Clear out the global va favArray so that next time favs are clicked, it won't include the previously viewed items....
+        eventObj.favArray = [];
+
+        // Remove the spinner
+        eventObj.removeSpinner();
+    },
 
     /**
      * Process search field inputs - prepare them for ajax call
@@ -287,8 +360,7 @@ var eventObj = {
         // Set search feedback as localStorage item
         localStorage.setItem("search-feedback", msg);
 
-        // Update main heading with search feedback
-  		$('.header-span').text(msg);
+        // Note: main heading with favorites feedback is updated inside of favorites click handler
     },
 
     /**
@@ -297,18 +369,33 @@ var eventObj = {
      * User will not be able to access this function if he/she is not logged in already, so no need to check for login at this point
      *
      */
-    getUserFavorites: function() {
-        usersRef.child(userId).child("favCategories").on('child_added', function(snapshot) { 
-            var content = "<p>";
-            var faveCat = snapshot.key + ":<br>";
-            var event = "";
-            snapshot.val().forEach(function(item, index, arr) {
-                event += "<span> Description: " + item.desc + "</span><br>";
-            });
-        content += faveCat + event + "</p>";
-        console.log(content);
-        }); 
-    }
+    getUserFavoritesData: function() {                                                                                          
+        // Establish favTitles array for storing titles alone
+        var favTitleArray  = [];
+        var favEventsArray = [];
+        usersRef.child(userId).child("favCategories").on('child_added', function(snapshot) {
+            favTitleArray.push(snapshot.key);
+            favEventsArray.push(snapshot.val());
+            $('.slider-favs').append('<li data-category="' + snapshot.key + '">' + snapshot.key + '</li>');
+        });                        
+        console.log("favTitleArray: " , favTitleArray);
+        console.log("favEventsArray: " , favEventsArray);
+    },
+
+    /**
+     * Create category dropdowns inside of user side favorites slider
+     * 
+     *
+     */
+     /*
+    generateUserFavSliderLinks: function(favTitleArray) {
+        var content = "<ul>";
+        favTitleArray.forEach(function(item) {
+            content += "<li>" + item + "</li>";
+        });
+        content += "</ul>";
+        $('.slider-favs').html(content);
+    }*/
 
 } // eventObj
 
@@ -328,6 +415,7 @@ var contentObj = {
 }
 
 $(document).ready(function() {
+    eventObj.getUserFavoritesData();
 
 	// Include the datepicker, from jQuery UI library
   	$("#search-date-start").datepicker();
@@ -518,6 +606,107 @@ $(document).ready(function() {
 		eventObj.getFeedbackMsg(dataObj);
 	});
 
+    // If user clicks on a favorites link from the right-side slider menu, get and generate event content boxes 
+    // Event box content comes from data stored in the db; the key associated with the event will be the exact string of the data-category attr
+    // This category string is plugged into the data retrieval db function
+    $('.slider-favs').on('click', 'li', function() {
+
+        // Close the slider panel
+        $('#slider').slideReveal("hide");
+
+        // Get the category name (same as db key) for the favorites bucket
+        var category = $(this).data("category");
+        console.log("category from li: " + category);
+
+        // Find the category in the db under the user's record. THIS WORKS!!
+        // Note: switched to favArray global, so that setTimeout generateFavContent() doesn't have to be passed a param (setTimeout doesn't like that)
+        //var events = [];
+
+        usersRef.child(userId).child("favCategories").child(category).on("child_added", function(snapshot) {
+            eventObj.favArray.push(snapshot.val());
+        });
+        console.log("user events from fav slider click: " , eventObj.favArray);
+        console.log("typeof Events: " + typeof eventObj.favArray);
+
+        /* this gets the object, but I can't loop through it, I need to access it at the next level, and put each object into an array instead
+        usersRef.child(userId).child("favCategories").child(category).once("value").then(function(snapshot) {
+            events = snapshot.val();
+            console.log("user events from fav slider click: " , events);
+            console.log("typof Events: " + typeof events);
+        });*/
+
+        // Load the spinner to indicate processing. Note: spinner is removed inside of generateFavContent() function
+        $('div.spinner-div').html('<div class="spinner">Loading...</div>');
+
+        // Empty content here, before adding content
+        $('.event-boxes').empty();
+
+        // Update the heading (incorporate this into getFeedbackMsg() function eventually). or maybe not...bc it's pretty different...
+        $('.header-span').text("Browsing your " + category + " event favorites");
+
+        // Fake the 'delay', to simulate processing, or it will happen too fast
+        setTimeout(eventObj.generateFavContent, eventObj.timeDelayFavContent);
+
+        /* I put this inside of generateFavContent() method....
+        // Empty out existing event content
+        $('.event-boxes').empty();
+        // Loop through each event object inside of the events array, creating event cards to put into .event-boxes div container
+        events.forEach(function(item, index, arr) {
+
+            // Set easy access to name
+            var name = item.name;
+
+            // Set easy access to date. Format it using moment.js plugin
+            var date = item.date;
+
+            // Set easy access to event time.  Format it using moment.js plugin
+            var time = item.time;
+
+            // Set easy access to event description. Note:  in other code, this is var desc.  When I tried to do that, it grabbed the last previous desc from the last generated event content box.  Weird.  Some global thing
+            //console.log("item desc: " + item.desc);
+            var desc = item.desc;
+            console.log("desc: " + desc);
+            var shortDescription = desc.slice(0, 100) + "...";
+            var longDescription = desc;
+
+            // Set easy access to event cost. Couldn't get anything to work
+            //var cost = "";
+
+            // Set easy access to event category name. Couln't get anything to work
+            //var category = "";
+
+            // Set easy acces to event address.  Couldn't get anything to work
+            // var address = "";
+
+            // Build string of html content, filling in variable content with response items. fullDesc will be used for modal dropdown of full description
+            let html = '<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 event-box">' +
+                            '<div class="panel event-content text-center card-image" id="event' + index + '">' +
+                                '<h3 class="event-name" data-name="' + name + '">' + name + '</h3>' +
+                                '<p class="event-date" data-date="' + date + '">' + date + '</p>' +
+                                '<p class="event-time" data-time="' + time + '">' + time + '</p>' +
+                                '<p class="event-desc" data-desc="' + longDescription + '">' + shortDescription + '</p>' +
+                                //'<p class="event-cost" data-cost="' + cost + '">' + cost + '</p>' +
+                                //'<p class="event-cost" data-category="' + category + '">' + category + '</p>' +
+                                //'<p class="event-cost" data-address="' + address + '">' + address + '</p>' +
+                            '</div>' +
+                            '<button type="button" class="btn btn-lg btn-block fav-button show">add favorite</button>' +
+                            '<div class="card-reveal">' +
+                                '<span class="card-title">Card Title</span><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>' +
+                                '<p>Here is some more information about this product that is only revealed once clicked on.</p>' +
+                            '</div>' +
+                        '</div>';
+
+             // Append new event block to div.main
+             $(".event-boxes").append(html);
+        });*/
+
+        /*
+        db.ref("users/" + userId + "/favCategories/" + category).once("value").then(function(snapshot) {
+            var events = snapshot.child(category).val();
+            console.log("user events from fav slider click: " , events);
+        });*/
+    });
+
 	// Also allow user to submit city location input via keyboard enter key
 	$('.location-input').keypress(function(e) {
 		if(e.which == 13) {
@@ -525,4 +714,339 @@ $(document).ready(function() {
 			$('.location-icon').click();
 		}
 	});
+
+    /* db test data */
+    /* This is the actual starter database (may have added/altered since) 
+    db.ref().set({
+      users: {
+        4738473827: {
+          name: "Jeff",
+          email: "mt@m.com",
+          favCategories: {
+            "DC Trip": [
+              {
+                name: "Blades of Glory",
+                date: "07/07/16",
+                Time: "7:15pm",
+                desc: "Presentation by author Michael Reyes, where he discusses the livelihood of hog farming.",
+                location: "2025 E 7th St, Washington, DC 20002"
+              },
+
+              {
+                name: "Jazz in the Garden",
+                date: "07/08/16",
+                time: "5:30pm",
+                desc: "Get down with some funk jazz, courtesy of the Robert Hickman band, man!",
+                location: "700 Georgia St, Austin, Tx 78702"
+              },
+              
+              {
+                name: "Nasty Cereal",
+                date: "07/10/16",
+                time: "7:00pm",
+                desc: "Author Michael Pollen explains why eating cereal is bad for you in the engaging presentation.",
+                location: "Haper Ave, Austin, TX 23438"
+              }
+            ],
+          
+            "October Must-Dos": [
+              {
+                name: "Sun Britches",
+                date: "10/01/16",
+                time: "7:00pm",
+                desc: "Scientist Sarah Gaslschak explains why being out in the sun is healthy for you.",
+                location: "2025 E 7th St"
+              },
+
+              {
+                name: "Blades of Fayyyce",
+                date: "10/07/16",
+                time: "4:30pm",
+                desc: "A modern play satirizing the popularity of dogs.",
+                location: "13 Bitch St, Houston, TX 28394"
+              },
+              
+              {
+                name: "The Dodge Paradox",
+                date: "10/15/16",
+                time: "10:00am",
+                desc: "Watch a movie about the only dodge project ever that was aimed at producing a spaceship.",
+                location: "10 Service St, Washi"
+              }
+            ],
+
+            "Spring '16 NYC Trip": [
+              {
+                name: "Blades of Soccer",
+                date: "03/07/16",
+                time: "07:15pm",
+                desc: "Go down in blades of glory, with Brazil football club celebration, man!",
+                location: "1 NYC Drive, New York, NY 28391 "
+              },
+              
+              {
+                name: "The Mormon Tabernacle",
+                date: "03/09/16",
+                time: "8:15pm",
+                desc: "Sing hymns with the mormon historical society!",
+                location: "10 Geneve St, New York, NY 39405"
+              },
+              
+              {
+                name: "Pinballs Over Brooklyn",
+                date: "03/10/16",
+                time: "5:30pm",
+                desc: "Go see a bunch of vintage pinball machines!",
+                location: "12 Balls St, New York, NY 94839"
+              }
+            ]
+          } // favCategories
+        },
+        // Note: this is the one that's used for the system testing.  
+        // This information source (before insertion) comes from the data atrributes on the event card, 
+        // so the data here in the db will be exactly as presented inside of the html data attributes
+        757827487: {
+          name: "Michael",
+          email: "m@h.com",
+          favCategories: {
+            "Bday Month": [
+              {
+                name: "DJ Strong",
+                date: "September 21st 2016",
+                time: "9:00 PM - 2:00 AM",
+                desc: "Empire is a 15,000 square foot modern music space at 7th and Red River, dedicated to presenting quirky, warehouse style events that feel more like adventurous discoveries than everyday affairs. Doors: 9:00PM Age: Free w/ RSVP or $5 at door without RSVP // 18+ $5 surcharge"
+              },
+              
+              {
+                name: "Blades of They Infinite Knowledge",
+                date: "October 18th 2016",
+                time: "6:45 PM - 11:15 PM",
+                desc: "See the new men's razor blades Blades of Z exhibit.  They will convince you to strut your stuff, and flaunt your longest beard hairs, no doubt.  You are going to rock out with your cock out, and the event will kick major ass."
+              },
+              
+              {
+                name: "Tony Hawk Competition",
+                date: "November 21st 2016",
+                time: "3:30 PM - 7:45 PM",
+                desc: "Go play Tony Hawk like you used to, against other Tony Hawk enthusiasts!  Get some serious air with Officer Dick, and do some aeoli surprises, to wow the crowd.  The best performer will get front-row tickets to the hottest music event of the season, 'Enya Performs Live at Luther College'"
+              }
+            ],
+  
+            "Nov '16 Fall Trip": [
+              {
+                name: "Hit The Links Extravaganza",
+                date: "September 10th 2016",
+                time: "7:15 PM - 1:30 AM",
+                desc: "Go play some golf at night-time, recently voted 'The Best Time Ever To Play Golf', by Gentlemen's Quarterly magazine.  You will use glow-in-the-dark golf balls, and if you hit any fellow competitors, you get extra points, and some dates with Victoria's Secret models.  Don't miss it!"
+              },
+              
+              {
+                name: "Blades of They Knowledge 2",
+                date: "July 15th 2017",
+                time: "2:30 AM = 7:15 AM",
+                desc: "See Belmont University's hottest band, 'Blades of Kaaaaawledge', play Enya covers, rap style.  This is the only event of its kind, c/o Belmont University's awesome student musicians.  You won't forget this event; bring friends!"
+              },
+              
+              {
+                name: "Coming To Terms With Eating Fruit",
+                date: "August 13th 2017",
+                time: "5:30 PM - 2:00 AM",
+                desc: "Have you ever wondered why some people eat fruit and some don't? Well you are not alone!  There are lots of people out there, just like you.  Come join us to talk about this fruit anxiety, and become comfortable with the fact that you eat more fruit than most people out there!"
+              }
+            ],
+
+            "LR Work Trip" : [
+              {
+                name: "Eat Italian Night",
+                date: "October 21st 2016",
+                time: "8:00 PM - 11:45 PM",
+                desc: "Italian Italian Italian Italian Italian Italian Italian Italian Italian Italian Italian Italian Italian Italian Italian Italian Italian Italian Italian Italian Italian Italian Italian Italian Italian Italian Italian Italian Italian Italian food"
+              },
+              
+              {
+                name: "Wizard of Oz Meets Dark Side of The Moon",
+                date: "December 21st 2016",
+                time: "5:45 PM - 12:30 AM",
+                desc: "Come watch the ever-so-creepy Wizard of Oz with us, while we play Pink Floyd's 'Dark Side of the Moon' album, which ever-so-creepily goes right along with the ever-so-creepy, kids-shouldn't-watch-this-scary-movie movie.  You will be amazed!"
+              },
+              
+              {
+                name: "The Time Has Come For Comptetition Canoeing",
+                date: "November 5th 2016",
+                time: "4:30 PM - 7:30 PM",
+                desc: "Were you inspired by the power-canoeing in this year's recent Summer Olympics?  Well, we were too.  So we decided to get an event together where normal people that aren't so great at canoeing will fight to the death to get to the finish line first, before their fellowing canoers.  This is a 'Don't miss' one of a kind event!"
+              }
+            ]
+          } // favCategories
+        },
+
+        888828838: {
+          name: "Harry",
+          email: "m@harry.com",
+          favCategories: {
+            "Piano Fest": [
+              {
+                name: "Blades of Glory",
+                date: "07/07/16",
+                time: "10:00pm",
+                desc: "Go down in blades of glory, man!",
+                location: "2025 E 7th St"
+              },
+              
+              {
+                name: "Blades of Jazz",
+                date: "07/07/16",
+                time: "6:30pm",
+                desc: "Go down in blades of glory, man!",
+                location: "2025 E 7th St"
+              },
+              
+              {
+                name: "Blades of Nast",
+                date: "07/07/16",
+                time: "4:45pm",
+                desc: "Go down in blades of glory, man!",
+                location: "2025 E 7th St"
+              }
+            ],
+    
+            "Music To See": [
+              {
+                name: "Blades of Bitches",
+                date: "07/07/16",
+                time: "8:00pm",
+                desc: "Go down in blades of glory, man!",
+                location: "2025 E 7th St"
+              },
+              
+              {
+                name: "Blades of Fayyyce",
+                date: "07/07/16",
+                time: "8:15pm",
+                desc: "Go down in blades of glory, man!",
+                location: "2025 E 7th St"
+              },
+              
+              {
+                name: "Blades of Dodge",
+                date: "07/07/16",
+                time: "9:00pm",
+                desc: "Go down in blades of glory, man!",
+                location: "2025 E 7th St"
+              }
+            ],
+
+            "Plays To See": [
+              {
+                name: "Blades of The Sista",
+                date: "07/22/16",
+                time: "9:00pm",
+                desc: "Play commenting on the social norm of 'couter-challenging' in America.",
+                location: "2025 E 7th St, Austin, TX 894838"
+              },
+              
+              {
+                name: "Golf's Greatest Mysteries",
+                date: "11/07/16",
+                time: "8:30pm",
+                desc: "Watch the infamous Isaac Bich Take on Rutherford B. Hayes.",
+                location: "80 Jefferson St, Austin, TX 38473"
+              },
+              
+              {
+                name: "Tom's Malfunctions",
+                date: "12/09/16",
+                time: "7:30pm",
+                desc: "Go down in blades of glory, man!",
+                location: "40 E Gary St., Austin, Tx 38483"
+              }
+            ]
+          } // favCategories
+        },
+
+        111627626: {
+          name: "Isaac",
+          email: "m@isaac.com",
+          favCategories: {
+            "Talks To See": [
+              {
+                name: "Blades of Glory",
+                date: "07/07/16",
+                time: "7:15pm",
+                desc: "Go down in blades of glory, man!",
+                location: "2025 E 7th St"
+              },
+
+              {
+                name: "Blades of Jazz",
+                date: "07/07/16",
+                time: "6:15pm",
+                desc: "Go down in blades of glory, man!",
+                location: "2025 E 7th St"
+              },
+
+              {
+                name: "Blades of Nast",
+                date: "07/07/16",
+                time: "7:30pm",
+                desc: "Go down in blades of glory, man!",
+                location: "2025 E 7th St"
+              }
+            ],
+    
+            "Art Exhibits To See": [
+              {
+                name: "Blades of Bitches",
+                date: "07/07/16",
+                time: "7:15pm",
+                desc: "Go down in blades of glory, man!",
+                location: "2025 E 7th St"
+              },
+              
+              {
+                name: "Blades of Fayyyce",
+                date: "07/07/16",
+                time: "10:15am",
+                desc: "Go down in blades of glory, man!",
+                location: "2025 E 7th St"
+              },
+              
+              {
+                name: "Blades of Dodge",
+                date: "07/07/16",
+                time: "7:25pm",
+                desc: "Go down in blades of glory, man!",
+                location: "2025 E 7th St"
+              }
+            ],
+
+            "Winter CO Ski Trip": [
+              {
+                name: "Blades of Soccer",
+                date: "07/07/16",
+                time: "6:45pm",
+                desc: "Go down in blades of glory, man!",
+                location: "2025 E 7th St"
+              },
+              
+              {
+                name: "Blades of Golf",
+                date: "07/07/16",
+                time: "5:30pm",
+                desc: "Go down in blades of glory, man!",
+                location: "2025 E 7th St"
+              },
+              
+              {
+                name: "Blades of Pinball",
+                date: "07/07/16",
+                time: "4:30pm",
+                desc: "Go down in blades of glory, man!",
+                location: "2025 E 7th St"
+              }
+            ]
+          } // favCategories
+        } // player unique id
+      } // users
+    }); // set function */
 });
