@@ -19,6 +19,7 @@ Colors:
 #239095 - darker robin blue for hover
 #154D4F - darkest robin blue for click border
 #FEDC32 - daisy yellow
+#F7CF00 - dark yellow for hover
 #BFBFBF - light gray used on fonts and borders
 #717171 - dark gray modal header
 #EFEFEF - slider background color
@@ -128,7 +129,7 @@ li {
 }
 
 li h2 {
-	font-weight: 200;
+	font-weight: 300;
 }
 
 /*Remove box and outline from the sidebar buttons*/
@@ -151,26 +152,15 @@ input.input-generate {
 	margin-right: 5px;
 }
 
-/* Styling for favorite buttons */
-.fav-button {
-	font-weight: bold;
- 	font-size: 20px;
-	background-color: #31C0C5;
-	border: none;
-	color: #fff;
-	border-top-right-radius: 0;
- 	border-top-left-radius: 0;
- 	transition: .5s;
-}
-
 /* Global styles for all buttons */
 .btn {
- 	font-size: 16px;
+ 	font-size: 20px;
 	border-radius: 3px;
 	background-color: #31C0C5;
 	border: none;
 	transition: .5s;
  	color: #fff;
+	letter-spacing: .5px;
 }
 
 .btn:hover, .btn:active, .btn:focus, .btn:active:focus {
@@ -181,6 +171,23 @@ input.input-generate {
 
 .clear-btn {
 	margin-right: 10px;
+}
+
+ /*Find Events Button*/
+#find-events-btn {
+	font-size: 16px;
+}
+
+/* Styling for favorite buttons */
+.fav-button {
+	font-weight: bold;
+ 	font-size: 20px;
+	background-color: #31C0C5;
+	border: none;
+	color: #fff;
+	border-top-right-radius: 0;
+ 	border-top-left-radius: 0;
+ 	transition: .5s;
 }
 
 /* Make search icon light blue */
@@ -195,6 +202,8 @@ input.input-generate {
 	margin-bottom: 0;
 	border-bottom-left-radius: 0;
 	border-bottom-right-radius: 0;
+	padding-left: 10px;
+	padding-right: 10px;
 }
 
 /* Align search icon inside of input field */
@@ -207,6 +216,13 @@ span.plus-icon {
 span.form-control-feedback {
 	pointer-events: visible;
 	cursor: pointer;
+}
+/*Change the color of the form boxes focus*/
+.form-control:focus {
+    border-color: #717171;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(35,144,149,.6);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(35,144,149,.6);
 }
 
 /* Parent container for each individual event box */
@@ -273,6 +289,28 @@ h3 {
  	background-color: #EFEFEF;
  	text-align: center;
  	font-weight: bold;
+	list-style-type: none;
+}
+
+/* h1 text at top of slider*/
+#slider h1 {
+  margin-top: 40px;
+  margin-bottom: 40px;
+  font-weight: 600;
+  border-bottom: 1.5px solid #31C0C5;
+  font-size: 42px;
+	letter-spacing: .5px;
+}
+
+/* Styling for the list of user generated categories*/
+.user-generated-categories {
+ color: #717171;
+ letter-spacing: .5px;
+}
+
+.user-generated-categories:hover {
+ color: #F7CF00;
+ letter-spacing: .5px;
 }
 
 /*Slider button*/
@@ -289,7 +327,7 @@ h3 {
 }
 
 #trigger:hover {
- 	background: #CAAB0A;
+ 	background: #F7CF00;
  	color: white;
 }
 
@@ -338,9 +376,9 @@ h3 {
  	padding: 20px;
  	position: absolute;
  	background-color: #FFF;
- 	width: 100%;
  	overflow-y: auto;
  	left:0;
+	right: 0;
  	bottom:0;
  	height: 100%;
  	z-index: 1;
@@ -349,11 +387,9 @@ h3 {
  	min-height: 1px;
  	padding-right: 15px;
  	padding-left: 15px;
-}
-
-.card .card-reveal p {
- 	color: rgba(0, 0, 0, 0.71);
- 	margin: 20px ;
+	margin-right: 15px;
+	margin-left: 15px;
+	color: #717171;
 }
 
 .btn-custom {
@@ -373,6 +409,69 @@ h3 {
 
 .close:hover, .close:active, .close:focus, .close:visited {
  	outline: none;
+}
+
+/* Card slider favorites text at top "select a category"*/
+.card-reveal h2 {
+	margin-top: -2px;
+	font-size: 26px;
+}
+
+/* User category options box within the add favorites slider*/
+#user-category {
+	color: #717171;
+	font-weight: bold;
+	border-color: #717171;
+	letter-spacing: .5px;
+	font-size: 16px;
+	margin-top: -8px;
+}
+
+/* Button to add to user favorites category within the add favorites slider*/
+.add-to-category {
+	height: 13%;
+	color: #717171;
+	font-weight: bold;
+	background-color: #FEDC32;
+	margin-top: 8px;
+	padding: 0px;
+}
+
+.add-to-category:hover, .add-to-category:active, .add-to-category:focus, .add-to-category:active:focus {
+    color: #fff;
+    background-color: #F7CF00;
+    outline: none;
+}
+
+/* h2 text that says "create a new category"*/
+#create-new {
+	margin-top: 27px;
+}
+
+/* User category input box within the add favorites slider*/
+.category-input {
+	color: #717171;
+	font-weight: bold;
+	border-color: #717171;
+	margin-top: -8px;
+	font-size: 16px;
+	letter-spacing: .5px;
+}
+
+.category-input:focus {
+  border-color: #717171;
+  outline: 100;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+}
+
+/* Arrow click icon, within the user category input box within the add favorites slider*/
+.category-icon {
+  position: absolute;
+  margin-top: 180px;
+  margin-left: 225px;
+  color: #FEDC32;
+  font-size: 28px;
 }
 
 /* Media queries for small screens */

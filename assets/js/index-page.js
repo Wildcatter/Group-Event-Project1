@@ -16,13 +16,13 @@ var eventObj = {
 
     // Set delay interval for ajaxCall(), so the spinner is visible for a minimum period of time (otherwise will go away too fast)
     timeDelay: 530,
-  
-    // Set query url as global so that ajaxCall() method may access it without receiving url as parameter 
+
+    // Set query url as global so that ajaxCall() method may access it without receiving url as parameter
     // (setTimeout does not allow for passing parameters to fn's)
     queryUrl: "",
-  
+
     /**
-     * Build the query url string, and execute ajaxCall(), based on dataObj params. 
+     * Build the query url string, and execute ajaxCall(), based on dataObj params.
      * Separated out from main ajaxCall() function, to properly execute processing spinner
      * @param {object} dataObj Object containing search params
      * @return N/A
@@ -33,13 +33,13 @@ var eventObj = {
         var categoryId      = dataObj.categoryId;
         var queryStartDate  = dataObj.queryStartDate;
         var queryEndDate    = dataObj.queryEndDate;
-      
+
         // Build url query
         eventObj.queryUrl = "https://www.eventbriteapi.com/v3/events/search/?token=IVKXSGGHO6MZSHMF5QZZ&location.address=" + city + "&categories=" + categoryId + "&start_date.range_start=" + queryStartDate + "&start_date.range_end=" + queryEndDate + "&location.within=10mi";
-      
+
         // Load the spinner to indicate processing
         $('div.spinner-div').html('<div class="spinner">Loading...</div>');
-  
+
         // Run the ajaxCall() method, after timeDelay interval. The spinner is removed once the ajax call is complete.
         setTimeout(eventObj.ajaxCall, eventObj.timeDelay);
     },
@@ -47,7 +47,7 @@ var eventObj = {
     /**
      * Format the dates to send to the api query, and for updating the main page header
      * Put in separate function so that it may be used for in several different query form submit scenarios
-     * Note: used for the following scenarios: 
+     * Note: used for the following scenarios:
      * @param
      * @return
      */
@@ -65,13 +65,13 @@ var eventObj = {
             firstDate = new Date(firstDate);
             lastDate = new Date(lastDate);
         }
-    
+
         var queryStartDate = moment(firstDate).format().slice(0, -6);
         var startDate      = moment(firstDate).format('MM/DD/YYYY');
         var queryEndDate   = moment(lastDate).format().slice(0, -6);
         var endDate        = moment(lastDate).format('MM/DD/YYYY');
         console.log("startDate: " + startDate + " queryStartDate: " + queryStartDate + " endDate: " + endDate + " queryEndDate: " + queryEndDate);
-        
+
         // Return an object containing all correctly formatted date references
         return {
             queryStartDate: queryStartDate,
@@ -96,30 +96,30 @@ var eventObj = {
             console.log("typeof response: " + typeof response);
             if(response != undefined) {
                 console.log("entered response != '' block");
-  
+
                 // Remove the spinner
                 eventObj.removeSpinner();
-  
+
                 // Empty out existing event content
                 $('.event-boxes').empty();
-          
+
                 //console.log("Response: " + response.events[1]);
                 // Save the response object as a session variable
                 localStorage.setItem("homePage-results", JSON.stringify(response));
                 //console.log("localStorage 'search-results': " + JSON.stringify(response));
-      
+
                 // Now generate the new content, and append it to the main section, replacing existing content
                 // Note: this is not necessary on the home page
                 //eventObj.generateSearchContent(response);
-            
+
             } else {
                 // This else block doesn't work. Never executes.  Can't figure out how to check for undefined, bc it is always logging as an object
                 console.log("entered response false block");
                 //$('.event-boxes').html('<h3 style="color: #FEDC32;"> Sorry, but there were no events found for your search! </h3>');
             }
-      
+
             // Redirect to dashboard page, now that search results have been returned
-            window.location="file:///Users/Yo/Desktop/Bootcamp/homework/group-projects/Group-Event-Project1/dashboard.html";
+            window.location="file:///Users/Reyes/Desktop/Bootcamp/week-8-group-project/Group-Event-Project1/dashboard.html";
         });
     }, // ajaxCall()
 
@@ -147,13 +147,13 @@ var eventObj = {
         var firstDate    = $('#search-date-start').val().trim();
         var lastDate     = $('#search-date-end').val().trim();
         console.log("city: " + city + " categoryId: " + categoryId + " categoryName: " + categoryName + " date1: " + firstDate + " date2: " + lastDate);
-      
+
         // Prevent form submit if all inputs are empty
         if(city == "" && categoryId == "" && firstDate == "" && lastDate == "") {
             contentObj.showAlertModal("You didn't enter any search criteria!");
             return false;
         }
-  
+
         // Prevent form submit if there was no city entered.  This is the minimum search requirement
         if(city == "") {
             contentObj.showAlertModal("You must at least enter a city for your search!");
@@ -162,10 +162,10 @@ var eventObj = {
 
         // Set city location to session var. Note: this is also set in other places. You want to overrite it every time a new search occurs
         localStorage.setItem("city-location", city);
-  
+
         // All inputs are good to go; now format dates for query string and search feedback msg string
-        var dateObj = eventObj.formatQueryDates(firstDate, lastDate);     
-        
+        var dateObj = eventObj.formatQueryDates(firstDate, lastDate);
+
         // Send search inputs to ajaxCall. Note: ajaxCall will set response data as localStorage item for dashboard.html content generation
         var dataObj = {
             city:           city,
@@ -176,7 +176,7 @@ var eventObj = {
             endDate:        dateObj.endDate,
             queryEndDate:   dateObj.queryEndDate
         }
-  
+
         return dataObj;
     },
 
@@ -186,21 +186,21 @@ var eventObj = {
      * @return N/A
      */
     getFeedbackMsg: function(dataObj) {
-      
-        // First, build beginning default string.  
+
+        // First, build beginning default string.
         var msg = '';
-    
+
         // If user entered a category, add that as well
         if(dataObj.categoryName != null) {
             msg += dataObj.categoryName;
         }
-    
+
         // City will ALWAYS be required
         msg += ' events in ' + dataObj.city;
-    
-        // If date range was entered, add that as well. First, format it back 
+
+        // If date range was entered, add that as well. First, format it back
         msg += ' ' + dataObj.startDate + ' - ' + dataObj.endDate;
-    
+
         // Set search feedback as localStorage item
         localStorage.setItem("search-feedback", msg);
 
@@ -293,7 +293,7 @@ var eventObj = {
       if(city == "") {
           alert("You must at least enter a city for your search!");
       }
-      
+
       // Send search inputs to ajaxCall. Note: ajaxCall will set response data as localStorage item for dashboard.html content generation
       var dataObj = {
           city: city,
@@ -315,21 +315,21 @@ var eventObj = {
    */
   /*
   getFeedbackMsg: function(dataObj) {
-    
-      // First, build beginning default string.  
+
+      // First, build beginning default string.
       var msg = '';
-  
+
       // If user entered a category, add that as well
       if(dataObj.categoryName != null) {
           msg += dataObj.categoryName;
       }
-  
+
       // City will ALWAYS be required
       msg += ' events in ' + dataObj.city;
-  
-      // If date range was entered, add that as well. First, format it back 
+
+      // If date range was entered, add that as well. First, format it back
       msg += ' ' + dataObj.startDate + ' - ' + dataObj.endDate;
-  
+
       // Set search feedback as localStorage item
       localStorage.setItem("search-feedback", msg);
   }*/

@@ -83,11 +83,12 @@
                     <h3 class="modal-title"> search for events </h3>
                 </div>
                 <div class="modal-body">
-                    <!-- Note: this form is EXACTLY the same as the main home page form.  Typically, you would never duplicate this code, and you would generate it from one place on server-side code, from a class file,template file, etc--> 
+                    <!-- Note: this form is EXACTLY the same as the main home page form.  Typically, you would never duplicate this code, and you would generate it from one place on server-side code, from a class file,template file, etc-->
                     <div class="form-group">
                         <!-- Wrap inside of col's to match padding & margin of side-by-side date fields -->
                         <div class="col-sm-12 col-md-12 col-lg-12">
                             <label> city </label>
+
                             <input type="text" class="form-control" id="search-city">
 
                             <label> category </label>
@@ -162,27 +163,27 @@
                     <div id="dashboard-content">
                         <!-- Slide Reveal side Bar Button -->
                         <button class="btn" id='trigger'>my favorites</button>
-    
+
                         <li>
                             <button type="button" class="click-option" data-id="" data-category="all events">all events</button>
                         </li>
-    
+
                         <li>
                             <button type="button" class="click-option" data-id="105" data-category="Arts">arts</button>
                         </li>
-    
+
                         <li>
                             <button type="button" class="click-option" data-id="103" data-category="music">music</button>
                         </li>
-    
+
                         <li>
                             <button type="button" class="click-option" data-id="108" data-category="Sports & Fitness">athletics</button>
                         </li>
-    
+
                         <li>
                             <button type="button" class="click-option" data-id="110" data-category="Food & Drink">food & drink</button>
                         </li>
-    
+
                         <li>
                             <button type="button" class="click-option" data-id="104" data-category="Film & Media">film & media</button>
                         </li>
@@ -192,7 +193,7 @@
                         </li>
 
                         <li>
-                            <input type="text" class="form-control location-input" placeholder="Enter a city to set location">
+                            <input type="text" class="form-control location-input" placeholder="enter a city to set location">
                             <span class="glyphicon glyphicon-share-alt location-icon"></span>
                             <p class="location-input-feedback"></p>
                         </li>
@@ -204,7 +205,18 @@
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
                 <!-- Slide Reveal side Bar -->
                 <div class="slide-reveal">
-                    <div id='slider'><h1>my favorites</h1></div>
+                  <div id='slider'><h1>my favorites</h1>
+                    <!-- Placeholder of user generated favorites categories -->
+                    <li>
+                      <button type="button" class="click-option user-generated-categories" data-id="" data-category="">Birthday Weekend</button>
+                    </li>
+                    <li>
+                      <button type="button" class="click-option user-generated-categories" data-id="" data-category="">Halloween</button>
+                    </li>
+                    <li>
+                      <button type="button" class="click-option user-generated-categories" data-id="" data-category="">Upcoming Concerts</button>
+                    </li>
+                  </div>
                 </div>
                 <!-- Section for main page content heading -->
                 <div class="row page-header">
