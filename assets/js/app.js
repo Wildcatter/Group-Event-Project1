@@ -15,6 +15,9 @@ var db = firebase.database();
 // For testing purposes, for testing of modal that pops up if user tries to 'Add Favorite', but they are not logged in
 var userLoggedIn = true;
 
+// Establish global for database user reference
+var usersRef = db.ref("users");
+
 // For testing purposes, to obtain user informtion as if user were logged in
 var userId = "757827487";
 
@@ -24,9 +27,16 @@ var eventObj = {
 	// Set delay interval for ajaxCall(), so the spinner is visible for a minimum period of time (otherwise will go away too fast)
 	timeDelay: 530,
 
-	// Set query url as global so that ajaxCall() method may access it without receiving url as parameter
+    // Set delay interval for generateFavContent() to longer period thatn timeDelay, as it will be too short because there is no ajax call taking up time
+    timeDelayFavContent: 930,
+
+	// Set query url as global so that ajaxCall() method may access it without receiving url as parameter 
 	// (setTimeout does not allow for passing parameters to fn's)
 	queryUrl: "",
+
+    // Set favArray as global so that generateFavContent() may be called inside of setTimeout function
+    // (setTimeout does not allow for passing parameters to fn's)
+    favArray: [],
 
 	/**
 	 * Build the query url string, and execute ajaxCall(), based on dataObj params.
@@ -149,6 +159,8 @@ var eventObj = {
 	 * @return N/A
 	 */
 	generateSearchContent: function(response) {
+        console.log("event 1: " , response.events[1]);
+        console.log("response: " , response);
 		// Loop through each event item from the event search response object
 		response.events.forEach(function(item, index, arr) {
 
@@ -167,10 +179,24 @@ var eventObj = {
 			// Set easy access to date. Format it using moment.js plugin
 			var date = moment(item.start.local).format('MMMM Do YYYY');
 
+            // Set easy access to event time.  Format it using moment.js plugin
+            var startTime = moment(item.start.local).format('LT');
+            var endTime   = moment(item.end.local).format('LT');
+            var time      = startTime + " - " + endTime;
+
 			// Set easy access to event description
 			var desc = item.description.text;
 			var shorDesc = "";
 			var longDesc = "";
+
+            // Set easy access to event cost. Couldn't get anything to work
+            //var cost = "";
+
+            // Set easy access to event category name. Couln't get anything to work
+            //var category = "";
+
+            // Set easy acces to event address.  Couldn't get anything to work
+            // var address = "";
 
 			// If there is no item description, set default message. Save long description for modal dropdown
 			if (desc != null) {
@@ -207,6 +233,87 @@ var eventObj = {
 		     $(".event-boxes").append(html);
 		});
 	}, // generateSearchContent()
+
+    /** 
+     * After user clicks their favorite from the side favorites slider, db call generates array of event favorites.  Loop through those and generate content with this function
+     * May need to integrate this back into the main generateSearchContent() function, but not sure.  Just strong-arm it for now...
+     * the favArray variable is global, as setTimeout doesn't like to have functions inside that are passed params.....
+     * @param N/A
+     * @return N/A
+     */
+    generateFavContent: function() {
+        // Loop through each event object inside of the events array, creating event cards to put into .event-boxes div container
+        eventObj.favArray.forEach(function(item, index, arr) {
+
+            // Set easy access to name
+            var name = item.name;
+            var shortName = "";
+            var longName = "";
+
+            if (name != null) {
+                longName = name;
+                shortName = name.slice(0, 60) + "...";
+            } else {
+                longName = shortName = "No description available.";
+            }
+
+            // Set easy access to date. Format it using moment.js plugin
+            var date = item.date;
+
+            // Set easy access to event time.  Format it using moment.js plugin
+            var time = item.time;
+
+            // Set easy access to event description. Note:  in other code, this is var desc.  When I tried to do that, it grabbed the last previous desc from the last generated event content box.  Weird.  Some global thing
+            //console.log("item desc: " + item.desc);
+            var desc = item.desc;
+            console.log("desc: " + desc);
+            var shortDescription = desc.slice(0, 100) + "...";
+            var longDescription = desc;
+
+            // Set easy access to event cost. Couldn't get anything to work
+            //var cost = "";
+
+            // Set easy access to event category name. Couln't get anything to work
+            //var category = "";
+
+            // Set easy acces to event address.  Couldn't get anything to work
+            // var address = "";
+
+            // Note: below is duplicated code.  You need to make this a function in itself to conform to DRY principle
+            // Build string of html content, filling in variable content with response items. fullDesc will be used for modal dropdown of full description
+            var html = '<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 event-box">' +
+                            '<div class="panel event-content text-center card-image" id="event' + index + '">' +
+                                '<h3 class="event-name" data-name="' + longName + '">' + shortName + '</h3>' +
+                                '<p class="event-date" data-date="' + date + '">' + date + '</p>' +
+                                '<p class="event-time" data-time="' + time + '">' + time + '</p>' +
+                                '<p class="event-desc" data-desc="' + longDescription + '">' + shortDescription + '</p>' +
+                            '</div>' +
+                            '<button type="button" class="btn btn-lg btn-block fav-button show">add favorite</button>' +
+                            '<div class="card-reveal">' +
+                                '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>' +
+                                '<h2>select a category</h2>' +
+                                '<select type="text" class="form-control" id="user-category">' +
+                                    '<option value="">Birthday Weekend</option>' +
+                                    '<option value="" data-category="">Halloween</option>' +
+                                    '<option value="" data-category="">Upcoming Concerts</option>' +
+                                '</select>' +
+                                '<button type="button" class="btn btn-block text-center add-to-category">add to category</button>' +
+                                '<h2 id="create-new">create a new category</h2>' +
+                                '<input type="text" class="form-control category-input" placeholder="new category name"/>' +
+                                '<i class="glyphicon glyphicon-share-alt category-icon"></i>' +
+                            '</div>' +
+                        '</div>';
+
+            // Append new event block to div.main
+            $(".event-boxes").append(html);
+        });
+
+        // Clear out the global va favArray so that next time favs are clicked, it won't include the previously viewed items....
+        eventObj.favArray = [];
+
+        // Remove the spinner
+        eventObj.removeSpinner();
+    },
 
     /**
      * Process search field inputs - prepare them for ajax call
@@ -282,9 +389,42 @@ var eventObj = {
         // Set search feedback as localStorage item
         localStorage.setItem("search-feedback", msg);
 
-        // Update main heading with search feedback
-  		$('.header-span').text(msg);
-    }
+        // Note: main heading with favorites feedback is updated inside of favorites click handler
+    },
+
+    /**
+     * Get logged-in user's favorites information, for use in side favorites slider, and event card slider <select> options, and event cards
+     * Note: usersRef and userId are global vars established at top of program. userId gets set when user logs in
+     * User will not be able to access this function if he/she is not logged in already, so no need to check for login at this point
+     *
+     */
+    getUserFavoritesData: function() {                                                                                          
+        // Establish favTitles array for storing titles alone
+        var favTitleArray  = [];
+        var favEventsArray = [];
+        usersRef.child(userId).child("favCategories").on('child_added', function(snapshot) {
+            favTitleArray.push(snapshot.key);
+            favEventsArray.push(snapshot.val());
+            $('.slider-favs').append('<li> <button class="click-option user-generated-categories" data-category="' + snapshot.key + '">' + snapshot.key + ' </button> </li>');
+        });                        
+        console.log("favTitleArray: " , favTitleArray);
+        console.log("favEventsArray: " , favEventsArray);
+    },
+
+    /**
+     * Create category dropdowns inside of user side favorites slider
+     * 
+     *
+     */
+     /*
+    generateUserFavSliderLinks: function(favTitleArray) {
+        var content = "<ul>";
+        favTitleArray.forEach(function(item) {
+            content += "<li>" + item + "</li>";
+        });
+        content += "</ul>";
+        $('.slider-favs').html(content);
+    }*/
 
 } // eventObj
 
@@ -304,6 +444,7 @@ var contentObj = {
 }
 
 $(document).ready(function() {
+    eventObj.getUserFavoritesData();
 
 	// Include the datepicker, from jQuery UI library
   	$("#search-date-start").datepicker();
@@ -361,6 +502,10 @@ $(document).ready(function() {
 		// Get event date
 		data = $(parentId + ' p.event-date').data("date");
 		$('#modal-event-date').text(data);
+
+        // Get event time
+        data = $(parentId + ' p.event-time').data("time");
+        $('#modal-event-time').text(data);
 
 		// Get event description
 		data = $(parentId + ' p.event-desc').data("desc");
@@ -485,6 +630,48 @@ $(document).ready(function() {
 		// Generate feedback message
 		eventObj.getFeedbackMsg(dataObj);
 	});
+
+    // If user clicks on a favorites link from the right-side slider menu, get and generate event content boxes 
+    // Event box content comes from data stored in the db; the key associated with the event will be the exact string of the data-category attr
+    // This category string is plugged into the data retrieval db function
+    $('.slider-favs').on('click', 'li', function() {
+
+        // Close the slider panel
+        $('#slider').slideReveal("hide");
+
+        // Get the category name (same as db key) for the favorites bucket
+        var category = $(this).data("category");
+        console.log("category from li: " + category);
+
+        // Find the category in the db under the user's record. THIS WORKS!!
+        // Note: switched to favArray global, so that setTimeout generateFavContent() doesn't have to be passed a param (setTimeout doesn't like that)
+        //var events = [];
+
+        usersRef.child(userId).child("favCategories").child(category).on("child_added", function(snapshot) {
+            eventObj.favArray.push(snapshot.val());
+        });
+        console.log("user events from fav slider click: " , eventObj.favArray);
+        console.log("typeof Events: " + typeof eventObj.favArray);
+
+        /* this gets the object, but I can't loop through it, I need to access it at the next level, and put each object into an array instead
+        usersRef.child(userId).child("favCategories").child(category).once("value").then(function(snapshot) {
+            events = snapshot.val();
+            console.log("user events from fav slider click: " , events);
+            console.log("typof Events: " + typeof events);
+        });*/
+
+        // Load the spinner to indicate processing. Note: spinner is removed inside of generateFavContent() function
+        $('div.spinner-div').html('<div class="spinner">Loading...</div>');
+
+        // Empty content here, before adding content
+        $('.event-boxes').empty();
+
+        // Update the heading (incorporate this into getFeedbackMsg() function eventually). or maybe not...bc it's pretty different...
+        $('.header-span').text("Browsing your " + category + " event favorites");
+
+        // Fake the 'delay', to simulate processing, or it will happen too fast
+        setTimeout(eventObj.generateFavContent, eventObj.timeDelayFavContent);
+    });
 
 	// Also allow user to submit city location input via keyboard enter key
 	$('.location-input').keypress(function(e) {

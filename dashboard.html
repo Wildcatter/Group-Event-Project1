@@ -47,6 +47,7 @@
                 <div class="modal-body text-center">
                     <p id="modal-event-name"></p>
                     <p id="modal-event-date"></p>
+                    <p id="modal-event-time"></p>
                     <p id="modal-event-desc"></p>
                 </div>
                 <div class="modal-footer">
@@ -163,35 +164,35 @@
                     <div id="dashboard-content">
                         <!-- Slide Reveal side Bar Button -->
                         <button class="btn" id='trigger'>my favorites</button>
-
+  
                         <li>
                             <button type="button" class="click-option" data-id="" data-category="all events">all events</button>
                         </li>
-
+  
                         <li>
                             <button type="button" class="click-option" data-id="105" data-category="Arts">arts</button>
                         </li>
-
+  
                         <li>
                             <button type="button" class="click-option" data-id="103" data-category="music">music</button>
                         </li>
-
+  
                         <li>
                             <button type="button" class="click-option" data-id="108" data-category="Sports & Fitness">athletics</button>
                         </li>
-
+  
                         <li>
                             <button type="button" class="click-option" data-id="110" data-category="Food & Drink">food & drink</button>
                         </li>
-
+  
                         <li>
                             <button type="button" class="click-option" data-id="104" data-category="Film & Media">film & media</button>
                         </li>
-
+  
                         <li>
                             <button type="button" class="click-option" data-id="102" data-category="Science & Tech">science & tech</button>
                         </li>
-
+  
                         <li>
                             <input type="text" class="form-control location-input" placeholder="enter a city to set location">
                             <span class="glyphicon glyphicon-share-alt location-icon"></span>
@@ -205,8 +206,9 @@
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
                 <!-- Slide Reveal side Bar -->
                 <div class="slide-reveal">
+                  <!--
                   <div id='slider'><h1>my favorites</h1>
-                    <!-- Placeholder of user generated favorites categories -->
+                    <!-- Placeholder of user generated favorites categories
                     <li>
                       <button type="button" class="click-option user-generated-categories" data-id="" data-category="">Birthday Weekend</button>
                     </li>
@@ -217,6 +219,11 @@
                       <button type="button" class="click-option user-generated-categories" data-id="" data-category="">Upcoming Concerts</button>
                     </li>
                   </div>
+                  -->
+                    <div class="text-center" id="slider">
+                        <h1>my favorites</h1>
+                        <ul class="slider-favs"></ul>
+                    </div>
                 </div>
                 <!-- Section for main page content heading -->
                 <div class="row page-header">
