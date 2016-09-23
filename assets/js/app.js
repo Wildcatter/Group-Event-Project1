@@ -13,7 +13,7 @@ firebase.initializeApp(config);
 var db = firebase.database();
 
 // For testing purposes, for testing of modal that pops up if user tries to 'Add Favorite', but they are not logged in
-var userLoggedIn = false;
+var userLoggedIn = true;
 
 // For testing purposes, to obtain user informtion as if user were logged in
 var userId = "757827487";
@@ -24,12 +24,12 @@ var eventObj = {
 	// Set delay interval for ajaxCall(), so the spinner is visible for a minimum period of time (otherwise will go away too fast)
 	timeDelay: 530,
 
-	// Set query url as global so that ajaxCall() method may access it without receiving url as parameter 
+	// Set query url as global so that ajaxCall() method may access it without receiving url as parameter
 	// (setTimeout does not allow for passing parameters to fn's)
 	queryUrl: "",
 
 	/**
-	 * Build the query url string, and execute ajaxCall(), based on dataObj params. 
+	 * Build the query url string, and execute ajaxCall(), based on dataObj params.
 	 * Separated out from main ajaxCall() function, to properly execute processing spinner
 	 * @param {object} dataObj Object containing search params
 	 * @return N/A
@@ -40,10 +40,10 @@ var eventObj = {
   	    var categoryId      = dataObj.categoryId;
   	    var queryStartDate  = dataObj.queryStartDate;
   	    var queryEndDate    = dataObj.queryEndDate;
-	  
+
   	    // Build url query
   	    eventObj.queryUrl = "https://www.eventbriteapi.com/v3/events/search/?token=IVKXSGGHO6MZSHMF5QZZ&location.address=" + city + "&categories=" + categoryId + "&start_date.range_start=" + queryStartDate + "&start_date.range_end=" + queryEndDate + "&location.within=10mi";
-	  
+
 	  	// Load the spinner to indicate processing
 		$('div.spinner-div').html('<div class="spinner">Loading...</div>');
 
@@ -54,7 +54,7 @@ var eventObj = {
 	/**
 	 * Format the dates to send to the api query, and for updating the main page header
 	 * Put in separate function so that it may be used for in several different query form submit scenarios
-	 * Note: used for the following scenarios: 
+	 * Note: used for the following scenarios:
 	 * @param
 	 * @return
 	 */
@@ -78,7 +78,7 @@ var eventObj = {
 		var queryEndDate   = moment(lastDate).format().slice(0, -6);
 		var endDate        = moment(lastDate).format('MM/DD/YYYY');
 		console.log("startDate: " + startDate + " queryStartDate: " + queryStartDate + " endDate: " + endDate + " queryEndDate: " + queryEndDate);
-		
+
 		// Return an object containing all correctly formatted date references
 		return {
 			queryStartDate: queryStartDate,
@@ -109,23 +109,23 @@ var eventObj = {
 
   	        	// Empty out existing event content
   	        	$('.event-boxes').empty();
-	    	
+
   	        	console.log("Response: " + response.events[1]);
-	    	
+
   	        	// Save the response object as a session variable
   	        	localStorage.setItem("homePage-results", JSON.stringify(response));
-	    	
+
   	        	//console.log("localStorage 'search-results': " + JSON.stringify(response));
-  	
+
   	        	// Now generate the new content, and append it to the main section, replacing existing content
   	        	eventObj.generateSearchContent(response);
-  					
+
   	        } else {
   	        	// This else block doesn't work. Never executes.  Can't figure out how to check for undefined, bc it is always logging as an object
   	        	console.log("entered response false block");
   	        	$('.event-boxes').html('<h3 style="color: #FEDC32;"> Sorry, but there were no events found for your search! </h3>');
   	        }
-	    
+
   	        // Redirect to dashboard page, now that search results have been returned
   	        //window.location="file:///Users/Yo/Desktop/Bootcamp/homework/group-projects/Group-Event-Project1/dashboard.html";
   	    });
@@ -154,6 +154,15 @@ var eventObj = {
 
 			// Set easy access to name
 			var name = item.name.text;
+            var shortName = "";
+            var longName = "";
+
+            if (name != null) {
+                longName = name;
+                shortName = name.slice(0, 60) + "...";
+            } else {
+                longName = shortName = "No description available.";
+            }
 
 			// Set easy access to date. Format it using moment.js plugin
 			var date = moment(item.start.local).format('MMMM Do YYYY');
@@ -161,10 +170,10 @@ var eventObj = {
 			// Set easy access to event description
 			var desc = item.description.text;
 			var shorDesc = "";
-			var fullDesc = "";
+			var longDesc = "";
 
 			// If there is no item description, set default message. Save long description for modal dropdown
-			if (item.description.text != null) {
+			if (desc != null) {
 				longDesc  = desc;
 				shortDesc = desc.slice(0, 100) + "...";
 			} else {
@@ -172,18 +181,27 @@ var eventObj = {
 			}
 
 			// Build string of html content, filling in variable content with response items. fullDesc will be used for modal dropdown of full description
-			let html = '<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 event-box">' +
-                      '<div class="panel event-content text-center card-image" id="event' + index + '">' +
-                          '<h3 class="event-name" data-name="' + name + '">' + name + '</h3>' +
-                          '<p class="event-date" data-date="' + date + '">' + date + '</p>' +
-                          '<p class="event-desc" data-desc="' + longDesc + '">' + shortDesc + '</p>' +
-                      '</div>' +
-                      '<button type="button" class="btn btn-lg btn-block fav-button show">add favorite</button>' +
-                      '<div class="card-reveal">' +
-                           '<span class="card-title">Card Title</span><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>' +
-                           '<p>Here is some more information about this product that is only revealed once clicked on.</p>' +
-                      '</div>' +
-                  '</div>';
+			let html =  '<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 event-box">' +
+                            '<div class="panel event-content text-center card-image" id="event' + index + '">' +
+                                '<h3 class="event-name" data-name="' + longName + '">' + shortName + '</h3>' +
+                                '<p class="event-date" data-date="' + date + '">' + date + '</p>' +
+                                '<p class="event-desc" data-desc="' + longDesc + '">' + shortDesc + '</p>' +
+                            '</div>' +
+                            '<button type="button" class="btn btn-lg btn-block fav-button show">add favorite</button>' +
+                            '<div class="card-reveal">' +
+                                '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>' +
+                                '<h2>select a category</h2>' +
+                                '<select type="text" class="form-control" id="user-category">' +
+                                    '<option value="">Birthday Weekend</option>' +
+                                    '<option value="" data-category="">Halloween</option>' +
+                                    '<option value="" data-category="">Upcoming Concerts</option>' +
+                                '</select>' +
+                                '<button type="button" class="btn btn-block text-center add-to-category">add to category</button>' +
+                                '<h2 id="create-new">create a new category</h2>' +
+                                '<input type="text" class="form-control category-input" placeholder="new category name"/>' +
+                                '<i class="glyphicon glyphicon-share-alt category-icon"></i>' +
+                            '</div>' +
+                        '</div>';
 
 		     // Append new event block to div.main
 		     $(".event-boxes").append(html);
@@ -203,7 +221,7 @@ var eventObj = {
         var firstDate    = $('#search-date-start').val().trim();
         var lastDate     = $('#search-date-end').val().trim();
         console.log("city: " + city + " categoryId: " + categoryId + " categoryName: " + categoryName + " date1: " + firstDate + " date2: " + lastDate);
-  		
+
   		// Prevent form submit if all inputs are empty
         if(city == "" && categoryId == "" && firstDate == "" && lastDate == "") {
         	// Close the search modal, and then show the alert modal
@@ -211,7 +229,7 @@ var eventObj = {
             contentObj.showAlertModal("You didn't enter any search criteria!");
             return false;
         }
-  
+
         // Prevent form submit if there was no city entered.  This is the minimum search requirement
         if(city == "") {
         	// Close the search modal, and then show the alert modal
@@ -224,8 +242,8 @@ var eventObj = {
   		localStorage.setItem("city-location", city);
 
   		// All inputs are good to go; now format dates for query string and search feedback msg string
-  		var dateObj = eventObj.formatQueryDates(firstDate, lastDate);     
-        
+  		var dateObj = eventObj.formatQueryDates(firstDate, lastDate);
+
         // Send search inputs to ajaxCall. Note: ajaxCall will set response data as localStorage item for dashboard.html content generation
         var dataObj = {
             city: city,
@@ -236,7 +254,7 @@ var eventObj = {
             endDate: 		dateObj.endDate,
             queryEndDate: 	dateObj.queryEndDate
         }
-  
+
         return dataObj;
     },
 
@@ -246,21 +264,21 @@ var eventObj = {
      * @return N/A
      */
     getFeedbackMsg: function(dataObj) {
-      
-        // First, build beginning default string.  
+
+        // First, build beginning default string.
         var msg = '';
-    
+
         // If user entered a category, add that as well
         if(dataObj.categoryName != null) {
             msg += dataObj.categoryName;
         }
-    
+
         // City will ALWAYS be required
         msg += ' events in ' + dataObj.city;
-    
-        // If date range was entered, add that as well. First, format it back 
+
+        // If date range was entered, add that as well. First, format it back
         msg += ' ' + dataObj.startDate + ' - ' + dataObj.endDate;
-    
+
         // Set search feedback as localStorage item
         localStorage.setItem("search-feedback", msg);
 
@@ -301,15 +319,11 @@ $(document).ready(function() {
     });
 
     // Card slider for my favorites options
-    var slider;
-
     $('.event-boxes').on('click','.show', function(){
         console.log(this);
         console.log("I clicked");
-        var slider = $(this);
-        slider.siblings('.card-reveal').slideToggle('slow');
+        $(this).siblings('.card-reveal').slideToggle('slow');
     });
-    
     $('.event-boxes').on('click','.close', function(){
         $(this).parent().slideToggle('slow');
     });
@@ -378,8 +392,8 @@ $(document).ready(function() {
 		// Set and format default date range for query search and search feedback heading string. Function will return object with date properties
 		var firstDate = null;
 		var lastDate  = null;
-		var dateObj   = eventObj.formatQueryDates(firstDate, lastDate);		
-		
+		var dateObj   = eventObj.formatQueryDates(firstDate, lastDate);
+
         // Run Ajax function
         var dataObj = {
             city: 			city,
@@ -444,7 +458,7 @@ $(document).ready(function() {
 		var categoryName = "all events";
 
 		// Show fadeIn/fadeOut feedback to user for successful location set
-		$('p.location-input-feedback').text(city + " location Set Successfully!").fadeIn(1000).fadeOut(2000);
+		$('p.location-input-feedback').text(city + " location set successfully!").fadeIn(1000).fadeOut(2000);
 
 		// Empty out the text that user just submitted
 		$('.location-input').val("");
@@ -453,7 +467,7 @@ $(document).ready(function() {
 		// Note: might want to revisit the possibility of setting date range to == localStorage dates, instead of default, in some cases
 		var firstDate = null;
 		var lastDate  = null;
-		var dateObj   = eventObj.formatQueryDates(firstDate, lastDate);	
+		var dateObj   = eventObj.formatQueryDates(firstDate, lastDate);
 
 		// Generate new result set, setting event categoryId to null & categoryName to "all events" to retrieve 'all events', and new city location as the location
 		var dataObj = {
