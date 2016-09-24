@@ -28,9 +28,10 @@ var db = firebase.database();
 var userLoggedIn = true;
 
 // Establish global for database user reference
-var usersRef = db.ref("users");
+var usersRef = db.ref("Users");
 
 // For testing purposes, to obtain user informtion as if user were logged in
+console.log('firebase logged-in userId: ' + firebase.auth().currentUser.uid);
 var userId = "757827487";
 
 // Object for storing event properties and methods specific to any event actions, searching, etc
@@ -167,6 +168,39 @@ var eventObj = {
   		$('div.spinner-div').empty();
   	},
 
+    /**
+     * Create markup for event boxes
+     * @param {object} dataObj Object containing value params
+     * @return N/A
+     */
+    generateEventBoxes: function(dataObj) {
+        // Build string of html content, filling in variable content with response items. fullDesc will be used for modal dropdown of full description
+        var html =  '<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 event-box">' +
+                        '<div class="panel event-content text-center card-image" id="event' + dataObj.index + '">' +
+                            '<h3 class="event-name" data-name="' + dataObj.longName + '">' + dataObj.shortName + '</h3>' +
+                            '<p class="event-date" data-date="' + dataObj.date + '">' + dataObj.date + '</p>' +
+                            '<p class="event-time" data-time="' + dataObj.time + '">' + dataObj.time + '</p>' +
+                            '<p class="event-desc" data-desc="' + dataObj.longDesc + '">' + dataObj.shortDesc + '</p>' +
+                        '</div>' +
+                        '<button type="button" class="btn btn-lg btn-block fav-button show">add favorite</button>' +
+                        '<div class="card-reveal">' +
+                            '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>' +
+                            '<h2>select a category</h2>' +
+                            '<select type="text" class="form-control" id="user-category">' +
+                                dataObj.options +
+                            '</select>' +
+                            '<button type="button" class="btn btn-block text-center add-to-category">add to category</button>' +
+                            '<h2 id="create-new">create a new category</h2>' +
+                            '<input type="text" class="form-control category-input" placeholder="new category name"/>' +
+                            '<i class="glyphicon glyphicon-share-alt category-icon"></i>' +
+                            '<p class="add-fav-feedback"></p>' +
+                        '</div>' +
+                    '</div>';
+
+         // Append new event block to div.main
+         $(".event-boxes").append(html);
+    },
+
   	/**
 	 * Create the search event box content cards from an event response data object
 	 * This is used by ajaxCall(), as well as the default dashboard page load from the localStorage "response" item
@@ -235,7 +269,19 @@ var eventObj = {
             }
 
 			// Build string of html content, filling in variable content with response items. fullDesc will be used for modal dropdown of full description
-			var html =  '<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 event-box">' +
+			var dataObj = {
+                index: index,
+                longName: longName,
+                shortName: shortName,
+                date: date,
+                time: time,
+                longDesc: longDesc,
+                shortDesc: shortDesc,
+                options: options
+            }
+            eventObj.generateEventBoxes(dataObj);
+            /*
+            var html =  '<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 event-box">' +
                             '<div class="panel event-content text-center card-image" id="event' + index + '">' +
                                 '<h3 class="event-name" data-name="' + longName + '">' + shortName + '</h3>' +
                                 '<p class="event-date" data-date="' + date + '">' + date + '</p>' +
@@ -258,7 +304,7 @@ var eventObj = {
                         '</div>';
 
 		     // Append new event block to div.main
-		     $(".event-boxes").append(html);
+		     $(".event-boxes").append(html);*/
 		});
 	}, // generateSearchContent()
 
@@ -288,8 +334,8 @@ var eventObj = {
             //console.log("item desc: " + item.desc);
             var desc = item.desc;
             console.log("desc: " + desc);
-            var shortDescription = desc.slice(0, 100) + "...";
-            var longDescription = desc;
+            var shortDesc = desc.slice(0, 100) + "...";
+            var longDesc = desc;
 
             // Set easy access to event cost. Couldn't get anything to work
             //var cost = "";
@@ -300,20 +346,39 @@ var eventObj = {
             // Set easy acces to event address.  Couldn't get anything to work
             // var address = "";
 
-            // Generate html string of select options. No need to check for user login, as this method can't be accessed unless user is logged in
+            // Generate html string of select options. 
+            // If user login is in working order, no need to check for user login, as this method can't be accessed unless user is logged in
+            // If the array is empty (was running into that and can't explain), show a default option with generic message
             var options = "";
-            eventObj.favTitleArray.forEach(function(title){
-                options += '<option value="' + title + '">' + title + '</option>';
-            });
+            if(eventObj.favTitleArray.length > 0) {
+                eventObj.favTitleArray.forEach(function(title) {
+                    options += '<option value="' + title + '">' + title + '</option>';
+                });
+            } else {
+                options += '<option value=""> No Favs Are Available </option>';
+            }
 
             // Note: below is duplicated code.  You need to make this a function in itself to conform to DRY principle
             // Build string of html content, filling in variable content with response items. fullDesc will be used for modal dropdown of full description
+             var dataObj = {
+                index: index,
+                longName: longName,
+                shortName: shortName,
+                date: date,
+                time: time,
+                longDesc: longDesc,
+                shortDesc: shortDesc,
+                options: options
+            }
+            eventObj.generateEventBoxes(dataObj);
+            /*
+            // Bui
             var html = '<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 event-box">' +
                             '<div class="panel event-content text-center card-image" id="event' + index + '">' +
                                 '<h3 class="event-name" data-name="' + longName + '">' + shortName + '</h3>' +
                                 '<p class="event-date" data-date="' + date + '">' + date + '</p>' +
                                 '<p class="event-time" data-time="' + time + '">' + time + '</p>' +
-                                '<p class="event-desc" data-desc="' + longDescription + '">' + shortDescription + '</p>' +
+                                '<p class="event-desc" data-desc="' + longDesc + '">' + shortDesc + '</p>' +
                             '</div>' +
                             '<button type="button" class="btn btn-lg btn-block fav-button show">manage favorite</button>' +
                             '<div class="card-reveal">' +
@@ -331,7 +396,7 @@ var eventObj = {
                         '</div>';
 
             // Append new event block to div.main
-            $(".event-boxes").append(html);
+            $(".event-boxes").append(html);*/
         });
 
         // Clear out the global var favArray so that next time favs are clicked, it won't include the previously viewed items....
@@ -717,7 +782,7 @@ $(document).ready(function() {
         // Get the category favorite reference string
         var category = $(this).siblings('.card-reveal select').val();
         console.log("category: " + category);
-
+        return false;
         // Validate the category selection
         if(category == "") {
             contentObj.showAlertModal("You didn't select a category!");
@@ -742,6 +807,13 @@ $(document).ready(function() {
             var node = snapshot.child(category)
 
         });*/
+
+        // Test data - hard code to force test entry
+        var category = "Summer Beach Trip '17";
+        var name = "Bea's Dance-of";
+        var date = "July 3rd 2017";
+        var desc = "A really big description should go here, about beaches beaches beaches beaches beaches beaches beaches beaches beaches!";
+        var time = "5:30 PM - 4:00 AM";
 
         // Now put the favorite into the database, under the correct user
         // Test: successful, but haven't gotten it to target the correct event box content data
@@ -776,11 +848,11 @@ $(document).ready(function() {
         console.log("name: " + name + " date: " + date + " time: " + time + " desc: " + desc);
         */
         // Test data - hard code to force test entry
-        var category = "Johnny's Test Category";
-        var name = "Saray Test";
+        var category = "Oct DC Trip";
+        var name = "Johnny's Apple Picker Retreat";
         var date = "October 21st 2017";
-        var desc = "A really big description should go here";
-        var time = "8:30 PM - 10:00 PM";
+        var desc = "A really big description should go here, that talks about apples, apple cider, apple pie, and event apple sauce!  Line up, folks!";
+        var time = "2:30 PM - 5:00 PM";
 
         // Now add the new favorite into the database, under the correct user
         // Test: successful
