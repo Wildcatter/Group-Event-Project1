@@ -434,23 +434,7 @@ var eventObj = {
         });                        
         console.log("favTitleArray: " , eventObj.favTitleArray);
         console.log("favEventsArray: " , favEventsArray);
-    },
-
-    /**
-     * Create category dropdowns inside of user side favorites slider
-     * 
-     *
-     */
-     /*
-    generateUserFavSliderLinks: function(favTitleArray) {
-        var content = "<ul>";
-        favTitleArray.forEach(function(item) {
-            content += "<li>" + item + "</li>";
-        });
-        content += "</ul>";
-        $('.slider-favs').html(content);
-    }*/
-
+    }
 } // eventObj
 
 var contentObj = {
@@ -496,6 +480,8 @@ $(document).ready(function() {
         console.log("I clicked");
         $(this).siblings('.card-reveal').slideToggle('slow');
     });
+
+    // Close the card slider when the 'X' is clicked
     $('.event-boxes').on('click','.close', function(){
         $(this).parent().slideToggle('slow');
     });
@@ -503,6 +489,9 @@ $(document).ready(function() {
 	// Get the events on initial page load, if the user used the search form on the main homepage (comes from localStorage var)
 	// If user chose to login instead, do not show any events, but show a welcome message
 	if(localStorage.getItem("homePage-results") != "") {
+        console.log("homePage-results session var is set");
+
+        // Turn JSON back from a string into an object
 		var response = JSON.parse(localStorage.getItem("homePage-results"));
 		eventObj.generateSearchContent(response);
 
