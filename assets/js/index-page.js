@@ -35,7 +35,6 @@ firebase.initializeApp(config);
 
 // Establish database global vars
 var database = firebase.database();
-//const auth = firebase.auth();
 var fbProvider = new firebase.auth.FacebookAuthProvider();
 var googleprovider = new firebase.auth.GoogleAuthProvider();
 var uidUser;
@@ -48,41 +47,42 @@ var userImg;
 
 
 firebase.auth().getRedirectResult().then(function(result) {
-  if (result.credential) {
-    // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-    var token = result.credential.accessToken;
-    console.log(token);
-    console.log(result);
-    user = result.user;
-    console.log(user.displayName);
-    userName = user.displayName;
-    userEmail = user.email;
-    console.log(user.email);
-    console.log(user.photoURL);
-    userImg = user.photoURL;
-    currentUserProfile = firebase.auth().currentUser;
+    if (result.credential) {
+        // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+        var token = result.credential.accessToken;
+        console.log(token);
+        console.log(result);
+        user = result.user;
+        console.log(user.displayName);
+        userName = user.displayName;
+        userEmail = user.email;
+        console.log(user.email);
+        console.log(user.photoURL);
+        userImg = user.photoURL;
+        currentUserProfile = firebase.auth().currentUser;
         uidUser = firebase.auth().currentUser.uid;
         (console.log(uidUser));
         currentUserRef = database.ref('Users/'+uidUser);
         currentUserRef.update({
-             name: userName,
-             email: userEmail,
-             photo: userImg,
-             });
-    $('.loggedModal').modal("show");
-    setTimeout(function () {         
-         window.location = "https://still-shore-69099.herokuapp.com/dashboard.html";
-    }, 1000);
-  };
-  }).catch(function(error) {
-  // Handle Errors here.
-  var errorCode = error.code;
-  var errorMessage = error.message;
-  // The email of the user's account used.
-  var email = error.email;
-  // The firebase.auth.AuthCredential type that was used.
-  var credential = error.credential;
-  // ...
+            name: userName,
+            email: userEmail,
+            photo: userImg,
+        });
+    
+        $('.loggedModal').modal("show");
+        setTimeout(function () {         
+             window.location = "https://still-shore-69099.herokuapp.com/dashboard.html";
+        }, 1000);
+    }
+}).catch(function(error) {
+    // Handle Errors here.
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    // The email of the user's account used.
+    var email = error.email;
+    // The firebase.auth.AuthCredential type that was used.
+    var credential = error.credential;
+    // ...
 });
 
 // Establish email regex global
@@ -327,10 +327,7 @@ $(document).ready(function() {
     $("#search-date-start").datepicker();
     $("#search-date-end").datepicker();
 
-    $(document).on("click", ".login-link", function() {
-    $('.loginModal').modal("show");
-    });
-
+    /*
     $(document).on("click", "#fbook", function() {
     firebase.auth().signInWithRedirect(fbProvider);
     });
@@ -345,66 +342,70 @@ $(document).ready(function() {
 
     $(document).on("click", "#login", function() {
     auth.signInWithEmailAndPassword(email, password);
+    });*/
+
+    // Show the modal if user clicks 'login'
+    $('.login-link').on('click', function() {
+        $('.loginModal').modal("show");
     });
 
-    // // Show the modal if user clicks 'login'
-    // $('.login-link').on('click', function() {
-    //     $('.loginModal').modal("show");
-    // });
+    // Process the authorization btn login/signup click
+    $(".loginModal button").on("click", function() {
 
-    // // Process the authorization btn login/signup click
-    // $(".loginModal button").on("click", function() {
+        // Get user's email and password
+        var email = $('#login-email').val();
+        var password = $('#login-pass').val();
 
-    //     // Get user's email and password
-    //     var email = $('#login-email').val();
-    //     var password = $('#login-pass').val();
+        // Establish error array for error messages in alertModal, and msg string
+        var errors = [];
+        var msg = "";
 
-    //     // Establish error array for error messages in alertModal, and msg string
-    //     var errors = [];
-    //     var msg = "";
+        // Capture the button clicked
+        var btn = $(this).attr("id");
+        console.log("btn: " + btn);
 
-    //     // // Validate the password
-    //     // if(password == "") {
-    //     //     errors.push("You must enter a valid password! \n");
-    //     // }
+        // Only validate form entry if using login or sign up buttons
+        if(btn == "join" || btn == "login") {
+            // Validate the password
+            if(password == "") {
+                errors.push("You must enter a valid password! \n");
+            }
+    
+            // Validate the email address
+            if(!validEmail.test(email)) {
+                errors.push("You must enter a valid email address!");
+            }
+        }
 
-    //     // // Validate the email address
-    //     // if(!validEmail.test(email)) {
-    //     //     errors.push("You must enter a valid email address!");
-    //     // }
+        // If there were any errors, generate error msg, show alertModal and cease user credential processing
+        if(errors.length > 0) {
+            errors.forEach(function(error) {
+                msg += error + "<br>";
+            });
+            contentObj.showAlertModal(msg);
+            return false;
+        }
 
-    //     // If there were any errors, generate error msg, show alertModal and cease user credential processing
-    //     if(errors.length > 0) {
-    //         errors.forEach(function(error) {
-    //             msg += error + "\n";
-    //         });
-    //         contentObj.showAlertModal(msg);
-    //         return false;
-    //     }
+        // Load the spinner to indicate processing
+        $('div.spinner-div').html('<div class="spinner">Loading...</div>');
 
-    //     // Load the spinner to indicate processing
-    //     $('div.spinner-div').html('<div class="spinner">Loading...</div>');
-
-    //     // Run the ajaxCall() method, after timeDelay interval. The spinner is removed once the ajax call is complete.
-
-    //     // Capture the button clicked
-    //     var btn = $(this).attr("id");
-    //     console.log("btn: " + btn);
-
-  // Process user login credentials based on button clicked
-        // switch(btn) {
-        //     case "join":
-        //         auth.createUserWithEmailAndPassword(email, password);
-        //         break;
-        //     case "login":
-        //         auth.signInWithEmailAndPassword(email, password);
-        //         break;
-        //     case "fbook":
-        //         firebase.auth().signInWithRedirect(fbProvider);
-        //     case "googs":
-        //         firebase.auth().signInWithRedirect(googleProvider);
-        // }
-      // Process search submit
+        // Process user login credentials based on button clicked
+        switch(btn) {
+            case "join":
+                firebase.auth().createUserWithEmailAndPassword(email, password);
+                break;
+            case "login":
+                firebase.auth().signInWithEmailAndPassword(email, password);
+                 break;
+            case "fbook":
+                firebase.auth().signInWithRedirect(fbProvider);
+                break;
+            case "googs":
+                firebase.auth().signInWithRedirect(googleProvider);
+        }
+    });
+    
+    // Process search submit
     $('#search-submit').on('click', function() {
         // Get form input data and process so it is ready to send to the api ajax call
         var dataObj = eventObj.getSearchInputData();
