@@ -798,7 +798,7 @@ $(document).ready(function() {
         // Get the category favorite reference string
         var category = $(this).siblings('.card-reveal select').val();
         console.log("category: " + category);
-        return false;
+        
         // Validate the category selection
         if(category == "") {
             contentObj.showAlertModal("You didn't select a category!");
