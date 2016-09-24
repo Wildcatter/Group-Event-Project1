@@ -826,11 +826,11 @@ $(document).ready(function() {
         });*/
 
         // Test data - hard code to force test entry
-        var category = "Summer Beach Trip";
-        var name = "Jungle Cliff Diving";
-        var date = "August 12th 2017";
-        var desc = "Go cliff diving with some of the greatest cliff divers out there!!";
-        var time = "10:30 AM - 3:00 PM";
+        var category = "CO Ski Trip";
+        var name = "DC Snow Spins!";
+        var date = "December 12th 2017";
+        var desc = "Go spin it up with DJ Spins!";
+        var time = "10:30 PM - 3:00 AM";
 
         // Now put the favorite into the database, under the correct user
         // Test: successful, but haven't gotten it to target the correct event box content data
