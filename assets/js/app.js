@@ -826,11 +826,11 @@ $(document).ready(function() {
         });*/
 
         // Test data - hard code to force test entry
-        var category = "Summer Beach Trip '17";
-        var name = "Diving With Bull Sharks";
-        var date = "July 5th 2017";
-        var desc = "Come dive with sharks with us!  You don't want to miss this incredible opportunity.  Everybody will be on edge!";
-        var time = "11:30 AM - 3:00 PM";
+        var category = "Summer Beach Trip";
+        var name = "Jungle Cliff Diving";
+        var date = "August 12th 2017";
+        var desc = "Go cliff diving with some of the greatest cliff divers out there!!";
+        var time = "10:30 AM - 3:00 PM";
 
         // Now put the favorite into the database, under the correct user
         // Test: successful, but haven't gotten it to target the correct event box content data
@@ -869,11 +869,12 @@ $(document).ready(function() {
         */
         // Test data - hard code to force test entry
         
+        /*
         var category = "Oct DC Trip";
         var name = "Johnny's Apple Picker Retreat";
         var date = "October 21st 2017";
         var desc = "A really big description should go here, that talks about apples, apple cider, apple pie, and event apple sauce!  Line up, folks!";
-        var time = "2:30 PM - 5:00 PM";
+        var time = "2:30 PM - 5:00 PM";*/
 
         /*
         var category = "CO Ski Trip";
@@ -888,6 +889,12 @@ $(document).ready(function() {
         var date = "May 21st 2017";
         var desc = "A really big description should go here, that talks about all kinds of coral, fish and scuba diving!";
         var time = "1:30 PM - 5:00 PM"*/
+
+        var category = "Africa Trip '17";
+        var name = "Masai Mauri Trip";
+        var date = "May 21st 2017";
+        var desc = "A really big description should go here, that talks about all aspects of Africa!";
+        var time = "12:30 PM - 6:00 PM"
 
         // Now add the new favorite into the database, under the correct user
         // Test: successful
