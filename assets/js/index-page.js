@@ -24,6 +24,61 @@ var config = {
 
 firebase.initializeApp(config);
 
+//database.ref().set("users");
+
+/*********************** Garett's new code*/
+var database = firebase.database();
+var auth = firebase.auth();
+var fbprovider = new firebase.auth.FacebookAuthProvider();
+var googleprovider = new firebase.auth.GoogleAuthProvider();
+var uidUser;
+var currentUserProfile;
+var currentUserRef;
+var user;
+var userName;
+var userEmail;
+var userImg;
+
+/*
+firebase.auth().getRedirectResult().then(function(result) {
+    if (result.credential) {
+        // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+        var token = result.credential.accessToken;
+        console.log(token);
+        console.log(result);
+        user = result.user;
+        console.log(user.displayName);
+        userName = user.displayName;
+        userEmail = user.email;
+        console.log(user.email);
+        console.log(user.photoURL);
+        userImg = user.photoURL;
+        currentUserProfile = firebase.auth().currentUser;
+            uidUser = firebase.auth().currentUser.uid;
+            (console.log(uidUser));
+            currentUserRef = database.ref('Users/'+uidUser);
+            currentUserRef.update({
+                 name: userName,
+                 email: userEmail,
+                 photo: userImg,
+            });
+        $('.loggedModal').modal("show");
+        setTimeout(function () {         
+             window.location = "https://still-shore-69099.herokuapp.com/dashboard.html";
+        }, 500);
+    };
+}).catch(function(error) {
+    // Handle Errors here.
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    // The email of the user's account used.
+    var email = error.email;
+    // The firebase.auth.AuthCredential type that was used.
+    var credential = error.credential;
+});
+/***********************/
+
+/*
 // Establish database global vars
 var database = firebase.database();
 const auth = firebase.auth();
@@ -35,8 +90,6 @@ var userId;
 var userImg;
 var userName;
 var userEmail;
-
-//database.ref().set("users");
 
 firebase.auth().getRedirectResult().then(function(result) {
   if (result.credential) {
@@ -63,7 +116,7 @@ firebase.auth().getRedirectResult().then(function(result) {
   $(".fbook").append(user.email);
 
   $(".fbook").append('<img src =' + user.photoURL + '>')
-*/
+
 }).catch(function(error) {
   // Handle Errors here.
   var errorCode = error.code;
@@ -104,7 +157,7 @@ firebase.auth().onAuthStateChanged(firebaseUser => {
     } else {
         console.log("You are not logged in!");
     }
-});
+});*/
 
 // Establish email regex global
 var validEmail = /(^[\w-]+(?:\.[\w-]+)*@(?:[\w-]+\.)+[a-zA-Z]{2,7}$)|(^N\/A$)/;
@@ -358,8 +411,8 @@ $(document).ready(function() {
     $(".loginModal button").on("click", function() {
 
         // Get user's email and password
-        var email = $('#login-email').val();
-        var password = $('#login-pass').val();
+        var email = $('#login-email').val().trim();
+        var password = $('#login-pass').val().trim();
 
         // Establish error array for error messages in alertModal, and msg string
         var errors = [];
@@ -368,8 +421,9 @@ $(document).ready(function() {
         // Capture the button clicked
         var btn = $(this).attr("id");
         console.log("btn: " + btn);
-        return false;
+        //return false;
 
+        // Only 
         if(btn == "join" || btn == "login") {
             // Validate the password
             if(password == "") {
@@ -400,16 +454,26 @@ $(document).ready(function() {
         // Process user login credentials based on button clicked
         switch(btn) {
             case "join":
-                auth.createUserWithEmailAndPassword(email, password);
+                //auth.createUserWithEmailAndPassword(email, password);
+                auth.createUserWithEmailAndPassword(email, password).catch(function(error) {
+                    // Handle Errors here.
+                    console.log("error code: " + error.code);
+                    console.log("error msg: " + error.message);
+                });
                 break;
             case "login":
-                auth.signInWithEmailAndPassword(email, password);
+                //auth.signInWithEmailAndPassword(email, password);
+                auth.signInWithEmailAndPassword(email, password).catch(function(error) {
+                    // Handle Errors here.
+                    console.log("error code: " + error.code);
+                    console.log("error msg: " + error.message);
+                });
                 break;
             case "fbook":
-                firebase.auth().signInWithRedirect(fbProvider);
+                auth.signInWithRedirect(fbProvider);
                 break;
             case "googs":
-                firebase.auth().signInWithRedirect(googleProvider);
+                auth.signInWithRedirect(googleProvider);
         }
     });
 
