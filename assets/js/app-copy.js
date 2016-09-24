@@ -6,7 +6,9 @@ var config = {
   databaseURL: "https://eventi-testing-db.firebaseio.com",
   storageBucket: "eventi-testing-db.appspot.com",
   messagingSenderId: "393804341426"
-};*/
+};
+
+firebase.initializeApp(config);*/
 
 // Initialize Firebase
 var config = {
@@ -22,86 +24,6 @@ firebase.initializeApp(config);
 // Establish easy access to db object
 var db = firebase.database();
 
-/*
-// Establish firebase global vars
-var provider = new firebase.auth.FacebookAuthProvider();
-var googprovider = new firebase.auth.GoogleAuthProvider();
-var uidUser;
-var currentUserProfile;
-var currentUserRef;
-var user;
-var userName;
-var userEmail;
-var userImg;
-var authed = firebase.auth().currentUser;
-var justRegistered = true;
-var previousUser = false;
-
-
-firebase.auth().onAuthStateChanged(function(user) {   
-     if(user) {
-        console.log("entered user auth code block");
-        $("#login").remove();
-        currentUserProfile = firebase.auth().currentUser;
-        uidUser = firebase.auth().currentUser.uid;
-        currentUserRef = database.ref('Users/'+uidUser);
-        (console.log(uidUser));
-        console.log(currentUserProfile.displayName);
-        $("#name").html(currentUserProfile.displayName);
-        console.log(currentUserProfile.photoURL);
-        let pic = $('<img src='+currentUserProfile.photoURL+'>');
-        pic.addClass('img-responsive');
-        $("#pic").html(pic)
-        console.log(currentUserProfile.email)
-    } else {
-        let loginCreate = $('<button>')
-        loginCreate.addClass('btn navButtons');
-        loginCreate.attr('id', 'login');//<button class= "btn" id="login"> login </button>
-        loginCreate.text('Login')
-        $(".navbar-right").append(loginCreate);
-        console.log("u aint logged in :)");
-      }
-});
-
-firebase.auth().getRedirectResult().then(function(result) {
-    console.log("Entered user auth 2nd code block");
-    if (result.credential) {
-        // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-        var token = result.credential.accessToken;
-        console.log("token: " + token);
-        console.log("result: " + result);
-        user = result.user;
-        console.log("diplay name: " + user.displayName);
-        userName = user.displayName;
-        userEmail = user.email;
-        console.log("email: " + user.email);
-        console.log("photo url: " + user.photoURL);
-        userImg = user.photoURL;
-        currentUserProfile = firebase.auth().currentUser;
-        uidUser = firebase.auth().currentUser.uid;
-        console.log("uidUser: " + uidUser);
-        currentUserRef = database.ref('Users/'+uidUser);
-        currentUserRef.update({
-             name: userName,
-             email: userEmail,
-             photo: userImg,
-        });
-        setTimeout(function () {
-             $('.loggedModal').modal("show");
-        }, 2000);
-   }
-  // The signed-in user info.
-}).catch(function(error) {
-    // Handle Errors here.
-    var errorCode = error.code;
-    var errorMessage = error.message;
-    // The email of the user's account used.
-    var email = error.email;
-    // The firebase.auth.AuthCredential type that was used.
-    var credential = error.credential;
-    // ...
-});*/
-
 // For testing purposes, for testing of modal that pops up if user tries to 'Add Favorite', but they are not logged in
 var userLoggedIn = true;
 
@@ -109,9 +31,8 @@ var userLoggedIn = true;
 var usersRef = db.ref("Users");
 
 // For testing purposes, to obtain user informtion as if user were logged in
-//console.log('firebase logged-in userId: ' + firebase.auth().currentUser.uid);
-//var userId = "757827487";
-var userId = "FORCDQYjywPRkTZeFfhmEgLlYoZ2";
+var userId = firebase.auth().currentUser.uid;
+//var userId = "FORCDQYjywPRkTZeFfhmEgLlYoZ2";
 
 // Object for storing event properties and methods specific to any event actions, searching, etc
 var eventObj = {
@@ -247,39 +168,6 @@ var eventObj = {
   		$('div.spinner-div').empty();
   	},
 
-    /**
-     * Create markup for event boxes
-     * @param {object} dataObj Object containing value params
-     * @return N/A
-     */
-    generateEventBoxes: function(dataObj) {
-        // Build string of html content, filling in variable content with response items. fullDesc will be used for modal dropdown of full description
-        var html =  '<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 event-box">' +
-                        '<div class="panel event-content text-center card-image" id="event' + dataObj.index + '">' +
-                            '<h3 class="event-name" data-name="' + dataObj.longName + '">' + dataObj.shortName + '</h3>' +
-                            '<p class="event-date" data-date="' + dataObj.date + '">' + dataObj.date + '</p>' +
-                            '<p class="event-time" data-time="' + dataObj.time + '">' + dataObj.time + '</p>' +
-                            '<p class="event-desc" data-desc="' + dataObj.longDesc + '">' + dataObj.shortDesc + '</p>' +
-                        '</div>' +
-                        '<button type="button" class="btn btn-lg btn-block fav-button show">add favorite</button>' +
-                        '<div class="card-reveal">' +
-                            '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>' +
-                            '<h2>select a category</h2>' +
-                            '<select type="text" class="form-control" id="user-category">' +
-                                dataObj.options +
-                            '</select>' +
-                            '<button type="button" class="btn btn-block text-center add-to-category">add to category</button>' +
-                            '<h2 id="create-new">create a new category</h2>' +
-                            '<input type="text" class="form-control category-input" placeholder="new category name"/>' +
-                            '<i class="glyphicon glyphicon-share-alt category-icon"></i>' +
-                            '<p class="add-fav-feedback"></p>' +
-                        '</div>' +
-                    '</div>';
-
-         // Append new event block to div.main
-         $(".event-boxes").append(html);
-    },
-
   	/**
 	 * Create the search event box content cards from an event response data object
 	 * This is used by ajaxCall(), as well as the default dashboard page load from the localStorage "response" item
@@ -317,6 +205,15 @@ var eventObj = {
 			var shorDesc = "";
 			var longDesc = "";
 
+            // Set easy access to event cost. Couldn't get anything to work
+            //var cost = "";
+
+            // Set easy access to event category name. Couln't get anything to work
+            //var category = "";
+
+            // Set easy acces to event address.  Couldn't get anything to work
+            // var address = "";
+
 			// If there is no item description, set default message. Save long description for modal dropdown
 			if (desc != null) {
 				longDesc  = desc;
@@ -330,7 +227,6 @@ var eventObj = {
             if(userLoggedIn) {
                 console.log("user is logged in line 215");
                 //console.log("user favTitleArray var: " , eventObj.favTitleArray);
-                options += '<option value=""> Select... </option>';
                 eventObj.favTitleArray.forEach(function(title){
                     console.log("entered favTitleArray loop");
                     options += '<option value="' + title + '">' + title + '</option>';
@@ -340,17 +236,30 @@ var eventObj = {
             }
 
 			// Build string of html content, filling in variable content with response items. fullDesc will be used for modal dropdown of full description
-			var dataObj = {
-                index: index,
-                longName: longName,
-                shortName: shortName,
-                date: date,
-                time: time,
-                longDesc: longDesc,
-                shortDesc: shortDesc,
-                options: options
-            }
-            eventObj.generateEventBoxes(dataObj);
+			var html =  '<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 event-box">' +
+                            '<div class="panel event-content text-center card-image" id="event' + index + '">' +
+                                '<h3 class="event-name" data-name="' + longName + '">' + shortName + '</h3>' +
+                                '<p class="event-date" data-date="' + date + '">' + date + '</p>' +
+                                '<p class="event-time" data-time="' + time + '">' + time + '</p>' +
+                                '<p class="event-desc" data-desc="' + longDesc + '">' + shortDesc + '</p>' +
+                            '</div>' +
+                            '<button type="button" class="btn btn-lg btn-block fav-button show">add favorite</button>' +
+                            '<div class="card-reveal">' +
+                                '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>' +
+                                '<h2>select a category</h2>' +
+                                '<select type="text" class="form-control" id="user-category">' +
+                                    options +
+                                '</select>' +
+                                '<button type="button" class="btn btn-block text-center add-to-category">add to category</button>' +
+                                '<h2 id="create-new">create a new category</h2>' +
+                                '<input type="text" class="form-control category-input" placeholder="new category name"/>' +
+                                '<i class="glyphicon glyphicon-share-alt category-icon"></i>' +
+                                '<p class="add-fav-feedback"></p>' +
+                            '</div>' +
+                        '</div>';
+
+		     // Append new event block to div.main
+		     $(".event-boxes").append(html);
 		});
 	}, // generateSearchContent()
 
@@ -364,8 +273,6 @@ var eventObj = {
     generateFavContent: function() {
         // Loop through each event object inside of the events array, creating event cards to put into .event-boxes div container
         eventObj.favArray.forEach(function(item, index, arr) {
-            console.log("arr: " + arr);
-            console.log("item: " + item);
 
             // Set easy access to name, and cut the length for card display if length > 60 characters
             var name = item.name;
@@ -382,34 +289,50 @@ var eventObj = {
             //console.log("item desc: " + item.desc);
             var desc = item.desc;
             console.log("desc: " + desc);
-            var shortDesc = desc.slice(0, 100) + "...";
-            var longDesc = desc;
+            var shortDescription = desc.slice(0, 100) + "...";
+            var longDescription = desc;
 
-            // Generate html string of select options. 
-            // If user login is in working order, no need to check for user login, as this method can't be accessed unless user is logged in
-            // If the array is empty (was running into that and can't explain), show a default option with generic message
+            // Set easy access to event cost. Couldn't get anything to work
+            //var cost = "";
+
+            // Set easy access to event category name. Couln't get anything to work
+            //var category = "";
+
+            // Set easy acces to event address.  Couldn't get anything to work
+            // var address = "";
+
+            // Generate html string of select options. No need to check for user login, as this method can't be accessed unless user is logged in
             var options = "";
-            if(eventObj.favTitleArray.length > 0) {
-                eventObj.favTitleArray.forEach(function(title) {
-                    options += '<option value="' + title + '">' + title + '</option>';
-                });
-            } else {
-                options += '<option value=""> No Favs Are Available </option>';
-            }
+            eventObj.favTitleArray.forEach(function(title){
+                options += '<option value="' + title + '">' + title + '</option>';
+            });
 
             // Note: below is duplicated code.  You need to make this a function in itself to conform to DRY principle
             // Build string of html content, filling in variable content with response items. fullDesc will be used for modal dropdown of full description
-             var dataObj = {
-                index: index,
-                longName: longName,
-                shortName: shortName,
-                date: date,
-                time: time,
-                longDesc: longDesc,
-                shortDesc: shortDesc,
-                options: options
-            }
-            eventObj.generateEventBoxes(dataObj);
+            var html = '<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 event-box">' +
+                            '<div class="panel event-content text-center card-image" id="event' + index + '">' +
+                                '<h3 class="event-name" data-name="' + longName + '">' + shortName + '</h3>' +
+                                '<p class="event-date" data-date="' + date + '">' + date + '</p>' +
+                                '<p class="event-time" data-time="' + time + '">' + time + '</p>' +
+                                '<p class="event-desc" data-desc="' + longDescription + '">' + shortDescription + '</p>' +
+                            '</div>' +
+                            '<button type="button" class="btn btn-lg btn-block fav-button show">manage favorite</button>' +
+                            '<div class="card-reveal">' +
+                                '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>' +
+                                '<h2>select a category</h2>' +
+                                '<select type="text" class="form-control" id="user-category">' +
+                                    options +
+                                '</select>' +
+                                '<button type="button" class="btn btn-block text-center add-to-category">move to category</button>' +
+                                '<h2 id="create-new">move to new category</h2>' +
+                                '<input type="text" class="form-control category-input" placeholder="new category name"/>' +
+                                '<i class="glyphicon glyphicon-share-alt category-icon"></i>' +
+                                '<p class="add-fav-feedback"></p>' +
+                            '</div>' +
+                        '</div>';
+
+            // Append new event block to div.main
+            $(".event-boxes").append(html);
         });
 
         // Clear out the global var favArray so that next time favs are clicked, it won't include the previously viewed items....
@@ -493,9 +416,6 @@ var eventObj = {
         // Set search feedback as localStorage item
         localStorage.setItem("search-feedback", msg);
 
-        // Now insert the feedback search results into the main heading
-        $('.header-span').text(localStorage.getItem("search-feedback"));
-
         // Note: main heading with favorites feedback is updated inside of favorites click handler
     },
 
@@ -515,7 +435,23 @@ var eventObj = {
         });                        
         console.log("favTitleArray: " , eventObj.favTitleArray);
         console.log("favEventsArray: " , favEventsArray);
-    }
+    },
+
+    /**
+     * Create category dropdowns inside of user side favorites slider
+     * 
+     *
+     */
+     /*
+    generateUserFavSliderLinks: function(favTitleArray) {
+        var content = "<ul>";
+        favTitleArray.forEach(function(item) {
+            content += "<li>" + item + "</li>";
+        });
+        content += "</ul>";
+        $('.slider-favs').html(content);
+    }*/
+
 } // eventObj
 
 var contentObj = {
@@ -555,53 +491,29 @@ $(document).ready(function() {
         speed: 600
     });
 
-    // Get events on initial page load, if the user used the search form on the main homepage (comes from localStorage var)
-    // If user chose to login instead, show 'all events' in their current location by default (for now, location is hard-coded to "Austin")
-    if(localStorage.getItem("homePage-results") != null) {
-        console.log("homePage-results session var is set. Value is: " + localStorage.getItem("homePage-results"));
-
-        // Turn JSON back from a string into an object
-        var response = JSON.parse(localStorage.getItem("homePage-results"));
-        eventObj.generateSearchContent(response);
-
-        // Now insert the feedback search results into the main heading
-        $('.header-span').text(localStorage.getItem("search-feedback"));
-
-        console.log("The page should have loaded the homepage search results!");
-    } else {
-        // Set default events load with location "Austin", since user logged in, but didn't search
-        var firstDate = null;
-        var lastDate  = null;
-        var dateObj   = eventObj.formatQueryDates(firstDate, lastDate);
-
-        // Generate new result set, setting event categoryId to null & categoryName to "all events" to retrieve 'all events', and new city location as the location
-        var dataObj = {
-            city:           "Austin",
-            categoryId:     null,
-            categoryName:   "all events",
-            startDate:      dateObj.startDate,
-            queryStartDate: dateObj.queryStartDate,
-            endDate:        dateObj.endDate,
-            queryEndDate:   dateObj.queryEndDate
-        }
-        // Execute the query
-        eventObj.executeQueryUrl(dataObj);
-
-        // Generate feedback message
-        eventObj.getFeedbackMsg(dataObj);
-    }
-
     // Card slider for my favorites options
     $('.event-boxes').on('click','.show', function(){
         console.log(this);
         console.log("I clicked");
         $(this).siblings('.card-reveal').slideToggle('slow');
     });
-
-    // Close the card slider when the 'X' is clicked
     $('.event-boxes').on('click','.close', function(){
         $(this).parent().slideToggle('slow');
     });
+
+	// Get the events on initial page load, if the user used the search form on the main homepage (comes from localStorage var)
+	// If user chose to login instead, do not show any events, but show a welcome message
+	if(localStorage.getItem("homePage-results") != "") {
+		var response = JSON.parse(localStorage.getItem("homePage-results"));
+		eventObj.generateSearchContent(response);
+
+		// Now insert the feedback search results into the main heading
+		$('.header-span').text(localStorage.getItem("search-feedback"));
+
+		console.log("The page should have loaded the homepage search results!");
+	} else {
+		$(".event-boxes").append("<h3> Hello, [username]!  What are you looking for today? </h3>");
+	}
 
 	// If the user clicks on an event box, show modal with event info (giving greater detail of description etc)
 	// Had to start with div.main parent, then narrow down, due to DOM being updated dynamically with events after initial page load
@@ -798,7 +710,7 @@ $(document).ready(function() {
         // Get the category favorite reference string
         var category = $(this).siblings('.card-reveal select').val();
         console.log("category: " + category);
-        return false;
+
         // Validate the category selection
         if(category == "") {
             contentObj.showAlertModal("You didn't select a category!");
@@ -811,12 +723,11 @@ $(document).ready(function() {
         // This code works, so it is actually seeing that the elements exist; for some reason, having a hard time targeting the nearest ones to the click
         // var name = $(this).parents('.event-boxes').siblings('h3.event-name').data("name");
         // var name = $(this).closest('h3.event-name').data("name");
-        /*
         var name = $('h3.event-name').data("name");
         var date = $('p.event-date').data("date");
         var time = $('p.event-time').data("time");
         var desc = $('p.event-desc').data("desc");
-        console.log("name: " + name + " date: " + date + " time: " + time + " desc: " + desc);*/
+        console.log("name: " + name + " date: " + date + " time: " + time + " desc: " + desc);
 
         /* Not enough time to do this right now...
         // First, remove the event from the existing location
@@ -824,13 +735,6 @@ $(document).ready(function() {
             var node = snapshot.child(category)
 
         });*/
-
-        // Test data - hard code to force test entry
-        var category = "Summer Beach Trip '17";
-        var name = "Diving With Bull Sharks";
-        var date = "July 5th 2017";
-        var desc = "Come dive with sharks with us!  You don't want to miss this incredible opportunity.  Everybody will be on edge!";
-        var time = "11:30 AM - 3:00 PM";
 
         // Now put the favorite into the database, under the correct user
         // Test: successful, but haven't gotten it to target the correct event box content data
@@ -840,9 +744,6 @@ $(document).ready(function() {
             name: name,
             time: time
         });
-
-        // This will make the favorite feedback appear on every box.  It works, but you need to alter it to work on the specific one
-        $(this).parents('.event-boxes').find('p.add-fav-feedback').text("Favorite was added!").fadeIn(1000).fadeOut(2000);
     });
 
     // If user chooses to add a favorite to a new category, add the event to the database, under the new category name
@@ -869,18 +770,11 @@ $(document).ready(function() {
         */
         // Test data - hard code to force test entry
         /*
-        var category = "Oct DC Trip";
-        var name = "Johnny's Apple Picker Retreat";
+        var category = "Johnny's Test Category";
+        var name = "Saray Test";
         var date = "October 21st 2017";
-        var desc = "A really big description should go here, that talks about apples, apple cider, apple pie, and event apple sauce!  Line up, folks!";
-        var time = "2:30 PM - 5:00 PM";*/
-
-        /*
-        var category = "CO Ski Trip";
-        var name = "Tube-a-night-a-thon";
-        var date = "March 3rd 2017";
-        var desc = "Come tube down storm mountain, the biggest, baddest slope of them all!";
-        var time = "7:30 PM - 11:00 PM";*/
+        var desc = "A really big description should go here";
+        var time = "8:30 PM - 10:00 PM";*/
 
         var category = "Summer Beach Trip";
         var name = "Coral Sands Viewing Party";
@@ -890,7 +784,7 @@ $(document).ready(function() {
 
         // Now add the new favorite into the database, under the correct user
         // Test: successful
-        usersRef.child(userId).child("favCategories").child(category).set({
+        usersRef.child(userId).child("favCategories").child(category).push({
             date: date,
             desc: desc,
             name: name,
@@ -899,8 +793,7 @@ $(document).ready(function() {
 
         // Now give feedback to the user that add was successful
         // This will make the favorite feedback appear on every box.  It works, but you need to alter it to work on the specific one
-        $(this).parents('.event-boxes').find('p.add-fav-feedback').text("Favorite was added!").fadeIn(1000).fadeOut(2000);
-        //$('p.add-fav-feedback').text("Favorite was added!").fadeIn(1000).fadeOut(1000);
+        $(this).parents('.event-boxes').find('p.add-fav-feedback').text("Favorite was added!").fadeIn(1000).fadeOut(1000);
     });
 
 	// Also allow user to submit city location input via keyboard enter key
