@@ -491,6 +491,9 @@ var eventObj = {
         // Set search feedback as localStorage item
         localStorage.setItem("search-feedback", msg);
 
+        // Now insert the feedback search results into the main heading
+        $('.header-span').text(localStorage.getItem("search-feedback"));
+
         // Note: main heading with favorites feedback is updated inside of favorites click handler
     },
 
@@ -876,7 +879,7 @@ $(document).ready(function() {
 
         // Now give feedback to the user that add was successful
         // This will make the favorite feedback appear on every box.  It works, but you need to alter it to work on the specific one
-        $(this).parents('.event-boxes').find('p.add-fav-feedback').text("Favorite was added!").fadeIn(1000).fadeOut(1000);
+        $(this).parents('.event-boxes').find('p.add-fav-feedback').text("Favorite was added!").fadeIn(1000).fadeOut(2000);
         //$('p.add-fav-feedback').text("Favorite was added!").fadeIn(1000).fadeOut(1000);
     });
 
