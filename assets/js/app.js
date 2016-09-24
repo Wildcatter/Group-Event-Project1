@@ -890,7 +890,7 @@ $(document).ready(function() {
 
         // Now add the new favorite into the database, under the correct user
         // Test: successful
-        usersRef.child(userId).child("favCategories").child(category).set({
+        usersRef.child(userId).child("favCategories").child(category).push({
             date: date,
             desc: desc,
             name: name,
