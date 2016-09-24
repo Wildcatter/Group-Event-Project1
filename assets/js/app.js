@@ -32,7 +32,8 @@ var usersRef = db.ref("Users");
 
 // For testing purposes, to obtain user informtion as if user were logged in
 console.log('firebase logged-in userId: ' + firebase.auth().currentUser.uid);
-var userId = "757827487";
+//var userId = "757827487";
+var userId = "FORCDQYjywPRkTZeFfhmEgLlYoZ2";
 
 // Object for storing event properties and methods specific to any event actions, searching, etc
 var eventObj = {
