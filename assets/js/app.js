@@ -22,6 +22,7 @@ firebase.initializeApp(config);
 // Establish easy access to db object
 var db = firebase.database();
 
+/*
 // Establish firebase global vars
 var provider = new firebase.auth.FacebookAuthProvider();
 var googprovider = new firebase.auth.GoogleAuthProvider();
@@ -64,31 +65,31 @@ firebase.auth().onAuthStateChanged(function(user) {
 
 firebase.auth().getRedirectResult().then(function(result) {
     console.log("Entered user auth 2nd code block");
-  if (result.credential) {
-    // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-    var token = result.credential.accessToken;
-    console.log("token: " + token);
-    console.log("result: " + result);
-    user = result.user;
-    console.log("diplay name: " + user.displayName);
-    userName = user.displayName;
-    userEmail = user.email;
-    console.log("email: " + user.email);
-    console.log("photo url: " + user.photoURL);
-    userImg = user.photoURL;
-    currentUserProfile = firebase.auth().currentUser;
-    uidUser = firebase.auth().currentUser.uid;
-    console.log("uidUser: " + uidUser);
-    currentUserRef = database.ref('Users/'+uidUser);
-    currentUserRef.update({
-         name: userName,
-         email: userEmail,
-         photo: userImg,
-    });
-    setTimeout(function () {
-         $('.loggedModal').modal("show");
-    }, 2000);
-  };
+    if (result.credential) {
+        // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+        var token = result.credential.accessToken;
+        console.log("token: " + token);
+        console.log("result: " + result);
+        user = result.user;
+        console.log("diplay name: " + user.displayName);
+        userName = user.displayName;
+        userEmail = user.email;
+        console.log("email: " + user.email);
+        console.log("photo url: " + user.photoURL);
+        userImg = user.photoURL;
+        currentUserProfile = firebase.auth().currentUser;
+        uidUser = firebase.auth().currentUser.uid;
+        console.log("uidUser: " + uidUser);
+        currentUserRef = database.ref('Users/'+uidUser);
+        currentUserRef.update({
+             name: userName,
+             email: userEmail,
+             photo: userImg,
+        });
+        setTimeout(function () {
+             $('.loggedModal').modal("show");
+        }, 2000);
+   }
   // The signed-in user info.
 }).catch(function(error) {
     // Handle Errors here.
@@ -99,7 +100,7 @@ firebase.auth().getRedirectResult().then(function(result) {
     // The firebase.auth.AuthCredential type that was used.
     var credential = error.credential;
     // ...
-});
+});*/
 
 // For testing purposes, for testing of modal that pops up if user tries to 'Add Favorite', but they are not logged in
 var userLoggedIn = true;

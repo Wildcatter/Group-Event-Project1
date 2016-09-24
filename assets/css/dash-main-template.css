@@ -196,6 +196,13 @@ input.input-generate {
 }
 
 /* Styling for top right login items */
+.user-login-name-display {
+	color: #FEDC32;
+}
+
+.profile-img {
+	border-radius: 50%;
+}
 
 /* Override Bootstrap panel styling. Make sure there is no margin on bottom so that fav button looks seamless as part of container */
 .panel {
