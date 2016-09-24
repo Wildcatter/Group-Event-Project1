@@ -195,6 +195,8 @@ input.input-generate {
 	color: #FEDC32;
 }
 
+/* Styling for top right login items */
+
 /* Override Bootstrap panel styling. Make sure there is no margin on bottom so that fav button looks seamless as part of container */
 .panel {
 	background-color: #ECECEC;

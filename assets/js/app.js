@@ -6,9 +6,7 @@ var config = {
   databaseURL: "https://eventi-testing-db.firebaseio.com",
   storageBucket: "eventi-testing-db.appspot.com",
   messagingSenderId: "393804341426"
-};
-
-firebase.initializeApp(config);*/
+};*/
 
 // Initialize Firebase
 var config = {
@@ -23,6 +21,84 @@ firebase.initializeApp(config);
 
 // Establish easy access to db object
 var db = firebase.database();
+
+// Establish firebase global vars
+var provider = new firebase.auth.FacebookAuthProvider();
+var googprovider = new firebase.auth.GoogleAuthProvider();
+var uidUser;
+var currentUserProfile;
+var currentUserRef;
+var user;
+var userName;
+var userEmail;
+var userImg;
+var authed = firebase.auth().currentUser;
+var justRegistered = true;
+var previousUser = false;
+
+
+firebase.auth().onAuthStateChanged(function(user) {   
+     if(user) {
+        console.log("entered user auth code block");
+        $("#login").remove();
+        currentUserProfile = firebase.auth().currentUser;
+        uidUser = firebase.auth().currentUser.uid;
+        currentUserRef = database.ref('Users/'+uidUser);
+        (console.log(uidUser));
+        console.log(currentUserProfile.displayName);
+        $("#name").html(currentUserProfile.displayName);
+        console.log(currentUserProfile.photoURL);
+        let pic = $('<img src='+currentUserProfile.photoURL+'>');
+        pic.addClass('img-responsive');
+        $("#pic").html(pic)
+        console.log(currentUserProfile.email)
+    } else {
+        let loginCreate = $('<button>')
+        loginCreate.addClass('btn navButtons');
+        loginCreate.attr('id', 'login');//<button class= "btn" id="login"> login </button>
+        loginCreate.text('Login')
+        $(".navbar-right").append(loginCreate);
+        console.log("u aint logged in :)");
+      }
+});
+
+firebase.auth().getRedirectResult().then(function(result) {
+  if (result.credential) {
+    // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+    var token = result.credential.accessToken;
+    console.log(token);
+    console.log(result);
+    user = result.user;
+    console.log(user.displayName);
+    userName = user.displayName;
+    userEmail = user.email;
+    console.log(user.email);
+    console.log(user.photoURL);
+    userImg = user.photoURL;
+    currentUserProfile = firebase.auth().currentUser;
+    uidUser = firebase.auth().currentUser.uid;
+    (console.log(uidUser));
+    currentUserRef = database.ref('Users/'+uidUser);
+    currentUserRef.update({
+         name: userName,
+         email: userEmail,
+         photo: userImg,
+    });
+    setTimeout(function () {
+         $('.loggedModal').modal("show");
+    }, 2000);
+  };
+  // The signed-in user info.
+}).catch(function(error) {
+    // Handle Errors here.
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    // The email of the user's account used.
+    var email = error.email;
+    // The firebase.auth.AuthCredential type that was used.
+    var credential = error.credential;
+    // ...
+});
 
 // For testing purposes, for testing of modal that pops up if user tries to 'Add Favorite', but they are not logged in
 var userLoggedIn = true;
@@ -239,15 +315,6 @@ var eventObj = {
 			var shorDesc = "";
 			var longDesc = "";
 
-            // Set easy access to event cost. Couldn't get anything to work
-            //var cost = "";
-
-            // Set easy access to event category name. Couln't get anything to work
-            //var category = "";
-
-            // Set easy acces to event address.  Couldn't get anything to work
-            // var address = "";
-
 			// If there is no item description, set default message. Save long description for modal dropdown
 			if (desc != null) {
 				longDesc  = desc;
@@ -261,6 +328,7 @@ var eventObj = {
             if(userLoggedIn) {
                 console.log("user is logged in line 215");
                 //console.log("user favTitleArray var: " , eventObj.favTitleArray);
+                options += '<option value=""> Select... </option>';
                 eventObj.favTitleArray.forEach(function(title){
                     console.log("entered favTitleArray loop");
                     options += '<option value="' + title + '">' + title + '</option>';
@@ -281,31 +349,6 @@ var eventObj = {
                 options: options
             }
             eventObj.generateEventBoxes(dataObj);
-            /*
-            var html =  '<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 event-box">' +
-                            '<div class="panel event-content text-center card-image" id="event' + index + '">' +
-                                '<h3 class="event-name" data-name="' + longName + '">' + shortName + '</h3>' +
-                                '<p class="event-date" data-date="' + date + '">' + date + '</p>' +
-                                '<p class="event-time" data-time="' + time + '">' + time + '</p>' +
-                                '<p class="event-desc" data-desc="' + longDesc + '">' + shortDesc + '</p>' +
-                            '</div>' +
-                            '<button type="button" class="btn btn-lg btn-block fav-button show">add favorite</button>' +
-                            '<div class="card-reveal">' +
-                                '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>' +
-                                '<h2>select a category</h2>' +
-                                '<select type="text" class="form-control" id="user-category">' +
-                                    options +
-                                '</select>' +
-                                '<button type="button" class="btn btn-block text-center add-to-category">add to category</button>' +
-                                '<h2 id="create-new">create a new category</h2>' +
-                                '<input type="text" class="form-control category-input" placeholder="new category name"/>' +
-                                '<i class="glyphicon glyphicon-share-alt category-icon"></i>' +
-                                '<p class="add-fav-feedback"></p>' +
-                            '</div>' +
-                        '</div>';
-
-		     // Append new event block to div.main
-		     $(".event-boxes").append(html);*/
 		});
 	}, // generateSearchContent()
 
@@ -338,15 +381,6 @@ var eventObj = {
             var shortDesc = desc.slice(0, 100) + "...";
             var longDesc = desc;
 
-            // Set easy access to event cost. Couldn't get anything to work
-            //var cost = "";
-
-            // Set easy access to event category name. Couln't get anything to work
-            //var category = "";
-
-            // Set easy acces to event address.  Couldn't get anything to work
-            // var address = "";
-
             // Generate html string of select options. 
             // If user login is in working order, no need to check for user login, as this method can't be accessed unless user is logged in
             // If the array is empty (was running into that and can't explain), show a default option with generic message
@@ -372,32 +406,6 @@ var eventObj = {
                 options: options
             }
             eventObj.generateEventBoxes(dataObj);
-            /*
-            // Bui
-            var html = '<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 event-box">' +
-                            '<div class="panel event-content text-center card-image" id="event' + index + '">' +
-                                '<h3 class="event-name" data-name="' + longName + '">' + shortName + '</h3>' +
-                                '<p class="event-date" data-date="' + date + '">' + date + '</p>' +
-                                '<p class="event-time" data-time="' + time + '">' + time + '</p>' +
-                                '<p class="event-desc" data-desc="' + longDesc + '">' + shortDesc + '</p>' +
-                            '</div>' +
-                            '<button type="button" class="btn btn-lg btn-block fav-button show">manage favorite</button>' +
-                            '<div class="card-reveal">' +
-                                '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>' +
-                                '<h2>select a category</h2>' +
-                                '<select type="text" class="form-control" id="user-category">' +
-                                    options +
-                                '</select>' +
-                                '<button type="button" class="btn btn-block text-center add-to-category">move to category</button>' +
-                                '<h2 id="create-new">move to new category</h2>' +
-                                '<input type="text" class="form-control category-input" placeholder="new category name"/>' +
-                                '<i class="glyphicon glyphicon-share-alt category-icon"></i>' +
-                                '<p class="add-fav-feedback"></p>' +
-                            '</div>' +
-                        '</div>';
-
-            // Append new event block to div.main
-            $(".event-boxes").append(html);*/
         });
 
         // Clear out the global var favArray so that next time favs are clicked, it won't include the previously viewed items....
