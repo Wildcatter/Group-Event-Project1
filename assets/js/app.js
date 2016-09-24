@@ -63,6 +63,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 });
 
 firebase.auth().getRedirectResult().then(function(result) {
+    console.log("Entered user auth 2nd code block");
   if (result.credential) {
     // This gives you a Facebook Access Token. You can use it to access the Facebook API.
     var token = result.credential.accessToken;
