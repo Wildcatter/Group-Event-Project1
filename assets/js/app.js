@@ -868,19 +868,19 @@ $(document).ready(function() {
         console.log("name: " + name + " date: " + date + " time: " + time + " desc: " + desc);
         */
         // Test data - hard code to force test entry
-        /*
+        
         var category = "Oct DC Trip";
         var name = "Johnny's Apple Picker Retreat";
         var date = "October 21st 2017";
         var desc = "A really big description should go here, that talks about apples, apple cider, apple pie, and event apple sauce!  Line up, folks!";
-        var time = "2:30 PM - 5:00 PM";*/
+        var time = "2:30 PM - 5:00 PM";
 
-        
+        /*
         var category = "CO Ski Trip";
         var name = "Tube-a-night-a-thon";
         var date = "March 3rd 2017";
         var desc = "Come tube down storm mountain, the biggest, baddest slope of them all!";
-        var time = "7:30 PM - 11:00 PM";
+        var time = "7:30 PM - 11:00 PM";*/
 
         /*
         var category = "Summer Beach Trip";
