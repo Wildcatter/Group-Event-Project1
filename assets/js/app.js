@@ -489,7 +489,7 @@ $(document).ready(function() {
 	// Get the events on initial page load, if the user used the search form on the main homepage (comes from localStorage var)
 	// If user chose to login instead, do not show any events, but show a welcome message
 	if(localStorage.getItem("homePage-results") != "") {
-        console.log("homePage-results session var is set");
+        console.log("homePage-results session var is set. Value is: " + localStorage.getItem("homePage-results"));
 
         // Turn JSON back from a string into an object
 		var response = JSON.parse(localStorage.getItem("homePage-results"));
