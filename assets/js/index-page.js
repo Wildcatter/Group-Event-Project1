@@ -27,8 +27,8 @@ firebase.initializeApp(config);
 // Establish database global vars
 var database = firebase.database();
 const auth = firebase.auth();
-//var fbProvider = new firebase.auth.FacebookAuthProvider();
-//var googleProvider = new firebase.auth.GoogleAuthProvider();
+var fbProvider = new firebase.auth.FacebookAuthProvider();
+var googleProvider = new firebase.auth.GoogleAuthProvider();
 var currentUserRef;
 var user;
 var userId;
@@ -37,7 +37,6 @@ var userName;
 var userEmail;
 
 database.ref().set("users");
-
 
 firebase.auth().getRedirectResult().then(function(result) {
   if (result.credential) {
@@ -73,9 +72,8 @@ firebase.auth().getRedirectResult().then(function(result) {
   var email = error.email;
   // The firebase.auth.AuthCredential type that was used.
   var credential = error.credential;
-  console.log("errors: " + errorCode + " " + errorMessage + " " + email + " " + credential);
+  //console.log("errors: " + errorCode + " " + errorMessage + " " + email + " " + credential);
 });
-
 
 firebase.auth().onAuthStateChanged(firebaseUser => {
     if(firebaseUser) {
@@ -89,16 +87,19 @@ firebase.auth().onAuthStateChanged(firebaseUser => {
                 name: userName,
                 email: userEmail,
                 photo: userImg,
+                favCategories: {}
             });
         } else {
             currentUserRef.update({
                 name: firebase.auth().currentUser.email,
                 email: firebase.auth().currentUser.email,
+                favCategories: {}
             });
         };
         console.log("currentUserRef: " + currentUserRef);
         setTimeout(function () {
-            window.location = "file:///Users/Yo/Desktop/Bootcamp/homework/group-projects/Group-Event-Project1/dashboard.html";
+            //window.location = "file:///Users/Yo/Desktop/Bootcamp/homework/group-projects/Group-Event-Project1/dashboard.html";
+            window.location = "https://still-shore-69099.herokuapp.com/dashboard.html";
         }, 1000);
     } else {
         console.log("You are not logged in!");
@@ -216,7 +217,8 @@ var eventObj = {
             }
 
             // Redirect to dashboard page, now that search results have been returned
-            window.location="file:///Users/Yo/Desktop/Bootcamp/homework/group-projects/Group-Event-Project1/dashboard.html";
+            //window.location="file:///Users/Yo/Desktop/Bootcamp/homework/group-projects/Group-Event-Project1/dashboard.html";
+            window.location = "https://still-shore-69099.herokuapp.com/dashboard.html";
         });
     }, // ajaxCall()
 
@@ -363,14 +365,21 @@ $(document).ready(function() {
         var errors = [];
         var msg = "";
 
-        // Validate the password
-        if(password == "") {
-            errors.push("You must enter a valid password! \n");
-        }
+        // Capture the button clicked
+        var btn = $(this).attr("id");
+        console.log("btn: " + btn);
+        return false;
 
-        // Validate the email address
-        if(!validEmail.test(email)) {
-            errors.push("You must enter a valid email address!");
+        if(btn == "join" || btn == "login") {
+            // Validate the password
+            if(password == "") {
+                errors.push("You must enter a valid password! \n");
+            }
+    
+            // Validate the email address
+            if(!validEmail.test(email)) {
+                errors.push("You must enter a valid email address!");
+            }
         }
 
         // If there were any errors, generate error msg, show alertModal and cease user credential processing
@@ -386,13 +395,7 @@ $(document).ready(function() {
         $('div.spinner-div').html('<div class="spinner">Loading...</div>');
 
         // Run the ajaxCall() method, after timeDelay interval. The spinner is removed once the ajax call is complete.
-        setTimeout(window.location="file:///Users/Yo/Desktop/Bootcamp/homework/group-projects/Group-Event-Project1/dashboard.html", eventObj.timeDelay);
-
-
-        // Capture the button clicked
-        var btn = $(this).attr("id");
-        console.log("btn: " + btn);
-        return false;
+        //setTimeout(window.location="file:///Users/Yo/Desktop/Bootcamp/homework/group-projects/Group-Event-Project1/dashboard.html", eventObj.timeDelay);
 
         // Process user login credentials based on button clicked
         switch(btn) {

@@ -1,10 +1,22 @@
 // Initialize Firebase
+/*
 var config = {
   apiKey: "AIzaSyA9gw81RM2br5S9X55E0G6ZGjJMo1oDVRs",
   authDomain: "eventi-testing-db.firebaseapp.com",
   databaseURL: "https://eventi-testing-db.firebaseio.com",
   storageBucket: "eventi-testing-db.appspot.com",
   messagingSenderId: "393804341426"
+};
+
+firebase.initializeApp(config);*/
+
+// Initialize Firebase
+var config = {
+  apiKey: "AIzaSyBKXSuOL_8TzGqi84Wna4x_HW5M7NoCR5o",
+  authDomain: "eventi-auth-testing.firebaseapp.com",
+  databaseURL: "https://eventi-auth-testing.firebaseio.com",
+  storageBucket: "eventi-auth-testing.appspot.com",
+  messagingSenderId: "515619523046"
 };
 
 firebase.initializeApp(config);
