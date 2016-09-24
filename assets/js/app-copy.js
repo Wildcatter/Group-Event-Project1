@@ -769,11 +769,18 @@ $(document).ready(function() {
         console.log("name: " + name + " date: " + date + " time: " + time + " desc: " + desc);
         */
         // Test data - hard code to force test entry
+        /*
         var category = "Johnny's Test Category";
         var name = "Saray Test";
         var date = "October 21st 2017";
         var desc = "A really big description should go here";
-        var time = "8:30 PM - 10:00 PM";
+        var time = "8:30 PM - 10:00 PM";*/
+
+        var category = "Summer Beach Trip";
+        var name = "Coral Sands Viewing Party";
+        var date = "May 21st 2017";
+        var desc = "A really big description should go here, that talks about all kinds of coral, fish and scuba diving!";
+        var time = "1:30 PM - 5:00 PM"
 
         // Now add the new favorite into the database, under the correct user
         // Test: successful
@@ -787,7 +794,6 @@ $(document).ready(function() {
         // Now give feedback to the user that add was successful
         // This will make the favorite feedback appear on every box.  It works, but you need to alter it to work on the specific one
         $(this).parents('.event-boxes').find('p.add-fav-feedback').text("Favorite was added!").fadeIn(1000).fadeOut(1000);
-        //$('p.add-fav-feedback').text("Favorite was added!").fadeIn(1000).fadeOut(1000);
     });
 
 	// Also allow user to submit city location input via keyboard enter key
