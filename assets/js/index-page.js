@@ -1,4 +1,5 @@
 // Initialize Firebase
+/*
 var config = {
   apiKey: "AIzaSyA9gw81RM2br5S9X55E0G6ZGjJMo1oDVRs",
   authDomain: "eventi-testing-db.firebaseapp.com",
@@ -10,6 +11,102 @@ firebase.initializeApp(config);
 
 // Establish easy access to db object
 var db = firebase.database();
+
+*/
+// Initialize Firebase
+var config = {
+  apiKey: "AIzaSyBKXSuOL_8TzGqi84Wna4x_HW5M7NoCR5o",
+  authDomain: "eventi-auth-testing.firebaseapp.com",
+  databaseURL: "https://eventi-auth-testing.firebaseio.com",
+  storageBucket: "eventi-auth-testing.appspot.com",
+  messagingSenderId: "515619523046"
+};
+
+firebase.initializeApp(config);
+
+// Establish database global vars
+var database = firebase.database();
+const auth = firebase.auth();
+//var fbProvider = new firebase.auth.FacebookAuthProvider();
+//var googleProvider = new firebase.auth.GoogleAuthProvider();
+var currentUserRef;
+var user;
+var userId;
+var userImg;
+var userName;
+var userEmail;
+
+database.ref().set("users");
+
+
+firebase.auth().getRedirectResult().then(function(result) {
+  if (result.credential) {
+    // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+    var token = result.credential.accessToken;
+    console.log("token: " + token);
+    console.log("result: " + result);
+  }
+
+  // The signed-in user info.
+  user = result.user;
+
+  console.log("user displayName: " + user.displayName);
+  userName = user.displayName;
+
+  console.log("userEmail: " + user.email);
+  userEmail = user.email;
+
+  console.log("User photo: " + user.photoURL);
+  userImg = user.photoURL;
+/*
+  $(".fbook").html(user.displayName);
+
+  $(".fbook").append(user.email);
+
+  $(".fbook").append('<img src =' + user.photoURL + '>')
+*/
+}).catch(function(error) {
+  // Handle Errors here.
+  var errorCode = error.code;
+  var errorMessage = error.message;
+  // The email of the user's account used.
+  var email = error.email;
+  // The firebase.auth.AuthCredential type that was used.
+  var credential = error.credential;
+  console.log("errors: " + errorCode + " " + errorMessage + " " + email + " " + credential);
+});
+
+
+firebase.auth().onAuthStateChanged(firebaseUser => {
+    if(firebaseUser) {
+        alert("THANKS FOR LOGGING IN. LOSER")
+        console.log("firebaseUser: " + firebaseUser);
+        userId = firebase.auth().currentUser.uid;
+        (console.log("uidUser" + uidUser));
+        currentUserRef = database.ref('users/' + userId);
+        if (firebase.auth().currentUser.displayName) {
+            currentUserRef.update({
+                name: userName,
+                email: userEmail,
+                photo: userImg,
+            });
+        } else {
+            currentUserRef.update({
+                name: firebase.auth().currentUser.email,
+                email: firebase.auth().currentUser.email,
+            });
+        };
+        console.log("currentUserRef: " + currentUserRef);
+        setTimeout(function () {
+            window.location = "file:///Users/Yo/Desktop/Bootcamp/homework/group-projects/Group-Event-Project1/dashboard.html";
+        }, 1000);
+    } else {
+        console.log("You are not logged in!");
+    }
+});
+
+// Establish email regex global
+var validEmail = /(^[\w-]+(?:\.[\w-]+)*@(?:[\w-]+\.)+[a-zA-Z]{2,7}$)|(^N\/A$)/;
 
 // Object for storing event properties and methods specific to any event actions
 var eventObj = {
@@ -119,7 +216,7 @@ var eventObj = {
             }
 
             // Redirect to dashboard page, now that search results have been returned
-            window.location="file:///Users/Reyes/Desktop/Bootcamp/week-8-group-project/Group-Event-Project1/dashboard.html";
+            window.location="file:///Users/Yo/Desktop/Bootcamp/homework/group-projects/Group-Event-Project1/dashboard.html";
         });
     }, // ajaxCall()
 
@@ -208,132 +305,11 @@ var eventObj = {
         // Note: not necessary on main homepage
         //$('.header-span').text(msg);
     }
-
-/******************************/
-// orig code
-  /**
-   * Run the ajax call to the Eventbrite api
-   * @param {object} dataObj Contains parameters as an object
-   * @return N/A
-   */
-  /*
-  ajaxCall: function(dataObj) {
-
-    // Set variables from dataObj items
-    var city = dataObj.city;
-    var categoryId = dataObj.categoryId;
-    var startDate = dataObj.queryStartDate;
-    var endDate = dataObj.queryEndDate;
-
-    // Build url query
-    var url = "https://www.eventbriteapi.com/v3/events/search/?token=IVKXSGGHO6MZSHMF5QZZ&location.address=" + city + "&categories=" + categoryId + "&start_date.range_start=" + startDate + "&start_date.range_end=" + endDate + "&location.within=10mi";
-
-    // Load the spinner to indicate processing
-    $('div.spinner-div').html('<div class="spinner">Loading...</div>');
-
-    $.ajax({
-      url: url,
-      method: "GET",
-    }).done(function(response) {
-
-      console.log("Response: " + response.events[1]);
-
-      // Save the response object as a session variable, ONLY if user is not yet logged in. stringify for correct storage format
-      localStorage.setItem("homePage-results", JSON.stringify(response));
-
-      //console.log("localStorage 'search-results': " + JSON.stringify(response));
-
-      // Redirect to dashboard page, now that search results have been returned
-      window.location="file:///Users/Yo/Desktop/Bootcamp/homework/group-projects/Group-Event-Project1/dashboard.html";
-
-    });
-  }, // ajaxCall()
-
-  /**
-   * Process search field inputs - prepare them for ajax call
-   * @param
-   * @return {object} dataObj Contains all form input data
-   */
-  /*
-  getSearchInputData: function() {
-      // Get form inputs. Trim whitespace
-      var city = $('#search-city').val().trim();
-      var categoryId = $('#search-category').val().trim();
-      var categoryName = $('#search-category option:selected').data("category");
-      var startDate = $('#search-date-start').val().trim();
-      var endDate = $('#search-date-end').val().trim();
-      console.log("city: " + city + " categoryId: " + categoryId + " categoryName: " + categoryName + " date1: " + startDate + " date2: " + endDate);
-
-      // Save city as localStorage session var so that the dashboard page will have a default location to load if user clicks categories
-      // Note: while on the main dashboard page, the user also has the option to search again, which will reset the location session var,
-      // or has the option to manually set their location via a form on the page, whic will also reset the location session var
-      // Note: for what to do when user logs in from the main home page instead of searching, need to visit the option of setting their location somehow
-      localStorage.setItem("city-location", city);
-
-      // Convert dates to eventBrite api required format using moment.js library
-      // Note: Eventbrite requires date to be in datetime format: "2010-01-31T13:00:00".
-      // Default moment.format() function returns "MMMM-DD-YYT00:00:00-00:00". Cut of extra content so that api query works
-      // Do not apply moment formatting to the date if the date has not been entered.  moment will return an error if so
-      if(startDate != null) {
-          var queryStartDate = moment(new Date(startDate)).format().slice(0, -6);
-      }
-
-      if(endDate != null) {
-          var queryEndDate = moment(new Date(endDate)).format().slice(0, -6);
-      }
-      console.log("moment date1: " + queryStartDate + " moment date2: " + queryEndDate);
-
-      // Prevent form submit it all inputs are empty
-      if(city == "" && categoryId == "" && startDate == "" && endDate == "") {
-          alert("You didn't enter any search criteria!");
-          return false;
-      }
-
-      // Prevent form submit if there was no city entered.  This is the minimum search requirement
-      if(city == "") {
-          alert("You must at least enter a city for your search!");
-      }
-
-      // Send search inputs to ajaxCall. Note: ajaxCall will set response data as localStorage item for dashboard.html content generation
-      var dataObj = {
-          city: city,
-          categoryId: categoryId,
-          categoryName: categoryName,
-          startDate: startDate,
-          queryStartDate: queryStartDate,
-          endDate: endDate,
-          queryEndDate: queryEndDate
-      }
-
-      return dataObj;
-  },
-
-  /**
-   * Set search results feedback heading based on searched items
-   * @param {object} dataObj All search parameters
-   * @return N/A
-   */
-  /*
-  getFeedbackMsg: function(dataObj) {
-
-      // First, build beginning default string.
-      var msg = '';
-
-      // If user entered a category, add that as well
-      if(dataObj.categoryName != null) {
-          msg += dataObj.categoryName;
-      }
-
-      // City will ALWAYS be required
-      msg += ' events in ' + dataObj.city;
-
-      // If date range was entered, add that as well. First, format it back
-      msg += ' ' + dataObj.startDate + ' - ' + dataObj.endDate;
-
-      // Set search feedback as localStorage item
-      localStorage.setItem("search-feedback", msg);
-  }*/
 } // var eventObj
+
+var loginObj = {
+
+}
 
 var contentObj = {
   /**
@@ -370,6 +346,69 @@ $(document).ready(function() {
   	// Include the datepicker, from jQuery UI library
   	$("#search-date-start").datepicker();
   	$("#search-date-end").datepicker();
+
+    // Show the modal if user clicks 'login'
+    $('.login-link').on('click', function() {
+        $('.loginModal').modal("show");
+    });
+
+    // Process the authorization btn login/signup click
+    $(".loginModal button").on("click", function() {
+
+        // Get user's email and password
+        var email = $('#login-email').val();
+        var password = $('#login-pass').val();
+
+        // Establish error array for error messages in alertModal, and msg string
+        var errors = [];
+        var msg = "";
+
+        // Validate the password
+        if(password == "") {
+            errors.push("You must enter a valid password! \n");
+        }
+
+        // Validate the email address
+        if(!validEmail.test(email)) {
+            errors.push("You must enter a valid email address!");
+        }
+
+        // If there were any errors, generate error msg, show alertModal and cease user credential processing
+        if(errors.length > 0) {
+            errors.forEach(function(error) {
+                msg += error + "\n";
+            });
+            contentObj.showAlertModal(msg);
+            return false;
+        }
+
+        // Load the spinner to indicate processing
+        $('div.spinner-div').html('<div class="spinner">Loading...</div>');
+
+        // Run the ajaxCall() method, after timeDelay interval. The spinner is removed once the ajax call is complete.
+        setTimeout(window.location="file:///Users/Yo/Desktop/Bootcamp/homework/group-projects/Group-Event-Project1/dashboard.html", eventObj.timeDelay);
+
+
+        // Capture the button clicked
+        var btn = $(this).attr("id");
+        console.log("btn: " + btn);
+        return false;
+
+        // Process user login credentials based on button clicked
+        switch(btn) {
+            case "join":
+                auth.createUserWithEmailAndPassword(email, password);
+                break;
+            case "login":
+                auth.signInWithEmailAndPassword(email, password);
+                break;
+            case "fbook":
+                firebase.auth().signInWithRedirect(fbProvider);
+                break;
+            case "googs":
+                firebase.auth().signInWithRedirect(googleProvider);
+        }
+    });
 
     // Process search submit
     $('#search-submit').on('click', function() {

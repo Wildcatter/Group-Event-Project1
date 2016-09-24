@@ -31,21 +31,15 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Josefin+Sans:100|Josefin+Slab:100|Quicksand:300|Raleway:100|Yanone+Kaffeesatz:200" rel="stylesheet"></head>
 
-    <!-- This is for testing.  Take out after everyone discusses -->
     <style>
-      li {
-          padding: 10px;
-      }
+        li {
+            padding: 10px;
+        }
 
-      .location-input {
-          margin-top: 18px;
-      }
-
-      .location-icon {
-          margin-top: 580px;
-      }
+        .location-input {
+            margin-top: 18px;
+        }
     </style>
-
 </head>
 
 <body>
@@ -206,14 +200,15 @@
                         </li>
   
                         <li>
-                            <button type="button" class="click-option" data-id="102" data-category="Science & Tech">science & tech</button>
+                            <button type="button" class="click-option" id="li-last" data-id="102" data-category="Science & Tech">science & tech</button>
                         </li>
-  
+                        
                         <li>
                             <input type="text" class="form-control location-input" placeholder="enter a city to set location">
                             <span class="glyphicon glyphicon-share-alt location-icon"></span>
                             <p class="location-input-feedback"></p>
                         </li>
+                        
                     </div>
                 </ul>
             </div>
@@ -244,9 +239,14 @@
                 <!-- Section for main page content heading -->
                 <div class="row page-header">
                     <div class="col-sm-12 col-md-12">
+                    <!--<div class="col-sm-12 col-md-10 col-lg-10">-->
                         <!-- Note: span.header-span is only used for inserting dynamic text content -->
                         <h1 class="main-heading"><span class="header-span"></span></h1>
                     </div>
+                    <!-- This used to not be here, before I moved stuff around
+                    <div class="col=sm-12 col-md-2 col-lg-2">
+                        <button class="btn" id='trigger'>my favorites</button>
+                    </div>-->
                 </div>
                 <!-- Holds the event boxes -->
                 <div class="event-boxes card"></div>

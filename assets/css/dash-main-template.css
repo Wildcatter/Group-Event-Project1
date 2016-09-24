@@ -458,6 +458,13 @@ ul.slider-favs li {
     outline: none;
 }
 
+p.add-fav-feedback {
+	color: #31C0C5;
+	font-size: 20px;
+	text-align: center;
+	margin-top: 8px;
+}
+
 /* h2 text that says "create a new category"*/
 #create-new {
 	margin-top: 27px;

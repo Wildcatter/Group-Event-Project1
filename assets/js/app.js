@@ -38,6 +38,9 @@ var eventObj = {
     // (setTimeout does not allow for passing parameters to fn's)
     favArray: [],
 
+    // Store an array of user favorite titles for reuse in dropdowns and side slider content
+    favTitleArray: [],
+
 	/**
 	 * Build the query url string, and execute ajaxCall(), based on dataObj params.
 	 * Separated out from main ajaxCall() function, to properly execute processing spinner
@@ -169,9 +172,9 @@ var eventObj = {
             var shortName = "";
             var longName = "";
 
-            if (name != null) {
+            if (name) {
                 longName = name;
-                shortName = name.slice(0, 60) + "...";
+                shortName = (name.length > 60) ? name.slice(0, 60) + "..." : name;
             } else {
                 longName = shortName = "No description available.";
             }
@@ -206,11 +209,25 @@ var eventObj = {
 				longDesc = shortDesc = "No description available.";
 			}
 
+            // If user is logged in, generate <select> fav options for card slider, from favTitleArray global var
+            var options = "";
+            if(userLoggedIn) {
+                console.log("user is logged in line 215");
+                //console.log("user favTitleArray var: " , eventObj.favTitleArray);
+                eventObj.favTitleArray.forEach(function(title){
+                    console.log("entered favTitleArray loop");
+                    options += '<option value="' + title + '">' + title + '</option>';
+                });
+            } else {
+                options += '<option value="">No favorites available...</option>';
+            }
+
 			// Build string of html content, filling in variable content with response items. fullDesc will be used for modal dropdown of full description
-			let html =  '<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 event-box">' +
+			var html =  '<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 event-box">' +
                             '<div class="panel event-content text-center card-image" id="event' + index + '">' +
                                 '<h3 class="event-name" data-name="' + longName + '">' + shortName + '</h3>' +
                                 '<p class="event-date" data-date="' + date + '">' + date + '</p>' +
+                                '<p class="event-time" data-time="' + time + '">' + time + '</p>' +
                                 '<p class="event-desc" data-desc="' + longDesc + '">' + shortDesc + '</p>' +
                             '</div>' +
                             '<button type="button" class="btn btn-lg btn-block fav-button show">add favorite</button>' +
@@ -218,14 +235,13 @@ var eventObj = {
                                 '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>' +
                                 '<h2>select a category</h2>' +
                                 '<select type="text" class="form-control" id="user-category">' +
-                                    '<option value="">Birthday Weekend</option>' +
-                                    '<option value="" data-category="">Halloween</option>' +
-                                    '<option value="" data-category="">Upcoming Concerts</option>' +
+                                    options +
                                 '</select>' +
                                 '<button type="button" class="btn btn-block text-center add-to-category">add to category</button>' +
                                 '<h2 id="create-new">create a new category</h2>' +
                                 '<input type="text" class="form-control category-input" placeholder="new category name"/>' +
                                 '<i class="glyphicon glyphicon-share-alt category-icon"></i>' +
+                                '<p class="add-fav-feedback"></p>' +
                             '</div>' +
                         '</div>';
 
@@ -245,22 +261,15 @@ var eventObj = {
         // Loop through each event object inside of the events array, creating event cards to put into .event-boxes div container
         eventObj.favArray.forEach(function(item, index, arr) {
 
-            // Set easy access to name
+            // Set easy access to name, and cut the length for card display if length > 60 characters
             var name = item.name;
-            var shortName = "";
-            var longName = "";
-
-            if (name != null) {
-                longName = name;
-                shortName = name.slice(0, 60) + "...";
-            } else {
-                longName = shortName = "No description available.";
-            }
-
-            // Set easy access to date. Format it using moment.js plugin
+            longName = name;
+            shortName = (name.length > 60) ? name.slice(0, 60) + "..." : name;
+           
+            // Set easy access to date
             var date = item.date;
 
-            // Set easy access to event time.  Format it using moment.js plugin
+            // Set easy access to event time
             var time = item.time;
 
             // Set easy access to event description. Note:  in other code, this is var desc.  When I tried to do that, it grabbed the last previous desc from the last generated event content box.  Weird.  Some global thing
@@ -279,6 +288,12 @@ var eventObj = {
             // Set easy acces to event address.  Couldn't get anything to work
             // var address = "";
 
+            // Generate html string of select options. No need to check for user login, as this method can't be accessed unless user is logged in
+            var options = "";
+            eventObj.favTitleArray.forEach(function(title){
+                options += '<option value="' + title + '">' + title + '</option>';
+            });
+
             // Note: below is duplicated code.  You need to make this a function in itself to conform to DRY principle
             // Build string of html content, filling in variable content with response items. fullDesc will be used for modal dropdown of full description
             var html = '<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 event-box">' +
@@ -288,19 +303,18 @@ var eventObj = {
                                 '<p class="event-time" data-time="' + time + '">' + time + '</p>' +
                                 '<p class="event-desc" data-desc="' + longDescription + '">' + shortDescription + '</p>' +
                             '</div>' +
-                            '<button type="button" class="btn btn-lg btn-block fav-button show">add favorite</button>' +
+                            '<button type="button" class="btn btn-lg btn-block fav-button show">manage favorite</button>' +
                             '<div class="card-reveal">' +
                                 '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>' +
                                 '<h2>select a category</h2>' +
                                 '<select type="text" class="form-control" id="user-category">' +
-                                    '<option value="">Birthday Weekend</option>' +
-                                    '<option value="" data-category="">Halloween</option>' +
-                                    '<option value="" data-category="">Upcoming Concerts</option>' +
+                                    options +
                                 '</select>' +
-                                '<button type="button" class="btn btn-block text-center add-to-category">add to category</button>' +
-                                '<h2 id="create-new">create a new category</h2>' +
+                                '<button type="button" class="btn btn-block text-center add-to-category">move to category</button>' +
+                                '<h2 id="create-new">move to new category</h2>' +
                                 '<input type="text" class="form-control category-input" placeholder="new category name"/>' +
                                 '<i class="glyphicon glyphicon-share-alt category-icon"></i>' +
+                                '<p class="add-fav-feedback"></p>' +
                             '</div>' +
                         '</div>';
 
@@ -308,7 +322,7 @@ var eventObj = {
             $(".event-boxes").append(html);
         });
 
-        // Clear out the global va favArray so that next time favs are clicked, it won't include the previously viewed items....
+        // Clear out the global var favArray so that next time favs are clicked, it won't include the previously viewed items....
         eventObj.favArray = [];
 
         // Remove the spinner
@@ -396,18 +410,17 @@ var eventObj = {
      * Get logged-in user's favorites information, for use in side favorites slider, and event card slider <select> options, and event cards
      * Note: usersRef and userId are global vars established at top of program. userId gets set when user logs in
      * User will not be able to access this function if he/she is not logged in already, so no need to check for login at this point
-     *
+     * Event card slider <select> options will be generated from favTitleArray array
      */
     getUserFavoritesData: function() {                                                                                          
-        // Establish favTitles array for storing titles alone
-        var favTitleArray  = [];
+        // Establish favTitles array for storing titles alone. Note: The fav title array is global so it can be re-used inside of the getFavContent() method
         var favEventsArray = [];
         usersRef.child(userId).child("favCategories").on('child_added', function(snapshot) {
-            favTitleArray.push(snapshot.key);
+            eventObj.favTitleArray.push(snapshot.key);
             favEventsArray.push(snapshot.val());
             $('.slider-favs').append('<li> <button class="click-option user-generated-categories" data-category="' + snapshot.key + '">' + snapshot.key + ' </button> </li>');
         });                        
-        console.log("favTitleArray: " , favTitleArray);
+        console.log("favTitleArray: " , eventObj.favTitleArray);
         console.log("favEventsArray: " , favEventsArray);
     },
 
@@ -444,7 +457,13 @@ var contentObj = {
 }
 
 $(document).ready(function() {
-    eventObj.getUserFavoritesData();
+    // Backstretch plugin for responsive background container image
+    $.backstretch("assets/img/chihuly-bg-02-copy.jpg");
+
+    // If user is logged in, grab their favorties data from the db
+    if(userLoggedIn) {
+        eventObj.getUserFavoritesData();
+    }
 
 	// Include the datepicker, from jQuery UI library
   	$("#search-date-start").datepicker();
@@ -634,7 +653,7 @@ $(document).ready(function() {
     // If user clicks on a favorites link from the right-side slider menu, get and generate event content boxes 
     // Event box content comes from data stored in the db; the key associated with the event will be the exact string of the data-category attr
     // This category string is plugged into the data retrieval db function
-    $('.slider-favs').on('click', 'li', function() {
+    $('.slider-favs').on('click', 'button', function() {
 
         // Close the slider panel
         $('#slider').slideReveal("hide");
@@ -671,6 +690,91 @@ $(document).ready(function() {
 
         // Fake the 'delay', to simulate processing, or it will happen too fast
         setTimeout(eventObj.generateFavContent, eventObj.timeDelayFavContent);
+    });
+
+    // If user chooses to add a favorite (inside of the card slider) to an existing fave category, add the event info to the database under their favorites
+    $('.event-boxes').on('click', '.add-to-category', function() {
+        // Get the category favorite reference string
+        var category = $(this).siblings('.card-reveal select').val();
+        console.log("category: " + category);
+
+        // Validate the category selection
+        if(category == "") {
+            contentObj.showAlertModal("You didn't select a category!");
+            return false;
+        }
+
+        // Get the remaining event information from the original event card.  
+        // Tried a bunch of .parents(), .siblings(), .closest() combos, none of which worked.
+        // Thought this would return a bunch of names, dates, etc, for diff cards, but it only returns the nearest one.  I don't know why...
+        // This code works, so it is actually seeing that the elements exist; for some reason, having a hard time targeting the nearest ones to the click
+        // var name = $(this).parents('.event-boxes').siblings('h3.event-name').data("name");
+        // var name = $(this).closest('h3.event-name').data("name");
+        var name = $('h3.event-name').data("name");
+        var date = $('p.event-date').data("date");
+        var time = $('p.event-time').data("time");
+        var desc = $('p.event-desc').data("desc");
+        console.log("name: " + name + " date: " + date + " time: " + time + " desc: " + desc);
+
+        /* Not enough time to do this right now...
+        // First, remove the event from the existing location
+        usersRef.child(userId).child("favCategories").child(category).child(name).once("value").then(function(snapshot) {
+            var node = snapshot.child(category)
+
+        });*/
+
+        // Now put the favorite into the database, under the correct user
+        // Test: successful, but haven't gotten it to target the correct event box content data
+        usersRef.child(userId).child("favCategories").child(category).push({
+            date: date,
+            desc: desc,
+            name: name,
+            time: time
+        });
+    });
+
+    // If user chooses to add a favorite to a new category, add the event to the database, under the new category name
+    // Note: will also need to update the select dropdowns with the new category, and add it to the side slider fav buttons list
+    $('.event-boxes').on('click', '.category-icon', function() {
+        console.log("add category icon clicked!");
+        // Get the new category name. Trim the text for any whitespace
+        var category = $('input .category-input').val();
+
+        // Validate the input.  Do not allow it to be empty
+        if(category == "") {
+            contentObj.showAlertModal("You must enter a category title!");
+            return false;
+        }
+
+        // Get the remaining information from the original event card.  
+        // Need to eventually put this under one function, along with code in the .add-to-category click handler. It is duplicated!!
+        /*
+        var name = $('h3.event-name').data("name");
+        var date = $('p.event-date').data("date");
+        var time = $('p.event-time').data("time");
+        var desc = $('p.event-desc').data("desc");
+        console.log("name: " + name + " date: " + date + " time: " + time + " desc: " + desc);
+        */
+        // Test data - hard code to force test entry
+        var category = "Johnny's Test Category";
+        var name = "Saray Test";
+        var date = "October 21st 2017";
+        var desc = "A really big description should go here";
+        var time = "8:30 PM - 10:00 PM";
+
+        // Now add the new favorite into the database, under the correct user
+        // Test: successful
+        usersRef.child(userId).child("favCategories").child(category).set({
+            date: date,
+            desc: desc,
+            name: name,
+            time: time
+        });
+
+        // Now give feedback to the user that add was successful
+        // This will make the favorite feedback appear on every box.  It works, but you need to alter it to work on the specific one
+        $(this).parents('.event-boxes').find('p.add-fav-feedback').text("Favorite was added!").fadeIn(1000).fadeOut(1000);
+        //$('p.add-fav-feedback').text("Favorite was added!").fadeIn(1000).fadeOut(1000);
     });
 
 	// Also allow user to submit city location input via keyboard enter key
