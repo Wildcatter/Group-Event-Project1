@@ -364,6 +364,8 @@ var eventObj = {
     generateFavContent: function() {
         // Loop through each event object inside of the events array, creating event cards to put into .event-boxes div container
         eventObj.favArray.forEach(function(item, index, arr) {
+            console.log("arr: " + arr);
+            console.log("item: " + item);
 
             // Set easy access to name, and cut the length for card display if length > 60 characters
             var name = item.name;
