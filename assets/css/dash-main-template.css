@@ -202,6 +202,8 @@ input.input-generate {
 
 .profile-img {
 	border-radius: 50%;
+	height: 40px;
+	width: auto;
 }
 
 /* Override Bootstrap panel styling. Make sure there is no margin on bottom so that fav button looks seamless as part of container */
