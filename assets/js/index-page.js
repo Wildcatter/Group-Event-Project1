@@ -71,7 +71,7 @@ firebase.auth().getRedirectResult().then(function(result) {
              });
     $('.loggedModal').modal("show");
     setTimeout(function () {         
-         window.location = "https://pacific-reef-34702.herokuapp.com/dashboard.html";
+         window.location = "https://still-shore-69099.herokuapp.com/dashboard.html";
     }, 1000);
   };
   }).catch(function(error) {
@@ -196,7 +196,7 @@ var eventObj = {
             }
 
             // Redirect to dashboard page, now that search results have been returned
-            window.location="https://pacific-reef-34702.herokuapp.com/dashboard.html";
+            window.location="https://still-shore-69099.herokuapp.com/dashboard.html";
         });
     }, // ajaxCall()
 
@@ -404,10 +404,7 @@ $(document).ready(function() {
         //     case "googs":
         //         firebase.auth().signInWithRedirect(googleProvider);
         // }
-       
-    });
-
-    // Process search submit
+      // Process search submit
     $('#search-submit').on('click', function() {
         // Get form input data and process so it is ready to send to the api ajax call
         var dataObj = eventObj.getSearchInputData();
@@ -422,5 +419,5 @@ $(document).ready(function() {
 
         // Execute the ajax call, and save response to localStorage
         eventObj.executeQueryUrl(dataObj);
-    });
-// });
+    }); 
+});
