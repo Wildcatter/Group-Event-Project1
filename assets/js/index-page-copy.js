@@ -12,17 +12,8 @@ firebase.initializeApp(config);
 // Establish easy access to db object
 var db = firebase.database();
 
-// My old stuff
-// Initialize Firebase
-var config = {
-    apiKey: "AIzaSyDaPvYALiV1qQwyDxIrIfkwCUerTu_uSiA",
-    authDomain: "firstproject-b5d04.firebaseapp.com",
-    databaseURL: "https://firstproject-b5d04.firebaseio.com",
-    storageBucket: "firstproject-b5d04.appspot.com",
-    };
- firebase.initializeApp(config);
 */
- // Initialize Firebase
+// Initialize Firebase
 var config = {
   apiKey: "AIzaSyBKXSuOL_8TzGqi84Wna4x_HW5M7NoCR5o",
   authDomain: "eventi-auth-testing.firebaseapp.com",
@@ -33,10 +24,12 @@ var config = {
 
 firebase.initializeApp(config);
 
-// Establish database global vars
+//database.ref().set("users");
+
+/*********************** Garett's new code*/
 var database = firebase.database();
-//const auth = firebase.auth();
-var fbProvider = new firebase.auth.FacebookAuthProvider();
+var auth = firebase.auth();
+var fbprovider = new firebase.auth.FacebookAuthProvider();
 var googleprovider = new firebase.auth.GoogleAuthProvider();
 var uidUser;
 var currentUserProfile;
@@ -46,35 +39,85 @@ var userName;
 var userEmail;
 var userImg;
 
+/*
+firebase.auth().getRedirectResult().then(function(result) {
+    if (result.credential) {
+        // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+        var token = result.credential.accessToken;
+        console.log(token);
+        console.log(result);
+        user = result.user;
+        console.log(user.displayName);
+        userName = user.displayName;
+        userEmail = user.email;
+        console.log(user.email);
+        console.log(user.photoURL);
+        userImg = user.photoURL;
+        currentUserProfile = firebase.auth().currentUser;
+            uidUser = firebase.auth().currentUser.uid;
+            (console.log(uidUser));
+            currentUserRef = database.ref('Users/'+uidUser);
+            currentUserRef.update({
+                 name: userName,
+                 email: userEmail,
+                 photo: userImg,
+            });
+        $('.loggedModal').modal("show");
+        setTimeout(function () {         
+             window.location = "https://still-shore-69099.herokuapp.com/dashboard.html";
+        }, 500);
+    };
+}).catch(function(error) {
+    // Handle Errors here.
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    // The email of the user's account used.
+    var email = error.email;
+    // The firebase.auth.AuthCredential type that was used.
+    var credential = error.credential;
+});
+/***********************/
+
+/*
+// Establish database global vars
+var database = firebase.database();
+const auth = firebase.auth();
+var fbProvider = new firebase.auth.FacebookAuthProvider();
+var googleProvider = new firebase.auth.GoogleAuthProvider();
+var currentUserRef;
+var user;
+var userId;
+var userImg;
+var userName;
+var userEmail;
 
 firebase.auth().getRedirectResult().then(function(result) {
   if (result.credential) {
     // This gives you a Facebook Access Token. You can use it to access the Facebook API.
     var token = result.credential.accessToken;
-    console.log(token);
-    console.log(result);
-    user = result.user;
-    console.log(user.displayName);
-    userName = user.displayName;
-    userEmail = user.email;
-    console.log(user.email);
-    console.log(user.photoURL);
-    userImg = user.photoURL;
-    currentUserProfile = firebase.auth().currentUser;
-        uidUser = firebase.auth().currentUser.uid;
-        (console.log(uidUser));
-        currentUserRef = database.ref('Users/'+uidUser);
-        currentUserRef.update({
-             name: userName,
-             email: userEmail,
-             photo: userImg,
-             });
-    $('.loggedModal').modal("show");
-    setTimeout(function () {         
-         window.location = "https://pacific-reef-34702.herokuapp.com/dashboard.html";
-    }, 1000);
-  };
-  }).catch(function(error) {
+    console.log("token: " + token);
+    console.log("result: " + result);
+  }
+
+  // The signed-in user info.
+  user = result.user;
+
+  console.log("user displayName: " + user.displayName);
+  userName = user.displayName;
+
+  console.log("userEmail: " + user.email);
+  userEmail = user.email;
+
+  console.log("User photo: " + user.photoURL);
+  userImg = user.photoURL;
+/*
+  $(".fbook").html(user.displayName);
+
+  $(".fbook").append(user.email);
+
+  $(".fbook").append('<img src =' + user.photoURL + '>')
+
+}).catch(function(error) {
   // Handle Errors here.
   var errorCode = error.code;
   var errorMessage = error.message;
@@ -82,8 +125,39 @@ firebase.auth().getRedirectResult().then(function(result) {
   var email = error.email;
   // The firebase.auth.AuthCredential type that was used.
   var credential = error.credential;
-  // ...
+  //console.log("errors: " + errorCode + " " + errorMessage + " " + email + " " + credential);
 });
+
+firebase.auth().onAuthStateChanged(firebaseUser => {
+    if(firebaseUser) {
+        alert("THANKS FOR LOGGING IN. LOSER")
+        console.log("firebaseUser: " + firebaseUser);
+        userId = firebase.auth().currentUser.uid;
+        (console.log("uidUser" + uidUser));
+        currentUserRef = database.ref('users/' + userId);
+        if (firebase.auth().currentUser.displayName) {
+            currentUserRef.update({
+                name: userName,
+                email: userEmail,
+                photo: userImg,
+                favCategories: {}
+            });
+        } else {
+            currentUserRef.update({
+                name: firebase.auth().currentUser.email,
+                email: firebase.auth().currentUser.email,
+                favCategories: {}
+            });
+        };
+        console.log("currentUserRef: " + currentUserRef);
+        setTimeout(function () {
+            //window.location = "file:///Users/Yo/Desktop/Bootcamp/homework/group-projects/Group-Event-Project1/dashboard.html";
+            window.location = "https://still-shore-69099.herokuapp.com/dashboard.html";
+        }, 1000);
+    } else {
+        console.log("You are not logged in!");
+    }
+});*/
 
 // Establish email regex global
 var validEmail = /(^[\w-]+(?:\.[\w-]+)*@(?:[\w-]+\.)+[a-zA-Z]{2,7}$)|(^N\/A$)/;
@@ -196,7 +270,8 @@ var eventObj = {
             }
 
             // Redirect to dashboard page, now that search results have been returned
-            window.location="https://pacific-reef-34702.herokuapp.com/dashboard.html";
+            //window.location="file:///Users/Yo/Desktop/Bootcamp/homework/group-projects/Group-Event-Project1/dashboard.html";
+            window.location = "https://still-shore-69099.herokuapp.com/dashboard.html";
         });
     }, // ajaxCall()
 
@@ -309,102 +384,97 @@ var contentObj = {
 // Main document code
 $(document).ready(function() {
 
-    // Include the backstretch plugin to make the background images fully responsive and rotating
-    $.backstretch(
-        [
-          "assets/img/chicago-new.jpg",
-          "assets/img/flaming-lips.jpg",
-          "assets/img/concert-image-02.jpg"
-        ],
-        // Duration == pause time, fade == transition time
-        {
-            duration: 6000,
-            fade: 1400
+	// Include the backstretch plugin to make the background images fully responsive and rotating
+	$.backstretch(
+		[
+  	      "assets/img/chicago-new.jpg",
+  	      "assets/img/flaming-lips.jpg",
+  	      "assets/img/concert-image-02.jpg"
+  		],
+  		// Duration == pause time, fade == transition time
+  		{
+  			duration: 6000,
+  			fade: 1400
+  		}
+  	);
+
+  	// Include the datepicker, from jQuery UI library
+  	$("#search-date-start").datepicker();
+  	$("#search-date-end").datepicker();
+
+    // Show the modal if user clicks 'login'
+    $('.login-link').on('click', function() {
+        $('.loginModal').modal("show");
+    });
+
+    // Process the authorization btn login/signup click
+    $(".loginModal button").on("click", function() {
+
+        // Get user's email and password
+        var email = $('#login-email').val().trim();
+        var password = $('#login-pass').val().trim();
+
+        // Establish error array for error messages in alertModal, and msg string
+        var errors = [];
+        var msg = "";
+
+        // Capture the button clicked
+        var btn = $(this).attr("id");
+        console.log("btn: " + btn);
+        //return false;
+
+        // Only 
+        if(btn == "join" || btn == "login") {
+            // Validate the password
+            if(password == "") {
+                errors.push("You must enter a valid password! \n");
+            }
+    
+            // Validate the email address
+            if(!validEmail.test(email)) {
+                errors.push("You must enter a valid email address!");
+            }
         }
-    );
 
-    // Include the datepicker, from jQuery UI library
-    $("#search-date-start").datepicker();
-    $("#search-date-end").datepicker();
+        // If there were any errors, generate error msg, show alertModal and cease user credential processing
+        if(errors.length > 0) {
+            errors.forEach(function(error) {
+                msg += error + "\n";
+            });
+            contentObj.showAlertModal(msg);
+            return false;
+        }
 
-    $(document).on("click", ".login-link", function() {
-    $('.loginModal').modal("show");
-    });
+        // Load the spinner to indicate processing
+        $('div.spinner-div').html('<div class="spinner">Loading...</div>');
 
-    $(document).on("click", "#fbook", function() {
-    firebase.auth().signInWithRedirect(fbProvider);
-    });
+        // Run the ajaxCall() method, after timeDelay interval. The spinner is removed once the ajax call is complete.
+        //setTimeout(window.location="file:///Users/Yo/Desktop/Bootcamp/homework/group-projects/Group-Event-Project1/dashboard.html", eventObj.timeDelay);
 
-    $(document).on("click", "#googs", function() {
-      firebase.auth().signInWithRedirect(googleProvider)
-    });
-
-    $(document).on("click", "#join", function() {
-    auth.createUserWithEmailAndPassword(email, password);
-    });
-
-    $(document).on("click", "#login", function() {
-    auth.signInWithEmailAndPassword(email, password);
-    });
-
-    // // Show the modal if user clicks 'login'
-    // $('.login-link').on('click', function() {
-    //     $('.loginModal').modal("show");
-    // });
-
-    // // Process the authorization btn login/signup click
-    // $(".loginModal button").on("click", function() {
-
-    //     // Get user's email and password
-    //     var email = $('#login-email').val();
-    //     var password = $('#login-pass').val();
-
-    //     // Establish error array for error messages in alertModal, and msg string
-    //     var errors = [];
-    //     var msg = "";
-
-    //     // // Validate the password
-    //     // if(password == "") {
-    //     //     errors.push("You must enter a valid password! \n");
-    //     // }
-
-    //     // // Validate the email address
-    //     // if(!validEmail.test(email)) {
-    //     //     errors.push("You must enter a valid email address!");
-    //     // }
-
-    //     // If there were any errors, generate error msg, show alertModal and cease user credential processing
-    //     if(errors.length > 0) {
-    //         errors.forEach(function(error) {
-    //             msg += error + "\n";
-    //         });
-    //         contentObj.showAlertModal(msg);
-    //         return false;
-    //     }
-
-    //     // Load the spinner to indicate processing
-    //     $('div.spinner-div').html('<div class="spinner">Loading...</div>');
-
-    //     // Run the ajaxCall() method, after timeDelay interval. The spinner is removed once the ajax call is complete.
-
-    //     // Capture the button clicked
-    //     var btn = $(this).attr("id");
-    //     console.log("btn: " + btn);
-
-  // Process user login credentials based on button clicked
-        // switch(btn) {
-        //     case "join":
-        //         auth.createUserWithEmailAndPassword(email, password);
-        //         break;
-        //     case "login":
-        //         auth.signInWithEmailAndPassword(email, password);
-        //         break;
-        //     case "fbook":
-        //         firebase.auth().signInWithRedirect(fbProvider);
-        //     case "googs":
-        //         firebase.auth().signInWithRedirect(googleProvider);
-        // }
-       
+        // Process user login credentials based on button clicked
+        switch(btn) {
+            case "join":
+                //auth.createUserWithEmailAndPassword(email, password);
+                auth.createUserWithEmailAndPassword(email, password).catch(function(error) {
+                    // Handle Errors here.
+                    console.log("error code: " + error.code);
+                    console.log("error msg: " + error.message);
+                });
+                break;
+            case "login":
+                //auth.signInWithEmailAndPassword(email, password);
+                auth.signInWithEmailAndPassword(email, password).catch(function(error) {
+                    // Handle Errors here.
+                    console.log("error code: " + error.code);
+                    console.log("error msg: " + error.message);
+                });
+                break;
+            case "fbook":
+                auth.signInWithRedirect(fbProvider);
+                break;
+            case "googs":
+                auth.signInWithRedirect(googleProvider);
+        }
     });
 
     // Process search submit
@@ -423,4 +493,4 @@ $(document).ready(function() {
         // Execute the ajax call, and save response to localStorage
         eventObj.executeQueryUrl(dataObj);
     });
-// });
+});
