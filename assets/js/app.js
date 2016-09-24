@@ -838,6 +838,9 @@ $(document).ready(function() {
             name: name,
             time: time
         });
+
+        // This will make the favorite feedback appear on every box.  It works, but you need to alter it to work on the specific one
+        $(this).parents('.event-boxes').find('p.add-fav-feedback').text("Favorite was added!").fadeIn(1000).fadeOut(2000);
     });
 
     // If user chooses to add a favorite to a new category, add the event to the database, under the new category name
