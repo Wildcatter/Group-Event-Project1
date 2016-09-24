@@ -176,6 +176,7 @@ input.input-generate {
  /*Find Events Button*/
 #find-events-btn {
 	font-size: 16px;
+	margin-right: 18px;
 }
 
 /* Styling for favorite buttons */
@@ -196,8 +197,14 @@ input.input-generate {
 }
 
 /* Styling for top right login items */
+.navButtons {
+	display: inline-block;
+}
+
 .user-login-name-display {
 	color: #FEDC32;
+	margin-right: 15px;
+	font-size: 17px;
 }
 
 .profile-img {
