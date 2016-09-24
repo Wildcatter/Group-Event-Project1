@@ -809,11 +809,12 @@ $(document).ready(function() {
         // This code works, so it is actually seeing that the elements exist; for some reason, having a hard time targeting the nearest ones to the click
         // var name = $(this).parents('.event-boxes').siblings('h3.event-name').data("name");
         // var name = $(this).closest('h3.event-name').data("name");
+        /*
         var name = $('h3.event-name').data("name");
         var date = $('p.event-date').data("date");
         var time = $('p.event-time').data("time");
         var desc = $('p.event-desc').data("desc");
-        console.log("name: " + name + " date: " + date + " time: " + time + " desc: " + desc);
+        console.log("name: " + name + " date: " + date + " time: " + time + " desc: " + desc);*/
 
         /* Not enough time to do this right now...
         // First, remove the event from the existing location
@@ -824,10 +825,10 @@ $(document).ready(function() {
 
         // Test data - hard code to force test entry
         var category = "Summer Beach Trip '17";
-        var name = "Bea's Dance-of";
-        var date = "July 3rd 2017";
-        var desc = "A really big description should go here, about beaches beaches beaches beaches beaches beaches beaches beaches beaches!";
-        var time = "5:30 PM - 4:00 AM";
+        var name = "Diving With Bull Sharks";
+        var date = "July 5th 2017";
+        var desc = "Come dive with sharks with us!  You don't want to miss this incredible opportunity.  Everybody will be on edge!";
+        var time = "11:30 AM - 3:00 PM";
 
         // Now put the favorite into the database, under the correct user
         // Test: successful, but haven't gotten it to target the correct event box content data
