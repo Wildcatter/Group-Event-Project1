@@ -875,18 +875,19 @@ $(document).ready(function() {
         var desc = "A really big description should go here, that talks about apples, apple cider, apple pie, and event apple sauce!  Line up, folks!";
         var time = "2:30 PM - 5:00 PM";*/
 
-        /*
+        
         var category = "CO Ski Trip";
         var name = "Tube-a-night-a-thon";
         var date = "March 3rd 2017";
         var desc = "Come tube down storm mountain, the biggest, baddest slope of them all!";
-        var time = "7:30 PM - 11:00 PM";*/
+        var time = "7:30 PM - 11:00 PM";
 
+        /*
         var category = "Summer Beach Trip";
         var name = "Coral Sands Viewing Party";
         var date = "May 21st 2017";
         var desc = "A really big description should go here, that talks about all kinds of coral, fish and scuba diving!";
-        var time = "1:30 PM - 5:00 PM"
+        var time = "1:30 PM - 5:00 PM"*/
 
         // Now add the new favorite into the database, under the correct user
         // Test: successful
