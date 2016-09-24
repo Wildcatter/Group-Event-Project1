@@ -474,6 +474,42 @@ $(document).ready(function() {
         speed: 600
     });
 
+    // Get events on initial page load, if the user used the search form on the main homepage (comes from localStorage var)
+    // If user chose to login instead, show 'all events' in their current location by default (for now, location is hard-coded to "Austin")
+    if(localStorage.getItem("homePage-results") != null) {
+        console.log("homePage-results session var is set. Value is: " + localStorage.getItem("homePage-results"));
+
+        // Turn JSON back from a string into an object
+        var response = JSON.parse(localStorage.getItem("homePage-results"));
+        eventObj.generateSearchContent(response);
+
+        // Now insert the feedback search results into the main heading
+        $('.header-span').text(localStorage.getItem("search-feedback"));
+
+        console.log("The page should have loaded the homepage search results!");
+    } else {
+        // Set default events load with location "Austin", since user logged in, but didn't search
+        var firstDate = null;
+        var lastDate  = null;
+        var dateObj   = eventObj.formatQueryDates(firstDate, lastDate);
+
+        // Generate new result set, setting event categoryId to null & categoryName to "all events" to retrieve 'all events', and new city location as the location
+        var dataObj = {
+            city:           "Austin",
+            categoryId:     null,
+            categoryName:   "all events",
+            startDate:      dateObj.startDate,
+            queryStartDate: dateObj.queryStartDate,
+            endDate:        dateObj.endDate,
+            queryEndDate:   dateObj.queryEndDate
+        }
+        // Execute the query
+        eventObj.executeQueryUrl(dataObj);
+
+        // Generate feedback message
+        eventObj.getFeedbackMsg(dataObj);
+    }
+
     // Card slider for my favorites options
     $('.event-boxes').on('click','.show', function(){
         console.log(this);
@@ -485,23 +521,6 @@ $(document).ready(function() {
     $('.event-boxes').on('click','.close', function(){
         $(this).parent().slideToggle('slow');
     });
-
-	// Get the events on initial page load, if the user used the search form on the main homepage (comes from localStorage var)
-	// If user chose to login instead, do not show any events, but show a welcome message
-	if(localStorage.getItem("homePage-results") != null) {
-        console.log("homePage-results session var is set. Value is: " + localStorage.getItem("homePage-results"));
-
-        // Turn JSON back from a string into an object
-		var response = JSON.parse(localStorage.getItem("homePage-results"));
-		eventObj.generateSearchContent(response);
-
-		// Now insert the feedback search results into the main heading
-		$('.header-span').text(localStorage.getItem("search-feedback"));
-
-		console.log("The page should have loaded the homepage search results!");
-	} else {
-		$(".header-span").text("Hello!  What are you looking for today?");
-	}
 
 	// If the user clicks on an event box, show modal with event info (giving greater detail of description etc)
 	// Had to start with div.main parent, then narrow down, due to DOM being updated dynamically with events after initial page load
