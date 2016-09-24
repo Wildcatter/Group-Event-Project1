@@ -488,7 +488,7 @@ $(document).ready(function() {
 
 	// Get the events on initial page load, if the user used the search form on the main homepage (comes from localStorage var)
 	// If user chose to login instead, do not show any events, but show a welcome message
-	if(localStorage.getItem("homePage-results") != "") {
+	if(localStorage.getItem("homePage-results") != null) {
         console.log("homePage-results session var is set. Value is: " + localStorage.getItem("homePage-results"));
 
         // Turn JSON back from a string into an object
@@ -500,7 +500,7 @@ $(document).ready(function() {
 
 		console.log("The page should have loaded the homepage search results!");
 	} else {
-		$(".event-boxes").append("<h3> Hello, [username]!  What are you looking for today? </h3>");
+		$(".header-span").text("Hello!  What are you looking for today?");
 	}
 
 	// If the user clicks on an event box, show modal with event info (giving greater detail of description etc)
