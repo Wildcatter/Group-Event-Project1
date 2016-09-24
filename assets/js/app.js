@@ -862,11 +862,18 @@ $(document).ready(function() {
         console.log("name: " + name + " date: " + date + " time: " + time + " desc: " + desc);
         */
         // Test data - hard code to force test entry
+        /*
         var category = "Oct DC Trip";
         var name = "Johnny's Apple Picker Retreat";
         var date = "October 21st 2017";
         var desc = "A really big description should go here, that talks about apples, apple cider, apple pie, and event apple sauce!  Line up, folks!";
-        var time = "2:30 PM - 5:00 PM";
+        var time = "2:30 PM - 5:00 PM";*/
+
+        var category = "Summer Beach Trip '17";
+        var name = "Bea's Dance-of";
+        var date = "July 3rd 2017";
+        var desc = "A really big description should go here, about beaches beaches beaches beaches beaches beaches beaches beaches beaches!";
+        var time = "5:30 PM - 4:00 AM";
 
         // Now add the new favorite into the database, under the correct user
         // Test: successful
