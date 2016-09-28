@@ -500,6 +500,26 @@ var eventObj = {
     },
 
     /**
+     * Get event information from the selected card, when user chooses to add to new or existing category
+     * @param {object} htmlObj Html clicked element
+     * @return {object} Object containing event name, date, time, description
+     */
+    getCardFavData: function(htmlObj) {
+        var name = $(htmlObj).parent().siblings('.card-image').children('.event-name').data('name');
+        var date = $(htmlObj).parent().siblings('.card-image').children('.event-date').data('date');
+        var time = $(htmlObj).parent().siblings('.card-image').children('.event-time').data('time');
+        var desc = $(htmlObj).parent().siblings('.card-image').children('.event-desc').data('desc'); 
+        console.log("name: " + name + " date: " + date + " time: " + time + " desc: " + desc);
+
+        return {
+            name: name,
+            date: date,
+            time: time,
+            desc: desc
+        }
+    },
+
+    /**
      * Get logged-in user's favorites information, for use in side favorites slider, and event card slider <select> options, and event cards
      * Note: usersRef and userId are global vars established at top of program. userId gets set when user logs in
      * User will not be able to access this function if he/she is not logged in already, so no need to check for login at this point
@@ -797,7 +817,7 @@ $(document).ready(function() {
     $('.event-boxes').on('click', '.add-to-category', function() {
         // Get the category favorite reference string
         var category = $(this).siblings('.card-reveal select').val();
-        console.log("category: " + category);
+        //console.log("category: " + category);
         
         // Validate the category selection
         if(category == "") {
@@ -805,52 +825,31 @@ $(document).ready(function() {
             return false;
         }
 
-        // Get the remaining event information from the original event card.  
-        // Tried a bunch of .parents(), .siblings(), .closest() combos, none of which worked.
-        // Thought this would return a bunch of names, dates, etc, for diff cards, but it only returns the nearest one.  I don't know why...
-        // This code works, so it is actually seeing that the elements exist; for some reason, having a hard time targeting the nearest ones to the click
-        // var name = $(this).parents('.event-boxes').siblings('h3.event-name').data("name");
-        // var name = $(this).closest('h3.event-name').data("name");
-        /*
-        var name = $('h3.event-name').data("name");
-        var date = $('p.event-date').data("date");
-        var time = $('p.event-time').data("time");
-        var desc = $('p.event-desc').data("desc");
-        console.log("name: " + name + " date: " + date + " time: " + time + " desc: " + desc);*/
-
-        /* Not enough time to do this right now...
-        // First, remove the event from the existing location
-        usersRef.child(userId).child("favCategories").child(category).child(name).once("value").then(function(snapshot) {
-            var node = snapshot.child(category)
-
-        });*/
-
-        // Test data - hard code to force test entry
-        var category = "CO Ski Trip";
-        var name = "DC Snow Spins!";
-        var date = "December 12th 2017";
-        var desc = "Go spin it up with DJ Spins!";
-        var time = "10:30 PM - 3:00 AM";
+        // Get all remaining event information from the original event card.
+        var dataObj = eventObj.getCardFavData($(this));
 
         // Now put the favorite into the database, under the correct user
-        // Test: successful, but haven't gotten it to target the correct event box content data
         usersRef.child(userId).child("favCategories").child(category).push({
-            date: date,
-            desc: desc,
-            name: name,
-            time: time
+            date: dataObj.date,
+            desc: dataObj.desc,
+            name: dataObj.name,
+            time: dataObj.time
         });
 
-        // This will make the favorite feedback appear on every box.  It works, but you need to alter it to work on the specific one
-        $(this).parents('.event-boxes').find('p.add-fav-feedback').text("Favorite was added!").fadeIn(1000).fadeOut(2000);
+        // Now give feedback to the user that add was successful
+        $(this).siblings('.add-fav-feedback').text("Event added to " + category + "!").fadeIn(1000).fadeOut(3000);
+
+        // Return <select> to default <option>. Couldn't get this to work
+        //$(this).siblings('select>option:eq(0)').prop('selected', true);
     });
 
     // If user chooses to add a favorite to a new category, add the event to the database, under the new category name
     // Note: will also need to update the select dropdowns with the new category, and add it to the side slider fav buttons list
     $('.event-boxes').on('click', '.category-icon', function() {
-        console.log("add category icon clicked!");
+        console.log("add category icon clicked man!");
         // Get the new category name. Trim the text for any whitespace
-        var category = $('input .category-input').val();
+        var category = $(this).siblings('.category-input').val().trim();
+        //console.log("category: " + category);
 
         // Validate the input.  Do not allow it to be empty
         if(category == "") {
@@ -858,57 +857,22 @@ $(document).ready(function() {
             return false;
         }
 
-        // Get the remaining information from the original event card.  
-        // Need to eventually put this under one function, along with code in the .add-to-category click handler. It is duplicated!!
-        /*
-        var name = $('h3.event-name').data("name");
-        var date = $('p.event-date').data("date");
-        var time = $('p.event-time').data("time");
-        var desc = $('p.event-desc').data("desc");
-        console.log("name: " + name + " date: " + date + " time: " + time + " desc: " + desc);
-        */
-        // Test data - hard code to force test entry
+        // Get all remaining event information from the original event card.
+        var dataObj = eventObj.getCardFavData($(this));
         
-        /*
-        var category = "Oct DC Trip";
-        var name = "Johnny's Apple Picker Retreat";
-        var date = "October 21st 2017";
-        var desc = "A really big description should go here, that talks about apples, apple cider, apple pie, and event apple sauce!  Line up, folks!";
-        var time = "2:30 PM - 5:00 PM";*/
-
-        /*
-        var category = "CO Ski Trip";
-        var name = "Tube-a-night-a-thon";
-        var date = "March 3rd 2017";
-        var desc = "Come tube down storm mountain, the biggest, baddest slope of them all!";
-        var time = "7:30 PM - 11:00 PM";*/
-
-        /*
-        var category = "Summer Beach Trip";
-        var name = "Coral Sands Viewing Party";
-        var date = "May 21st 2017";
-        var desc = "A really big description should go here, that talks about all kinds of coral, fish and scuba diving!";
-        var time = "1:30 PM - 5:00 PM"*/
-
-        var category = "Africa Trip '17";
-        var name = "Masai Mauri Trip";
-        var date = "May 21st 2017";
-        var desc = "A really big description should go here, that talks about all aspects of Africa!";
-        var time = "12:30 PM - 6:00 PM"
-
         // Now add the new favorite into the database, under the correct user
-        // Test: successful
         usersRef.child(userId).child("favCategories").child(category).push({
-            date: date,
-            desc: desc,
-            name: name,
-            time: time
+            date: dataObj.date,
+            desc: dataObj.desc,
+            name: dataObj.name,
+            time: dataObj.time
         });
 
         // Now give feedback to the user that add was successful
-        // This will make the favorite feedback appear on every box.  It works, but you need to alter it to work on the specific one
-        $(this).parents('.event-boxes').find('p.add-fav-feedback').text("Favorite was added!").fadeIn(1000).fadeOut(2000);
-        //$('p.add-fav-feedback').text("Favorite was added!").fadeIn(1000).fadeOut(1000);
+        $(this).siblings('.add-fav-feedback').text("Event added to " + category + "!").fadeIn(1000).fadeOut(3000);
+
+        // Clear out the input field after successful event addition
+        $(this).siblings('.category-input').val('');
     });
 
 	// Also allow user to submit city location input via keyboard enter key

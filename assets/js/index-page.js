@@ -71,7 +71,7 @@ firebase.auth().getRedirectResult().then(function(result) {
     
         $('.loggedModal').modal("show");
         setTimeout(function () {         
-             window.location = "https://still-shore-69099.herokuapp.com/dashboard.html";
+             window.location = "file:///Users/Yo/Desktop/Bootcamp/homework/group-projects/Group-Event-Project1/dashboard.html";
         }, 1000);
     }
 }).catch(function(error) {
@@ -196,7 +196,8 @@ var eventObj = {
             }
 
             // Redirect to dashboard page, now that search results have been returned
-            window.location="https://still-shore-69099.herokuapp.com/dashboard.html";
+            //window.location="https://still-shore-69099.herokuapp.com/dashboard.html";
+            window.location = "file:///Users/Yo/Desktop/Bootcamp/homework/group-projects/Group-Event-Project1/dashboard.html";
         });
     }, // ajaxCall()
 
@@ -326,23 +327,6 @@ $(document).ready(function() {
     // Include the datepicker, from jQuery UI library
     $("#search-date-start").datepicker();
     $("#search-date-end").datepicker();
-
-    /*
-    $(document).on("click", "#fbook", function() {
-    firebase.auth().signInWithRedirect(fbProvider);
-    });
-
-    $(document).on("click", "#googs", function() {
-      firebase.auth().signInWithRedirect(googleProvider)
-    });
-
-    $(document).on("click", "#join", function() {
-    auth.createUserWithEmailAndPassword(email, password);
-    });
-
-    $(document).on("click", "#login", function() {
-    auth.signInWithEmailAndPassword(email, password);
-    });*/
 
     // Show the modal if user clicks 'login'
     $('.login-link').on('click', function() {
